@@ -1,0 +1,154 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
+<xwikidoc version="1.6" reference="OIDCPro.Code.Translation" locale="">
+  <web>OIDCPro.Code</web>
+  <name>Translation</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.Admin</creator>
+  <parent>OIDCPro.Code.OIDCProConfigSheet</parent>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
+  <title>Translation</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>
+oidcpro.config.section.General.label=General Configuration
+oidcpro.config.section.User.label=User Configuration
+oidcpro.config.section.Group.label=Group Configuration
+oidcpro.config.section.advanced=Advanced properties
+
+oidcpro.config.property.skipped.label=Is enabled?
+oidcpro.config.property.skipped.hint=Defines whether this oidc client is enabled or not.
+
+oidcpro.config.property.configurationName.label=Configuration name
+oidcpro.config.property.configurationName.hint=The name of this OIDC configuration
+oidcpro.config.property.clientId.label=Client ID
+oidcpro.config.property.clientId.hint=The client id retrieved from the OIDC provider you want to connect to.
+oidcpro.config.property.clientSecret.label=Client Secret
+oidcpro.config.property.clientSecret.hint=The client secret retrieved from the same OIDC Provider. The secret is usually displayed only once so make sure to copy it as soon as you get your hands on it.
+oidcpro.config.property.authorizationEndpoint.label=Authorization Endpoint
+oidcpro.config.property.authorizationEndpoint.hint=The endpoint of your provider where XWiki will try to authorize itself using the client id and secret you provided.
+oidcpro.config.property.tokenEndpoint.label=Token Endpoint
+oidcpro.config.property.tokenEndpoint.hint=The provider endpoint from where XWiki will retrieve the access and refresh tokens.
+oidcpro.config.property.userInfoEndpoint.label=User Info Endpoint
+oidcpro.config.property.userInfoEndpoint.hint=The provider endpoint where XWiki will retrieve the information of the user that wants to login.
+oidcpro.config.property.logoutEndpoint.label=Logout Endpoint
+oidcpro.config.property.logoutEndpoint.hint=If this property is filled, once the user logsout from XWiki, a logout request will also be sent to the OIDC provider, to the specified endpoint.
+
+oidcpro.config.property.xwikiProvider.label=XWiki Provider
+oidcpro.config.property.xwikiProvider.hint=TODO:FILL
+oidcpro.config.property.userInfoEndpointMethod.label=User Info Endpoint Method
+oidcpro.config.property.userInfoEndpointMethod.hint=The HTTP method that will be used when requesting the user information. i.e. GET, POST
+oidcpro.config.property.userInfoEndpointHeaders.label=User Info Endpoint Headers
+oidcpro.config.property.userInfoEndpointHeaders.hint=Any additional HTTP headers that need be used when requesting the user information. i.e. Accept: * TODO:FILL
+oidcpro.config.property.logoutEndpointMethod.label=Logout Endpoint Method
+oidcpro.config.property.logoutEndpointMethod.hint=The method that will be used to logout the user from the provider. i.e. POST, GET
+oidcpro.config.property.logoutMechanism.label=Logout Mechanisn
+oidcpro.config.property.logoutMechanism.hint=TODO:FILL
+oidcpro.config.property.responseType.label=Response Type
+oidcpro.config.property.responseType.hint=TODO:FILL
+oidcpro.config.property.idTokenClaims.label=ID Token Clains
+oidcpro.config.property.idTokenClaims.hint=TODO:FILL
+oidcpro.config.property.claims.label=Claims
+oidcpro.config.property.claims.hint=TODO:FILL
+oidcpro.config.property.afterLogoutURL.label=After-Logout URL
+oidcpro.config.property.afterLogoutURL.hint=The URL where the user should be redirected to after they logout
+oidcpro.config.property.tokenEndpointMethod.label=Token Endpoint Method
+oidcpro.config.property.tokenEndpointMethod.hint=The method that should be used when XWiki requests the tokens from the provided endpoint.
+oidcpro.config.property.tokenStorageScope.label=Token Storage Scope
+oidcpro.config.property.tokenStorageScope.hint=TODO:FILL
+
+
+oidcpro.config.property.userNameFormatter.label=Username Formatter
+oidcpro.config.property.userNameFormatter.hint=The format that will be used in order to generate the xwiki username of a user coming from the OIDC provider. i.e. TODO:FILL
+oidcpro.config.property.userSubjectFormatter.label=User Subject Formatter
+oidcpro.config.property.userSubjectFormatter.hint=TODO:FILL
+oidcpro.config.property.userMapping.label=User Attribute Mapping
+oidcpro.config.property.userMapping.hint=This property maps the attributes of the user coming from the OIDC provider to XWiki user attributes. i.e. if the OIDC provider stores the user email in a property named 'electronic-mail', we want to let XWiki know this by filling this property like so: electronic-mail=email.
+
+oidcpro.config.property.userInfoClaims.label=User Info Claims
+oidcpro.config.property.userInfoClaims.hint=TODO:FILL
+oidcpro.config.property.userInfoRefreshRate.label=User Info Refresh Rate
+oidcpro.config.property.userInfoRefreshRate.hint=TODO:FILL
+oidcpro.config.property.userInfoSkip.label=User Info Skip
+oidcpro.config.property.userInfoSkip.hint=If this property is set, then XWiki will skip the retrieval of the user information from the specialised endpoint. Useful for OAuth providers.
+
+oidcpro.config.property.enableUser.label=Enable User
+oidcpro.config.property.enableUser.hint=TODO:FILL
+
+
+oidcpro.config.property.groupsClaim.label=Group Claims
+oidcpro.config.property.groupsClaim.hint=TODO:FILL
+oidcpro.config.property.groupsMapping.label=Groups Mapping
+oidcpro.config.property.groupsMapping.hint=This property maps the groups coming from the OIDC provider to XWiki Groups. When a user coming from the OIDC provider logs in, they will also be added to the XWiki groups according to this mapping. i.e. OIDCGroupId=XWiki.AdminGroup
+
+oidcpro.config.property.allowedGroups.label=Allowed Groups
+oidcpro.config.property.allowedGroups.hint=List all the OIDC groups that should be allowed to login into XWiki. OIDC users that belong to other groups will not be allowed to login.
+oidcpro.config.property.forbiddenGroups.label=Forbidden Groups
+oidcpro.config.property.forbiddenGroups.hint=List all the OIDC groups that should be denied entry to XWiki. Users belonging to these groups will not be allowed to login. i.e. OIDCGroup1,OIDCAdminGroup2
+oidcpro.config.property.groupsMappingExclude.label=Groups Mapping Exclude
+oidcpro.config.property.groupsMappingExclude.hint=TODO:FILL
+</content>
+  <object>
+    <name>OIDCPro.Code.Translation</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>262c0cbd-2282-4773-9675-acb380f35c8c</guid>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
+</xwikidoc>

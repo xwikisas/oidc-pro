@@ -1,0 +1,1187 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
+<xwikidoc version="1.6" reference="OIDCPro.Code.OIDCProConfigSheet" locale="">
+  <web>OIDCPro.Code</web>
+  <name>OIDCProConfigSheet</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.Admin</creator>
+  <parent>WebHome</parent>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
+  <title>OIDCProConfigSheet</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity ouput="false"}}
+#macro (sectionHeaderHtml $section $properties $advanced)
+&lt;div class="oidcpro-section oidcpro-section-$section.id"&gt;
+  #set ($collapseId = "oidcpro-section-${section.id}-collapse")
+  &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#${collapseId}"
+    aria-expanded="false" aria-controls="$collapseId"&gt;
+    &lt;div class="oidcpro-section-header"&gt;
+      &lt;span class="oidcpro-section-header-icon"&gt;
+        $services.icon.renderHTML($section.icon)
+      &lt;/span&gt;
+      &lt;h2&gt;
+        $escapetool.xml($services.localization.render("oidcpro.config.section.${section.id}.label"))
+      &lt;/h2&gt;
+    &lt;/div&gt;
+  &lt;/a&gt;
+  &lt;div id="$collapseId" class="oidcpro-properties collapse"&gt;
+    &lt;dl&gt;
+      #foreach ($property in $properties)
+        #displayProperty($property)
+      #end
+      #set ($advancedCollapseId = "${collapseId}-advanced")
+      &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#${advancedCollapseId}"
+        aria-expanded="false" aria-controls="$advancedCollapseId"&gt;
+        &lt;div class="oidcpro-section-header"&gt;
+          &lt;span class="oidcpro-section-header-icon"&gt;
+            $services.icon.renderHTML('caret-down')
+          &lt;/span&gt;
+          &lt;p&gt;
+            $escapetool.xml($services.localization.render("oidcpro.config.section.advanced"))
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/a&gt;
+      &lt;div id="$advancedCollapseId" class="oidcpro-properties collapse"&gt;
+        #foreach ($property in $advanced)
+          #displayProperty($property)
+        #end
+      &lt;/div&gt;
+    &lt;/dl&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+#end
+#macro (displayProperty $property)
+&lt;div class="oidcpro-property oidcpro-property-${property.id} #if($property.hidden)hidden#end $!property.get('class')"&gt;
+  &lt;dt&gt;
+    #if($property.icon)
+      $services.icon.renderHTML($property.icon)
+    #end
+    &lt;label for=""&gt;$escapetool.xml($services.localization.render("oidcpro.config.property.${property.id}.label"))&lt;/label&gt;
+    &lt;span class="xHint"&gt;$escapetool.xml($services.localization.render("oidcpro.config.property.${property.id}.hint"))&lt;/span&gt;
+  &lt;/dt&gt;
+  &lt;dd&gt;
+    $doc.display($property.id, 'edit').replaceAll('^\{\{html(.*?)\}\}', '').replaceAll('\{\{/html\}\}$', '')
+   &lt;/dd&gt;
+&lt;/div&gt;
+#end
+{{/velocity}}
+
+{{velocity}}
+#set ($templateXObj = $doc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
+##$templateXObj.layoutJson
+#set ($oidcTemplate = $jsontool.fromString("$templateXObj.getProperty('layoutJson').value"))
+
+## Create a map that will enable us to display the sheet section by section.
+## Map will be of the following layout: {sectionKey: {section: sectionObj, properties: propertiesArray}}
+#set ($oidcSections = {})
+#foreach ($property in $oidcTemplate.properties)
+  #set ($propertySectionId = $property.section)
+  #if (!$propertySectionId)
+    #set ($propertySectionId = "General")
+  #end
+  #if ("$!oidcSections.get($propertySectionId)" == '')
+    #foreach($section in $oidcTemplate.sections)
+      $section.id and $propertySectionId
+      #if ($section.id == $propertySectionId)
+        #set ($discard = $oidcSections.put($propertySectionId, { "section": $section, "properties": [], "advanced": []}))
+        #break
+      #end
+    #end
+    ## Cover the case when the section of a given property is not present in the sections array.
+    #if ("$!oidcSections.get($propertySectionId)" == '')
+      #set ($discard = $oidcSections.put($propertySectionId, {"section": {}, "properties": [], "advanced": []}))
+    #end
+  #end
+  #if ($property.advanced)
+    #set ($discard = $oidcSections.get($propertySectionId).advanced.add($property))
+  #else
+    #set ($discard = $oidcSections.get($propertySectionId).properties.add($property))
+  #end
+#end
+## Display the page.
+{{html clean=false}}
+#foreach ($section in $oidcSections.entrySet())
+  #sectionHeaderHtml($section.value.section, $section.value.properties, $section.value.advanced)
+#end
+{{/html}}
+{{/velocity}}
+
+</content>
+  <object>
+    <name>OIDCPro.Code.OIDCProConfigSheet</name>
+    <number>0</number>
+    <className>OIDCPro.Code.OIDCProTemplateClass</className>
+    <guid>a4a4df88-796d-4bec-8cfa-0be277db3ef4</guid>
+    <class>
+      <name>OIDCPro.Code.OIDCProTemplateClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <layoutJson>
+        <contenttype>PureText</contenttype>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <editor>---</editor>
+        <hint/>
+        <name>layoutJson</name>
+        <number>1</number>
+        <picker>1</picker>
+        <prettyName>layoutJson</prettyName>
+        <restricted>0</restricted>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </layoutJson>
+    </class>
+    <property>
+      <layoutJson>{
+  "id": "default",
+  "extraCss": "StyleSheet",
+  "sections": [
+    {
+      "id": "General",
+      "icon": "cog"
+    },
+    {
+      "id": "User",
+      "icon": "caret-down"
+    },
+    {
+      "id": "Group",
+      "icon": "caret-down"
+    }
+  ],
+  "properties": [
+    {
+      "id": "skipped",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "play"
+    },
+    {
+      "id": "configurationName",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "book"
+    },
+    {
+      "id": "clientId",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "user"
+    },
+    {
+      "id": "clientSecret",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "key"
+    },
+    {
+      "id": "authorizationEndpoint",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "tokenEndpoint",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoEndpoint",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "logoutEndpoint",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "xwikiProvider",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoEndpointMethod",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoEndpointHeaders",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "logoutEndpointMethod",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "logoutMechanism",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "responseType",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "idTokenClaims",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "claims",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "afterLogoutURL",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id",
+      "customCode": "templae.vm"
+    },
+    {
+      "id": "tokenEndpointMethod",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "tokenStorageScope",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    
+    {
+      "id": "userNameFormatter",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userSubjectFormatter",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userMapping",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoClaims",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoRefreshRate",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoSkip",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "enableUser",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "groupsClaim",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "groupsMapping",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "allowedGroups",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "forbiddenGroups",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "groupsMappingExclude",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "groupsMappingInclude",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    }
+
+  ]
+}</layoutJson>
+    </property>
+  </object>
+  <object>
+    <name>OIDCPro.Code.OIDCProConfigSheet</name>
+    <number>0</number>
+    <className>XWiki.OIDC.ClientConfigurationClass</className>
+    <guid>215fd192-bb3d-4320-b6fe-6efc7f17e963</guid>
+    <class>
+      <name>XWiki.OIDC.ClientConfigurationClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <afterLogoutURL>
+        <disabled>0</disabled>
+        <name>afterLogoutURL</name>
+        <number>32</number>
+        <prettyName>URL after Logout</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </afterLogoutURL>
+      <allowedGroups>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>allowedGroups</name>
+        <number>6</number>
+        <prettyName>Allowed groups</prettyName>
+        <restricted>0</restricted>
+        <rows>10</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </allowedGroups>
+      <authorizationEndpoint>
+        <disabled>0</disabled>
+        <name>authorizationEndpoint</name>
+        <number>12</number>
+        <prettyName>Authorization OIDC endpoint</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </authorizationEndpoint>
+      <claims>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>claims</name>
+        <number>28</number>
+        <prettyName>Claims</prettyName>
+        <restricted>0</restricted>
+        <rows>25</rows>
+        <size>120</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </claims>
+      <clientId>
+        <disabled>0</disabled>
+        <name>clientId</name>
+        <number>16</number>
+        <prettyName>Client ID</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </clientId>
+      <clientSecret>
+        <disabled>0</disabled>
+        <name>clientSecret</name>
+        <number>17</number>
+        <prettyName>Secret</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </clientSecret>
+      <configurationName>
+        <disabled>0</disabled>
+        <name>configurationName</name>
+        <number>1</number>
+        <prettyName>Configuration name</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </configurationName>
+      <enableUser>
+        <defaultValue>1</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>select</displayType>
+        <name>enableUser</name>
+        <number>31</number>
+        <prettyName>Should user profiles be enabled on first login ?</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </enableUser>
+      <forbiddenGroups>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>forbiddenGroups</name>
+        <number>7</number>
+        <prettyName>Forbidden groups</prettyName>
+        <restricted>0</restricted>
+        <rows>10</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </forbiddenGroups>
+      <groupsClaim>
+        <disabled>0</disabled>
+        <name>groupsClaim</name>
+        <number>2</number>
+        <prettyName>Group claim</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </groupsClaim>
+      <groupsMapping>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>groupsMapping</name>
+        <number>3</number>
+        <prettyName>Group mapping</prettyName>
+        <restricted>0</restricted>
+        <rows>10</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </groupsMapping>
+      <groupsMappingExclude>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>groupsMappingExclude</name>
+        <number>5</number>
+        <prettyName>Group mapping exclusions regex </prettyName>
+        <restricted>0</restricted>
+        <rows>1</rows>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </groupsMappingExclude>
+      <groupsMappingInclude>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>groupsMappingInclude</name>
+        <number>4</number>
+        <prettyName>Group mapping inclusions regex</prettyName>
+        <restricted>0</restricted>
+        <rows>1</rows>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </groupsMappingInclude>
+      <idTokenClaims>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>idTokenClaims</name>
+        <number>26</number>
+        <prettyName>ID Token Claims</prettyName>
+        <restricted>0</restricted>
+        <rows>10</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </idTokenClaims>
+      <logoutEndpoint>
+        <disabled>0</disabled>
+        <name>logoutEndpoint</name>
+        <number>15</number>
+        <prettyName>Logout OIDC endpoint</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </logoutEndpoint>
+      <logoutEndpointMethod>
+        <disabled>0</disabled>
+        <name>logoutEndpointMethod</name>
+        <number>21</number>
+        <prettyName>Logout endpoint method</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </logoutEndpointMethod>
+      <logoutMechanism>
+        <disabled>0</disabled>
+        <name>logoutMechanism</name>
+        <number>22</number>
+        <prettyName>Logout mechanism</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </logoutMechanism>
+      <responseType>
+        <disabled>0</disabled>
+        <name>responseType</name>
+        <number>25</number>
+        <prettyName>Response type</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </responseType>
+      <scope>
+        <disabled>0</disabled>
+        <name>scope</name>
+        <number>24</number>
+        <prettyName>Scope</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </scope>
+      <skipLogoutIdToken>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>select</displayType>
+        <name>skipLogoutIdToken</name>
+        <number>34</number>
+        <prettyName>Skip ID Token at logout</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </skipLogoutIdToken>
+      <skipped>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>select</displayType>
+        <name>skipped</name>
+        <number>23</number>
+        <prettyName>Is authentication skipped ?</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </skipped>
+      <tokenEndpoint>
+        <disabled>0</disabled>
+        <name>tokenEndpoint</name>
+        <number>13</number>
+        <prettyName>Token OIDC endpoint</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </tokenEndpoint>
+      <tokenEndpointMethod>
+        <cache>0</cache>
+        <defaultValue>client_secret_basic</defaultValue>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>tokenEndpointMethod</name>
+        <number>18</number>
+        <prettyName>Token endpoint authentication method</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>client_secret_basic|client_secret_post</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </tokenEndpointMethod>
+      <tokenStorageScope>
+        <cache>0</cache>
+        <defaultValue>NONE</defaultValue>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>tokenStorageScope</name>
+        <number>33</number>
+        <prettyName>Store tokens</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>NONE|USER|WIKI</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </tokenStorageScope>
+      <userInfoClaims>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>userInfoClaims</name>
+        <number>27</number>
+        <prettyName>User info Claims</prettyName>
+        <restricted>0</restricted>
+        <rows>10</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </userInfoClaims>
+      <userInfoEndpoint>
+        <disabled>0</disabled>
+        <name>userInfoEndpoint</name>
+        <number>14</number>
+        <prettyName>User info OIDC endpoint</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </userInfoEndpoint>
+      <userInfoEndpointHeaders>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>userInfoEndpointHeaders</name>
+        <number>20</number>
+        <prettyName>User info endpoint headers</prettyName>
+        <restricted>0</restricted>
+        <rows>10</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </userInfoEndpointHeaders>
+      <userInfoEndpointMethod>
+        <disabled>0</disabled>
+        <name>userInfoEndpointMethod</name>
+        <number>19</number>
+        <prettyName>User information endpoint method</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </userInfoEndpointMethod>
+      <userInfoRefreshRate>
+        <disabled>0</disabled>
+        <name>userInfoRefreshRate</name>
+        <number>29</number>
+        <numberType>integer</numberType>
+        <prettyName>User info refresh rate</prettyName>
+        <size>5</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+      </userInfoRefreshRate>
+      <userInfoSkip>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>select</displayType>
+        <name>userInfoSkip</name>
+        <number>30</number>
+        <prettyName>Is user info skipped ?</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </userInfoSkip>
+      <userMapping>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>userMapping</name>
+        <number>10</number>
+        <prettyName>User mapping</prettyName>
+        <restricted>0</restricted>
+        <rows>10</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </userMapping>
+      <userNameFormatter>
+        <disabled>0</disabled>
+        <name>userNameFormatter</name>
+        <number>9</number>
+        <prettyName>XWiki username formatter</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </userNameFormatter>
+      <userSubjectFormatter>
+        <disabled>0</disabled>
+        <name>userSubjectFormatter</name>
+        <number>8</number>
+        <prettyName>Subject formatter</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </userSubjectFormatter>
+      <xwikiProvider>
+        <disabled>0</disabled>
+        <name>xwikiProvider</name>
+        <number>11</number>
+        <prettyName>XWiki provider</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </xwikiProvider>
+    </class>
+    <property>
+      <afterLogoutURL/>
+    </property>
+    <property>
+      <allowedGroups/>
+    </property>
+    <property>
+      <authorizationEndpoint/>
+    </property>
+    <property>
+      <claims/>
+    </property>
+    <property>
+      <clientId/>
+    </property>
+    <property>
+      <clientSecret/>
+    </property>
+    <property>
+      <configurationName/>
+    </property>
+    <property>
+      <enableUser>1</enableUser>
+    </property>
+    <property>
+      <forbiddenGroups/>
+    </property>
+    <property>
+      <groupsClaim/>
+    </property>
+    <property>
+      <groupsMapping/>
+    </property>
+    <property>
+      <groupsMappingExclude/>
+    </property>
+    <property>
+      <groupsMappingInclude/>
+    </property>
+    <property>
+      <idTokenClaims/>
+    </property>
+    <property>
+      <logoutEndpoint/>
+    </property>
+    <property>
+      <logoutEndpointMethod/>
+    </property>
+    <property>
+      <logoutMechanism/>
+    </property>
+    <property>
+      <responseType/>
+    </property>
+    <property>
+      <scope/>
+    </property>
+    <property>
+      <skipLogoutIdToken>0</skipLogoutIdToken>
+    </property>
+    <property>
+      <skipped/>
+    </property>
+    <property>
+      <tokenEndpoint/>
+    </property>
+    <property>
+      <tokenEndpointMethod>client_secret_basic</tokenEndpointMethod>
+    </property>
+    <property>
+      <tokenStorageScope>NONE</tokenStorageScope>
+    </property>
+    <property>
+      <userInfoClaims/>
+    </property>
+    <property>
+      <userInfoEndpoint/>
+    </property>
+    <property>
+      <userInfoEndpointHeaders/>
+    </property>
+    <property>
+      <userInfoEndpointMethod/>
+    </property>
+    <property>
+      <userInfoRefreshRate/>
+    </property>
+    <property>
+      <userInfoSkip/>
+    </property>
+    <property>
+      <userMapping/>
+    </property>
+    <property>
+      <userNameFormatter/>
+    </property>
+    <property>
+      <userSubjectFormatter/>
+    </property>
+    <property>
+      <xwikiProvider/>
+    </property>
+  </object>
+  <object>
+    <name>OIDCPro.Code.OIDCProConfigSheet</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>26a6dd06-bb82-459f-b9b7-6adc4fed8d1c</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <defaultValue>long</defaultValue>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <restricted>0</restricted>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>.oidcpro-section-header-icon {
+  transition: all 0.5s;
+  display: inline-block;
+}
+
+a.collapsed .oidcpro-section-header-icon {
+  transform: rotate(-180deg);
+  -moz-transform: rotate(-180deg);
+  -webkit-transform: rotate(-180deg);
+}
+
+.oidcpro-section-header {
+  display: flex;
+  gap: 1em;
+  align-items: baseline;
+}
+
+.oidcpro-collapse-link {
+  margin: 0 0 0 1em;
+}
+.oidcpro-collapse-link:has(h2) {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.oidcpro-properties {
+  padding-top: 1em;
+}</code>
+    </property>
+    <property>
+      <contentType/>
+    </property>
+    <property>
+      <name/>
+    </property>
+    <property>
+      <parse/>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+</xwikidoc>
