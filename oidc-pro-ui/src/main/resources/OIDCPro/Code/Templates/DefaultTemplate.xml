@@ -1,0 +1,451 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.6" reference="OIDCPro.Code.Templates.DefaultTemplate" locale="">
+  <web>OIDCPro.Code.Templates</web>
+  <name>DefaultTemplate</name>
+  <language/>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.superadmin</creator>
+  <creationDate>1763989653000</creationDate>
+  <parent>OIDCPro.Code.Templates.WebHome</parent>
+  <author>XWiki.superadmin</author>
+  <originalMetadataAuthor>XWiki.superadmin</originalMetadataAuthor>
+  <contentAuthor>XWiki.superadmin</contentAuthor>
+  <date>1763989829000</date>
+  <contentUpdateDate>1763989653000</contentUpdateDate>
+  <version>4.1</version>
+  <title>DefaultTemplate</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content/>
+  <object>
+    <name>OIDCPro.Code.Templates.DefaultTemplate</name>
+    <number>0</number>
+    <className>OIDCPro.Code.OIDCProTemplateClass</className>
+    <guid>208a888d-42e0-4a1a-9ab1-2ea7254e6f63</guid>
+    <class>
+      <name>OIDCPro.Code.OIDCProTemplateClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <layoutJson>
+        <contenttype>PureText</contenttype>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <editor>---</editor>
+        <hint/>
+        <name>layoutJson</name>
+        <number>1</number>
+        <picker>1</picker>
+        <prettyName>layoutJson</prettyName>
+        <restricted>0</restricted>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </layoutJson>
+      <name>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <hint/>
+        <name>name</name>
+        <number>2</number>
+        <picker>1</picker>
+        <prettyName>name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+    </class>
+    <property>
+      <layoutJson>{
+  "id": "default",
+  "extraCss": "StyleSheet",
+  "sections": [
+    {
+      "id": "General",
+      "icon": "cog"
+    },
+    {
+      "id": "User",
+      "icon": "caret-down"
+    },
+    {
+      "id": "Group",
+      "icon": "caret-down"
+    }
+  ],
+  "properties": [
+    {
+      "id": "skipped",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "play"
+    },
+    {
+      "id": "configurationName",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "book"
+    },
+    {
+      "id": "clientId",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "user"
+    },
+    {
+      "id": "clientSecret",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "key"
+    },
+    {
+      "id": "authorizationEndpoint",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "tokenEndpoint",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoEndpoint",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "logoutEndpoint",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "xwikiProvider",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoEndpointMethod",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoEndpointHeaders",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "logoutEndpointMethod",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "logoutMechanism",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "responseType",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "idTokenClaims",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "claims",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "afterLogoutURL",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id",
+      "customCode": "templae.vm"
+    },
+    {
+      "id": "tokenEndpointMethod",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "tokenStorageScope",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    
+    {
+      "id": "userNameFormatter",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userSubjectFormatter",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userMapping",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoClaims",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoRefreshRate",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userInfoSkip",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "enableUser",
+      "hidden": false,
+      "section": "User",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "groupsClaim",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "groupsMapping",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "allowedGroups",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "forbiddenGroups",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "groupsMappingExclude",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    },
+    {
+      "id": "groupsMappingInclude",
+      "hidden": false,
+      "section": "Group",
+      "value": "Some value",
+      "advanced": true,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "icon-id"
+    }
+
+  ]
+}</layoutJson>
+    </property>
+    <property>
+      <name>default</name>
+    </property>
+  </object>
+</xwikidoc>
