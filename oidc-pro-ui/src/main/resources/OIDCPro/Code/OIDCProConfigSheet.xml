@@ -1,78 +1,95 @@
-<?xml version='1.1' encoding='UTF-8'?>
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
 <xwikidoc version="1.6" reference="OIDCPro.Code.OIDCProConfigSheet" locale="">
   <web>OIDCPro.Code</web>
   <name>OIDCProConfigSheet</name>
   <language/>
-  <defaultLanguage>en</defaultLanguage>
+  <defaultLanguage/>
   <translation>0</translation>
-  <creator>XWiki.superadmin</creator>
-  <creationDate>1763403954000</creationDate>
+  <creator>xwiki:XWiki.Admin</creator>
   <parent>WebHome</parent>
-  <author>XWiki.superadmin</author>
-  <originalMetadataAuthor>XWiki.superadmin</originalMetadataAuthor>
-  <contentAuthor>XWiki.superadmin</contentAuthor>
-  <date>1763990754000</date>
-  <contentUpdateDate>1763990754000</contentUpdateDate>
-  <version>4.12</version>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
   <title>OIDCProConfigSheet</title>
   <comment/>
-  <minorEdit>true</minorEdit>
+  <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
-  <hidden>false</hidden>
+  <hidden>true</hidden>
   <content>{{velocity ouput="false"}}
 #macro (sectionHeaderHtml $section $properties $advanced)
-&lt;div class="oidcpro-section oidcpro-section-$section.id">
+&lt;div class="oidcpro-section oidcpro-section-$section.id"&gt;
   #set ($collapseId = "oidcpro-section-${section.id}-collapse")
   &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#${collapseId}"
-    aria-expanded="false" aria-controls="$collapseId">
-    &lt;div class="oidcpro-section-header">
-      &lt;h2>
-        &lt;span class="oidcpro-section-header-icon">
+    aria-expanded="false" aria-controls="$collapseId"&gt;
+    &lt;div class="oidcpro-section-header"&gt;
+      &lt;h2&gt;
+        &lt;span class="oidcpro-section-header-icon"&gt;
           $services.icon.renderHTML($section.icon)
-        &lt;/span>
+        &lt;/span&gt;
         $escapetool.xml($services.localization.render("oidcpro.config.section.${section.id}.label"))
-      &lt;/h2>
-    &lt;/div>
-  &lt;/a>
-  &lt;div id="$collapseId" class="oidcpro-properties collapse">
-    &lt;dl>
+      &lt;/h2&gt;
+    &lt;/div&gt;
+  &lt;/a&gt;
+  &lt;div id="$collapseId" class="oidcpro-properties collapse"&gt;
+    &lt;dl&gt;
       #foreach ($property in $properties)
         #displayProperty($property)
       #end
       #set ($advancedCollapseId = "${collapseId}-advanced")
       &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#${advancedCollapseId}"
-        aria-expanded="false" aria-controls="$advancedCollapseId">
-        &lt;div class="oidcpro-section-header">
-          &lt;span class="oidcpro-section-header-icon">
+        aria-expanded="false" aria-controls="$advancedCollapseId"&gt;
+        &lt;div class="oidcpro-section-header"&gt;
+          &lt;span class="oidcpro-section-header-icon"&gt;
             $services.icon.renderHTML('caret-down')
-          &lt;/span>
-          &lt;p>
+          &lt;/span&gt;
+          &lt;p&gt;
             $escapetool.xml($services.localization.render("oidcpro.config.section.advanced"))
-          &lt;/p>
-        &lt;/div>
-      &lt;/a>
-      &lt;div id="$advancedCollapseId" class="oidcpro-properties collapse">
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/a&gt;
+      &lt;div id="$advancedCollapseId" class="oidcpro-properties collapse"&gt;
         #foreach ($property in $advanced)
           #displayProperty($property)
         #end
-      &lt;/div>
-    &lt;/dl>
-  &lt;/div>
-&lt;/div>
+      &lt;/div&gt;
+    &lt;/dl&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
 #end
 #macro (displayProperty $property)
-&lt;div class="oidcpro-property oidcpro-property-${property.id} #if($property.hidden)hidden#end $!property.get('class')">
-  &lt;dt>
+&lt;div class="oidcpro-property oidcpro-property-${property.id} #if($property.hidden)hidden#end $!property.get('class')"&gt;
+  &lt;dt&gt;
     #if($property.icon)
       $services.icon.renderHTML($property.icon)
     #end
-    &lt;label for="">$escapetool.xml($services.localization.render("oidcpro.config.property.${property.id}.label"))&lt;/label>
-    &lt;span class="xHint">$escapetool.xml($services.localization.render("oidcpro.config.property.${property.id}.hint"))&lt;/span>
-  &lt;/dt>
-  &lt;dd>
+    &lt;label for=""&gt;$escapetool.xml($services.localization.render("oidcpro.config.property.${property.id}.label"))&lt;/label&gt;
+    &lt;span class="xHint"&gt;$escapetool.xml($services.localization.render("oidcpro.config.property.${property.id}.hint"))&lt;/span&gt;
+  &lt;/dt&gt;
+  &lt;dd&gt;
     $doc.display($property.id).replaceAll('^\{\{html(.*?)\}\}', '').replaceAll('\{\{/html\}\}$', '')
-   &lt;/dd>
-&lt;/div>
+   &lt;/dd&gt;
+&lt;/div&gt;
 #end
 {{/velocity}}
 
@@ -124,11 +141,11 @@
       {'evaluate': true}), {'type': 'text/css', 'rel': 'stylesheet'}))
   #set ($discard = $doc.use('XWiki.OIDC.ClientConfigurationClass'))
   {{html clean=false}}
-  &lt;div class="xform">
+  &lt;div class="xform"&gt;
   #foreach ($section in $oidcSections.entrySet())
     #sectionHeaderHtml($section.value.section, $section.value.properties, $section.value.advanced)
   #end
-  &lt;/div>
+  &lt;/div&gt;
   {{/html}}
 #end
 {{/velocity}}
@@ -239,7 +256,7 @@ require(['jquery', 'xwiki-propertize'], function ($) {
 });</code>
     </property>
     <property>
-      <name></name>
+      <name/>
     </property>
     <property>
       <parse>1</parse>
@@ -388,10 +405,10 @@ a.collapsed .oidcpro-section-header-icon {
 }</code>
     </property>
     <property>
-      <contentType></contentType>
+      <contentType/>
     </property>
     <property>
-      <name></name>
+      <name/>
     </property>
     <property>
       <parse/>

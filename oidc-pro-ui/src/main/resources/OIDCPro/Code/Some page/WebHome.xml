@@ -1,24 +1,41 @@
-<?xml version='1.1' encoding='UTF-8'?>
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
 <xwikidoc version="1.6" reference="OIDCPro.Code.Some page.WebHome" locale="">
   <web>OIDCPro.Code.Some page</web>
   <name>WebHome</name>
   <language/>
-  <defaultLanguage>en</defaultLanguage>
+  <defaultLanguage/>
   <translation>0</translation>
-  <creator>XWiki.superadmin</creator>
-  <creationDate>1763983798000</creationDate>
+  <creator>xwiki:XWiki.Admin</creator>
   <parent>OIDCPro.Code.OIDCProConfigSheet</parent>
-  <author>XWiki.superadmin</author>
-  <originalMetadataAuthor>XWiki.superadmin</originalMetadataAuthor>
-  <contentAuthor>XWiki.superadmin</contentAuthor>
-  <date>1763989896000</date>
-  <contentUpdateDate>1763983798000</contentUpdateDate>
-  <version>6.1</version>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
   <title>Some page</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
-  <hidden>false</hidden>
+  <hidden>true</hidden>
   <content/>
   <object>
     <name>OIDCPro.Code.Some page.WebHome</name>
@@ -442,22 +459,22 @@
       </xwikiProvider>
     </class>
     <property>
-      <afterLogoutURL></afterLogoutURL>
+      <afterLogoutURL/>
     </property>
     <property>
-      <allowedGroups></allowedGroups>
+      <allowedGroups/>
     </property>
     <property>
-      <authorizationEndpoint></authorizationEndpoint>
+      <authorizationEndpoint/>
     </property>
     <property>
-      <claims></claims>
+      <claims/>
     </property>
     <property>
       <clientId>123123asad</clientId>
     </property>
     <property>
-      <clientSecret></clientSecret>
+      <clientSecret/>
     </property>
     <property>
       <configurationName>Some nice name</configurationName>
@@ -466,37 +483,37 @@
       <enableUser>1</enableUser>
     </property>
     <property>
-      <forbiddenGroups></forbiddenGroups>
+      <forbiddenGroups/>
     </property>
     <property>
-      <groupsClaim></groupsClaim>
+      <groupsClaim/>
     </property>
     <property>
-      <groupsMapping></groupsMapping>
+      <groupsMapping/>
     </property>
     <property>
-      <groupsMappingExclude></groupsMappingExclude>
+      <groupsMappingExclude/>
     </property>
     <property>
-      <groupsMappingInclude></groupsMappingInclude>
+      <groupsMappingInclude/>
     </property>
     <property>
-      <idTokenClaims></idTokenClaims>
+      <idTokenClaims/>
     </property>
     <property>
-      <logoutEndpoint></logoutEndpoint>
+      <logoutEndpoint/>
     </property>
     <property>
-      <logoutEndpointMethod></logoutEndpointMethod>
+      <logoutEndpointMethod/>
     </property>
     <property>
-      <logoutMechanism></logoutMechanism>
+      <logoutMechanism/>
     </property>
     <property>
-      <responseType></responseType>
+      <responseType/>
     </property>
     <property>
-      <scope></scope>
+      <scope/>
     </property>
     <property>
       <skipLogoutIdToken>0</skipLogoutIdToken>
@@ -505,7 +522,7 @@
       <skipped>0</skipped>
     </property>
     <property>
-      <tokenEndpoint></tokenEndpoint>
+      <tokenEndpoint/>
     </property>
     <property>
       <tokenEndpointMethod>client_secret_basic</tokenEndpointMethod>
@@ -514,16 +531,16 @@
       <tokenStorageScope>NONE</tokenStorageScope>
     </property>
     <property>
-      <userInfoClaims></userInfoClaims>
+      <userInfoClaims/>
     </property>
     <property>
-      <userInfoEndpoint></userInfoEndpoint>
+      <userInfoEndpoint/>
     </property>
     <property>
-      <userInfoEndpointHeaders></userInfoEndpointHeaders>
+      <userInfoEndpointHeaders/>
     </property>
     <property>
-      <userInfoEndpointMethod></userInfoEndpointMethod>
+      <userInfoEndpointMethod/>
     </property>
     <property>
       <userInfoRefreshRate/>
@@ -532,16 +549,16 @@
       <userInfoSkip/>
     </property>
     <property>
-      <userMapping></userMapping>
+      <userMapping/>
     </property>
     <property>
-      <userNameFormatter></userNameFormatter>
+      <userNameFormatter/>
     </property>
     <property>
-      <userSubjectFormatter></userSubjectFormatter>
+      <userSubjectFormatter/>
     </property>
     <property>
-      <xwikiProvider></xwikiProvider>
+      <xwikiProvider/>
     </property>
   </object>
 </xwikidoc>
