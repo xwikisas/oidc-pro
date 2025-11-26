@@ -36,7 +36,21 @@
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
-  <content>
+  <content># Admin section
+oidcpro.admin.create.title=Create a new OIDC Client Configuration
+oidcpro.admin.create.button.label=Create
+
+oidcpro.admin.livedata.title=Available OIDC Client Configurations
+oidcpro.admin.livedata.emptyvalue=-
+oidcpro.admin.livedata.configurationName=Configuration Name
+oidcpro.admin.livedata.clientId=Cliend ID
+oidcpro.admin.livedata.authorizationEndpoint=Authorization endpoint
+oidcpro.admin.livedata._actions=Actions
+
+oidcpro.templates.default.name=Default
+oidcpro.templates.test.name=Entra ID test
+
+# Config Sheet
 oidcpro.config.section.General.label=General Configuration
 oidcpro.config.section.User.label=User Configuration
 oidcpro.config.section.Group.label=Group Configuration

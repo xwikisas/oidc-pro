@@ -95,7 +95,13 @@
 
 {{velocity}}
 #set ($templateBinderXObj = $doc.getObject('OIDCPro.Code.OIDCProTemplateBinderClass'))
-#set ($templateId = $templateBinderXObj.getProperty('templateName').value)
+#if ($templateBinderXObj &amp;&amp; "$!templateBinderXObj.getProperty('templateName').value" != '')
+  #set ($templateId = $templateBinderXObj.getProperty('templateName').value)
+#elseif ($request.oidcTemplate)
+  #set ($templateId = $request.oidcTemplate)
+#else
+  #set ($templateId = 'default')
+#end
 #set ($queryResult = $services.query.xwql("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as template where template.name = :templateName").bindValue('templateName', $templateId).execute())
 #if (!$queryResult || $queryResult.size() == 0)
   {{warning}}No OIDC template found with '$templateId' name.{{/warning}}
@@ -132,6 +138,11 @@
       #set ($discard = $oidcSections.get($propertySectionId).properties.add($property))
     #end
   #end
+  ## Order the sections as they appear in the template.sections list.
+  #set ($orderedSections = {})
+  #foreach ($s in $oidcTemplate.sections)
+    #set ($discard = $orderedSections.put($s.id, $oidcSections.get($s.id)))
+  #end
   ## Display the page.
   #set ($discard = $xwiki.jsx.use('OIDCPro.Code.OIDCProConfigSheet'))
   #set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProConfigSheet'))
@@ -139,10 +150,19 @@
       'com.xwiki.commons:xwiki-pro-commons-webjar',
       'xwikiPropertize/xwikiPropertize.css',
       {'evaluate': true}), {'type': 'text/css', 'rel': 'stylesheet'}))
-  #set ($discard = $doc.use('XWiki.OIDC.ClientConfigurationClass'))
   {{html clean=false}}
   &lt;div class="xform"&gt;
-  #foreach ($section in $oidcSections.entrySet())
+  #if ($doc.isNew() &amp;&amp; "$!request.oidcTemplate" != '')
+    ## Save the template name into the template binder when creating a new configuration.
+    ## This way, the document will use the correct template after creation.
+    &lt;div class="hidden"&gt;
+      #set ($discard = $doc.use('OIDCPro.Code.OIDCProTemplateBinderClass'))
+      #set ($discard = $doc.set('templateName', $request.oidcTemplate))
+      $doc.display('templateName').replaceAll('^\{\{html(.*?)\}\}', '').replaceAll('\{\{/html\}\}$', '')
+    &lt;/div&gt;
+  #end
+  #set ($discard = $doc.use('XWiki.OIDC.ClientConfigurationClass'))
+  #foreach ($section in $orderedSections.entrySet())
     #sectionHeaderHtml($section.value.section, $section.value.properties, $section.value.advanced)
   #end
   &lt;/div&gt;

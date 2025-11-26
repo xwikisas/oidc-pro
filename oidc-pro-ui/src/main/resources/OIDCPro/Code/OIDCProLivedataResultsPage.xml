@@ -43,10 +43,20 @@
   $response.setContentType('application/json')
   #set($map = {})
   #gridresult_buildJSON("$!request.classname" $request.collist.split(',') $map)
+  #set ($oidcSheet = "OIDCPro.Code.OIDCProConfigSheet")
   #foreach($row in $map.get('rows'))
     #set($rowDocRef = $services.model.resolveDocument($row.get('doc_fullName')))
     #set($rowDoc = $xwiki.getDocument($rowDocRef))
-    #set ($discard = $row.put('oidcpro.view_url', 'https://google.com'))
+    #set($templateBinderObj = $rowDoc.getObject('OIDCPro.Code.OIDCProTemplateBinderClass'))
+    #if ($templateBinderObj)
+      ##set ($discard = $row.put('xxxxxxxsmth', $templateBinderObj))
+      #set ($discard = $row.put('oidcpro.view_url', $row.get('doc_url')))
+      #set ($discard = $row.put('oidcpro.edit_url', $row.get('doc_edit_url')))
+    #else
+      #set ($discard = $row.put('oidcpro.view_url', "${row.get('doc_url')}?sheet=${oidcSheet}"))
+      #set ($discard = $row.put('oidcpro.edit_url', "${row.get('doc_edit_url')}?sheet=${oidcSheet}"))
+    #end
+    ##set ($discard = $row.put('oidcpro.view_url', 'https://google.com'))
     ##set($discard = $row.put('doc_delete_url', $xwiki.getURL('AppWithinMinutes.DeleteApplication', 'view', $appQueryString)))
   #end
   $jsontool.serialize($map)

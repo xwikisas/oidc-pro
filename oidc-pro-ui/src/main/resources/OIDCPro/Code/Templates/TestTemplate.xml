@@ -20,9 +20,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.6" reference="OIDCPro.Code.Templates.DefaultTemplate" locale="">
+<xwikidoc version="1.6" reference="OIDCPro.Code.Templates.TestTemplate" locale="">
   <web>OIDCPro.Code.Templates</web>
-  <name>DefaultTemplate</name>
+  <name>TestTemplate</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
@@ -31,17 +31,17 @@
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title>DefaultTemplate</title>
+  <title>TestTemplate</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
   <content/>
   <object>
-    <name>OIDCPro.Code.Templates.DefaultTemplate</name>
+    <name>OIDCPro.Code.Templates.TestTemplate</name>
     <number>0</number>
     <className>OIDCPro.Code.OIDCProTemplateClass</className>
-    <guid>208a888d-42e0-4a1a-9ab1-2ea7254e6f63</guid>
+    <guid>0ac44f56-caaa-4290-a37f-dbc6cfcec632</guid>
     <class>
       <name>OIDCPro.Code.OIDCProTemplateClass</name>
       <customClass/>
@@ -123,13 +123,14 @@
   "id": "default",
   "extraCss": "StyleSheet",
   "sections": [
-    {
-      "id": "General",
-      "icon": "cog"
-    },
+
     {
       "id": "User",
       "icon": "caret-down"
+    },
+    {
+      "id": "General",
+      "icon": "list"
     },
     {
       "id": "Group",
@@ -137,17 +138,6 @@
     }
   ],
   "properties": [
-    {
-      "id": "skipped",
-      "hidden": false,
-      "section": "General",
-      "value": "Some value",
-      "advanced": false,
-      "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
-      "icon": "play"
-    },
     {
       "id": "configurationName",
       "hidden": false,
@@ -180,6 +170,17 @@
       "hint": "xwiki hint key or plain text",
       "label": "xwiki l10n key for label or plain text",
       "icon": "key"
+    },
+    {
+      "id": "skipped",
+      "hidden": false,
+      "section": "General",
+      "value": "Some value",
+      "advanced": false,
+      "class": "extraClass",
+      "hint": "xwiki hint key or plain text",
+      "label": "xwiki l10n key for label or plain text",
+      "icon": "play"
     },
     {
       "id": "authorizationEndpoint",
@@ -238,7 +239,7 @@
     },
     {
       "id": "userInfoEndpointMethod",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -249,7 +250,7 @@
     },
     {
       "id": "userInfoEndpointHeaders",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -260,7 +261,7 @@
     },
     {
       "id": "logoutEndpointMethod",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -271,7 +272,7 @@
     },
     {
       "id": "logoutMechanism",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -282,7 +283,7 @@
     },
     {
       "id": "responseType",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -293,7 +294,7 @@
     },
     {
       "id": "idTokenClaims",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -304,7 +305,7 @@
     },
     {
       "id": "claims",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -315,7 +316,7 @@
     },
     {
       "id": "afterLogoutURL",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -327,7 +328,7 @@
     },
     {
       "id": "tokenEndpointMethod",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -338,7 +339,7 @@
     },
     {
       "id": "tokenStorageScope",
-      "hidden": false,
+      "hidden": true,
       "section": "General",
       "value": "Some value",
       "advanced": true,
@@ -361,7 +362,7 @@
     },
     {
       "id": "userSubjectFormatter",
-      "hidden": false,
+      "hidden": true,
       "section": "User",
       "value": "Some value",
       "advanced": false,
@@ -372,7 +373,7 @@
     },
     {
       "id": "userMapping",
-      "hidden": false,
+      "hidden": true,
       "section": "User",
       "value": "Some value",
       "advanced": false,
@@ -394,7 +395,7 @@
     },
     {
       "id": "userInfoRefreshRate",
-      "hidden": false,
+      "hidden": true,
       "section": "User",
       "value": "Some value",
       "advanced": true,
@@ -405,7 +406,7 @@
     },
     {
       "id": "userInfoSkip",
-      "hidden": false,
+      "hidden": true,
       "section": "User",
       "value": "Some value",
       "advanced": true,
@@ -416,7 +417,7 @@
     },
     {
       "id": "enableUser",
-      "hidden": false,
+      "hidden": true,
       "section": "User",
       "value": "Some value",
       "advanced": true,
@@ -438,7 +439,7 @@
     },
     {
       "id": "groupsMapping",
-      "hidden": false,
+      "hidden": true,
       "section": "Group",
       "value": "Some value",
       "advanced": false,
@@ -460,7 +461,7 @@
     },
     {
       "id": "forbiddenGroups",
-      "hidden": false,
+      "hidden": true,
       "section": "Group",
       "value": "Some value",
       "advanced": true,
@@ -471,7 +472,7 @@
     },
     {
       "id": "groupsMappingExclude",
-      "hidden": false,
+      "hidden": true,
       "section": "Group",
       "value": "Some value",
       "advanced": true,
@@ -482,7 +483,7 @@
     },
     {
       "id": "groupsMappingInclude",
-      "hidden": false,
+      "hidden": true,
       "section": "Group",
       "value": "Some value",
       "advanced": true,
@@ -496,7 +497,7 @@
 }</layoutJson>
     </property>
     <property>
-      <name>default</name>
+      <name>test</name>
     </property>
   </object>
 </xwikidoc>
