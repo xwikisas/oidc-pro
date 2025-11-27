@@ -51,7 +51,7 @@
       &lt;/h2&gt;
     &lt;/div&gt;
   &lt;/a&gt;
-  &lt;div id="$collapseId" class="oidcpro-properties collapse"&gt;
+  &lt;div id="$collapseId" class="oidcpro-properties #if(!$collapsed)collapse#end"&gt;
     &lt;dl&gt;
       #foreach ($property in $properties)
         #displayProperty($property)
@@ -78,7 +78,11 @@
 &lt;/div&gt;
 #end
 #macro (displayProperty $property)
-&lt;div class="oidcpro-property oidcpro-property-${property.id} #if($property.hidden)hidden#end $!property.get('class')"&gt;
+&lt;div class="oidcpro-property oidcpro-property-${property.id} #if($property.hidden)hidden#end $!property.get('class')" 
+  #foreach($dataKey in $property.data.keySet())
+    data-$escapetool.xml($dataKey)="$escapetool.xml($jsontool.serialize($property.data.get($dataKey)))"
+  #end
+  &gt;
   &lt;dt&gt;
     #if($property.icon)
       $services.icon.renderHTML($property.icon)
@@ -94,6 +98,7 @@
 {{/velocity}}
 
 {{velocity}}
+#set ($collapsed = "$!request.collapsed" == '1')
 #set ($templateBinderXObj = $doc.getObject('OIDCPro.Code.OIDCProTemplateBinderClass'))
 #if ($templateBinderXObj &amp;&amp; "$!templateBinderXObj.getProperty('templateName').value" != '')
   #set ($templateId = $templateBinderXObj.getProperty('templateName').value)
@@ -152,6 +157,11 @@
       {'evaluate': true}), {'type': 'text/css', 'rel': 'stylesheet'}))
   {{html clean=false}}
   &lt;div class="xform"&gt;
+  #if("$!templateXObj.getProperty('customCode').value" != '' &amp;&amp; "$!templateXObj.getProperty('codeInsertionPoint').value" == 'header')
+    &lt;div class="oidcpro-customcode"&gt;
+      $templateXObj.display('customCode', 'view', false).replaceAll('^\{\{html(.*?)\}\}', '').replaceAll('\{\{/html\}\}$', '')
+    &lt;/div&gt;
+  #end
   #if ($doc.isNew() &amp;&amp; "$!request.oidcTemplate" != '')
     ## Save the template name into the template binder when creating a new configuration.
     ## This way, the document will use the correct template after creation.
@@ -164,6 +174,11 @@
   #set ($discard = $doc.use('XWiki.OIDC.ClientConfigurationClass'))
   #foreach ($section in $orderedSections.entrySet())
     #sectionHeaderHtml($section.value.section, $section.value.properties, $section.value.advanced)
+  #end
+  #if("$!templateXObj.getProperty('customCode').value" != '' &amp;&amp; "$!templateXObj.getProperty('codeInsertionPoint').value" == 'footer')
+    &lt;div class="oidcpro-customcode"&gt;
+      $templateXObj.display('customCode', 'view', false).replaceAll('^\{\{html(.*?)\}\}', '').replaceAll('\{\{/html\}\}$', '')
+    &lt;/div&gt;
   #end
   &lt;/div&gt;
   {{/html}}
@@ -264,13 +279,76 @@
     'xwiki-propertize': "$services.webjars.url('com.xwiki.commons:xwiki-pro-commons-webjar', 'xwikiPropertize/xwikiPropertize.js')"
   }
 });
-require(['jquery', 'xwiki-propertize'], function ($) {
+require(['jquery', 'xwiki-propertize', 'xwiki-selectize'], function ($) {
   console.log('hello there');
+  let linkInputs = function (config) {
+    if (!config || !config.primaryInput) {
+      return;
+    }
+    let linkedInputs = config.linkedInputs || [];
+    config.unsynched = false;
+    linkedInputs.forEach(linkedInput =&gt; {
+      let linkedElem = $(linkedInput.selector);
+      linkedElem.on('change', function () {
+        config.unsynched = true;
+      });
+      linkedInput.element = linkedElem;
+    });
+    let primaryElem = $(config.primaryInput);
+    primaryElem.on('input', function () {
+      if (config.unsynched) {
+        if (primaryElem.val() != '' || config.linkedInputs.filter(e =&gt; e.element.val() != '').size() &gt; 0) {
+          return;
+        } else {
+          config.unsynched = false;
+        }
+      }
+      let currentVal = primaryElem.val();
+      for (let i in config.ignoredSuffixes) {
+        if (currentVal.toLowerCase().endsWith(config.ignoredSuffixes[i])) {
+          currentVal = currentVal.substr(0, currentVal.length - config.ignoredSuffixes[i].length);
+          break;
+        }
+      }
+      for (let i in config.ignoredPrefixes) {
+        if (currentVal.toLowerCase().startsWith(config.ignoredPrefixes[i])) {
+          currentVal = currentVal.substr(config.ignoredPrefixes[i].length, currentVal.length);
+          break;
+        }
+      }
+      currentVal = currentVal.endsWith(config.ignoredSuffix) ? currentVal.substr(0, currentVal.length - (config.ignoredSuffix || '').length) : currentVal;
+      currentVal = currentVal.startsWith(config.ignoredPrefix) ? currentVal.substr((config.ingoredPrefix || '').length, currentVal.length) : currentVal;
+      config.linkedInputs.forEach(linkedInput =&gt; linkedInput.element.val((linkedInput.prefix || '') + currentVal + (linkedInput.suffix || '')));
+    });
+  };
+  linkInputs({
+    primaryInput: '#XWiki\\.OIDC\\.ClientConfigurationClass_0_authorizationEndpoint',
+    ignoredSuffixes: ['/auth', '/authorize', '/authorization'],
+    ignoredPrefixes: [],
+    linkedInputs: [
+      {
+        selector: '#XWiki\\.OIDC\\.ClientConfigurationClass_0_tokenEndpoint',
+        suffix: '/token',
+        prefix: ''
+      },
+      {
+        selector: '#XWiki\\.OIDC\\.ClientConfigurationClass_0_userInfoEndpoint',
+        suffix: '/userinfo',
+        prefix: ''
+      }
+    ]
+  });
   $('#XWiki\\.OIDC\\.ClientConfigurationClass_0_userMapping').xwikiPropertize({
     separator: '|'
   });
   $('#XWiki\\.OIDC\\.ClientConfigurationClass_0_groupsMapping').xwikiPropertize({
     separator: '|'
+  });
+  $('.oidcpro-property').each(function () {
+    let selectizeCfg = $(this).data('selectize');
+    if (selectizeCfg) {
+      $(this).find('input').xwikiSelectize(selectizeCfg);
+    }
   });
   // XWiki.OIDC.ClientConfigurationClass_0_groupsMapping
 });</code>

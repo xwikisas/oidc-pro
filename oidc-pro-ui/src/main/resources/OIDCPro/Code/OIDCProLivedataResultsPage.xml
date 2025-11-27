@@ -51,10 +51,10 @@
     #if ($templateBinderObj)
       ##set ($discard = $row.put('xxxxxxxsmth', $templateBinderObj))
       #set ($discard = $row.put('oidcpro.view_url', $row.get('doc_url')))
-      #set ($discard = $row.put('oidcpro.edit_url', $row.get('doc_edit_url')))
+      #set ($discard = $row.put('oidcpro.edit_url', "${row.get('doc_edit_url')}?collapsed=1"))
     #else
       #set ($discard = $row.put('oidcpro.view_url', "${row.get('doc_url')}?sheet=${oidcSheet}"))
-      #set ($discard = $row.put('oidcpro.edit_url', "${row.get('doc_edit_url')}?sheet=${oidcSheet}"))
+      #set ($discard = $row.put('oidcpro.edit_url', "${row.get('doc_edit_url')}?sheet=${oidcSheet}&amp;collapsed=1"))
     #end
     ##set ($discard = $row.put('oidcpro.view_url', 'https://google.com'))
     ##set($discard = $row.put('doc_delete_url', $xwiki.getURL('AppWithinMinutes.DeleteApplication', 'view', $appQueryString)))

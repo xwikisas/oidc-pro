@@ -46,6 +46,33 @@
     <defaultWeb/>
     <nameField/>
     <validationScript/>
+    <codeInsertionPoint>
+      <disabled>0</disabled>
+      <name>codeInsertionPoint</name>
+      <number>6</number>
+      <prettyName>codeInsertionPoint</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+    </codeInsertionPoint>
+    <customCode>
+      <contenttype>FullyRenderedText</contenttype>
+      <customDisplay/>
+      <disabled>0</disabled>
+      <editor>Text</editor>
+      <hint/>
+      <name>customCode</name>
+      <number>5</number>
+      <picker>1</picker>
+      <prettyName>customCode</prettyName>
+      <restricted>0</restricted>
+      <rows>5</rows>
+      <size>40</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+    </customCode>
     <iconName>
       <customDisplay/>
       <disabled>0</disabled>

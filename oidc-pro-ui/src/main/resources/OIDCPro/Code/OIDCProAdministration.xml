@@ -265,6 +265,7 @@
     <property>
       <codeToExecute>{{velocity}}
 #set ($discard = $xwiki.jsx.use('OIDCPro.Code.OIDCProAdministration'))
+#set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProAdministration'))
 {{html}}
 &lt;div class="xform"&gt;
   &lt;h2&gt;$escapetool.xml($services.localization.render('oidcpro.admin.create.title'))&lt;/h2&gt;
@@ -275,11 +276,17 @@
       &lt;span class="sr-only"&gt;Toggle Dropdown&lt;/span&gt;
     &lt;/button&gt;
     &lt;ul class="dropdown-menu"&gt;
-      #foreach ($templateName in $services.query.xwql("select distinct template.name from Document doc, doc.object('OIDCPro.Code.OIDCProTemplateClass') as template").execute())
-        &lt;li class="oidcpro-config-create" data-templateid="$templateName" title="$escapetool.xml($services.localization.render("oidcpro.templates.${templateName}.hint"))"&gt;
+      #foreach ($template in $services.query.xwql("select distinct doc.fullName, template.name from Document doc, doc.object('OIDCPro.Code.OIDCProTemplateClass') as template").execute())
+        #set ($templateDoc = $xwiki.getDocument($template[0]))
+        #set ($templateXObj = $templateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
+        &lt;li class="oidcpro-config-create" data-templateid="$template[1]" title="$escapetool.xml($services.localization.render("oidcpro.templates.${template[1]}.hint"))"&gt;
           &lt;a href="#"&gt;
-            $services.icon.renderHTML('lock')
-            $escapetool.xml($services.localization.render("oidcpro.templates.${templateName}.name"))
+            #if ("$!templateXObj.getProperty('iconName').value" != '')
+              &lt;span class="oidcpro-admin-icon"&gt;$services.icon.renderHTML("$templateXObj.getProperty('iconName').value")&lt;/span&gt;
+            #elseif("$!templateXObj.getProperty('iconReference').value" != '')
+              &lt;span class="oidcpro-admin-icon"&gt;&lt;img src="/xwiki/bin/download/OIDCPro/Code/Templates/DefaultTemplate/openid-logo.png?rev=1.1" /&gt;&lt;/span&gt;
+            #end
+            $escapetool.xml($services.localization.render("oidcpro.templates.${template[1]}.name"))
           &lt;/a&gt;
         &lt;/li&gt;
       #end
@@ -451,6 +458,141 @@
     window.open(createURL, '_blank');
   });
 });</code>
+    </property>
+    <property>
+      <name/>
+    </property>
+    <property>
+      <parse/>
+    </property>
+    <property>
+      <use/>
+    </property>
+  </object>
+  <object>
+    <name>OIDCPro.Code.OIDCProAdministration</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>d3eee7bb-032d-409d-86be-83d7c19b9f43</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <defaultValue>long</defaultValue>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <restricted>0</restricted>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>.oidcpro-admin-icon &gt; * {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.oidcpro-admin-icon {
+  width: 20px;
+  height: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}</code>
+    </property>
+    <property>
+      <contentType/>
     </property>
     <property>
       <name/>

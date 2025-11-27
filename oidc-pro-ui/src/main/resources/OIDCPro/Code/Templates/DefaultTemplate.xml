@@ -37,6 +37,16 @@
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
   <content/>
+  <attachment>
+    <filename>openid-logo.png</filename>
+    <mimetype>image/png</mimetype>
+    <charset>UTF-8</charset>
+    <author>xwiki:XWiki.Admin</author>
+    <version>1.1</version>
+    <comment/>
+    <content>iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAMAAADDpiTIAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAARUdAAEVHQHxXN70AAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAwBQTFRF////AwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEAwEEtRVHvgAAAP90Uk5TAAECAwQF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</content>
+    <filesize>6256</filesize>
+  </attachment>
   <object>
     <name>OIDCPro.Code.Templates.DefaultTemplate</name>
     <number>0</number>
@@ -51,6 +61,33 @@
       <defaultWeb/>
       <nameField/>
       <validationScript/>
+      <codeInsertionPoint>
+        <disabled>0</disabled>
+        <name>codeInsertionPoint</name>
+        <number>6</number>
+        <prettyName>codeInsertionPoint</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </codeInsertionPoint>
+      <customCode>
+        <contenttype>FullyRenderedText</contenttype>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <hint/>
+        <name>customCode</name>
+        <number>5</number>
+        <picker>1</picker>
+        <prettyName>customCode</prettyName>
+        <restricted>0</restricted>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </customCode>
       <iconName>
         <customDisplay/>
         <disabled>0</disabled>
@@ -113,10 +150,16 @@
       </name>
     </class>
     <property>
+      <codeInsertionPoint/>
+    </property>
+    <property>
+      <customCode/>
+    </property>
+    <property>
       <iconName/>
     </property>
     <property>
-      <iconReference/>
+      <iconReference>/xwiki/bin/download/OIDCPro/Code/Templates/DefaultTemplate/openid-logo.png?rev=1.1</iconReference>
     </property>
     <property>
       <layoutJson>{
@@ -144,8 +187,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "play"
     },
     {
@@ -155,8 +196,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "book"
     },
     {
@@ -166,8 +205,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "user"
     },
     {
@@ -177,8 +214,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "key"
     },
     {
@@ -188,8 +223,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -199,8 +232,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -210,8 +241,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -221,8 +250,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -232,8 +259,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -243,9 +268,24 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "data": {
+        "selectize": {
+          "delimiter": ",",
+          "create": true,
+          "maxItems": 1,
+          "options": [
+            {
+              "value": "GET",
+              "label": "GET"
+            },
+            {
+              "value": "POST",
+              "label": "POST"
+            }
+          ]
+        }
+      }
     },
     {
       "id": "userInfoEndpointHeaders",
@@ -254,8 +294,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -265,9 +303,24 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "data": {
+        "selectize": {
+          "delimiter": ",",
+          "create": true,
+          "maxItems": 1,
+          "options": [
+            {
+              "value": "GET",
+              "label": "GET"
+            },
+            {
+              "value": "POST",
+              "label": "POST"
+            }
+          ]
+        }
+      }
     },
     {
       "id": "logoutMechanism",
@@ -276,8 +329,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -287,8 +338,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -298,8 +347,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -309,8 +356,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -320,8 +365,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id",
       "customCode": "templae.vm"
     },
@@ -332,9 +375,24 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "data": {
+        "selectize": {
+          "delimiter": ",",
+          "create": true,
+          "maxItems": 1,
+          "options": [
+            {
+              "value": "GET",
+              "label": "GET"
+            },
+            {
+              "value": "POST",
+              "label": "POST"
+            }
+          ]
+        }
+      }
     },
     {
       "id": "tokenStorageScope",
@@ -343,8 +401,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     
@@ -355,8 +411,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -366,8 +420,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -377,8 +429,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -388,8 +438,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -399,8 +447,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -410,8 +456,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -421,8 +465,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -432,8 +474,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -443,8 +483,6 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -454,8 +492,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -465,8 +501,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -476,8 +510,6 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     },
     {
@@ -487,11 +519,8 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "hint": "xwiki hint key or plain text",
-      "label": "xwiki l10n key for label or plain text",
       "icon": "icon-id"
     }
-
   ]
 }</layoutJson>
     </property>
