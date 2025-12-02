@@ -56,6 +56,12 @@
       #set ($discard = $row.put('oidcpro.view_url', "${row.get('doc_url')}?sheet=${oidcSheet}"))
       #set ($discard = $row.put('oidcpro.edit_url', "${row.get('doc_edit_url')}?sheet=${oidcSheet}&amp;collapsed=1"))
     #end
+    #if ("$!row.get('skipped')" == '0')
+      #set ($checked = 'checked')
+    #else
+      #set ($checked = '')
+    #end
+    #set ($discard = $row.put('oidcpro.is_enabled', "&lt;label data-docref='$row.get('doc_fullName')' class='oidcpro-switch'&gt;&lt;input type='checkbox' $checked&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
     ##set ($discard = $row.put('oidcpro.view_url', 'https://google.com'))
     ##set($discard = $row.put('doc_delete_url', $xwiki.getURL('AppWithinMinutes.DeleteApplication', 'view', $appQueryString)))
   #end
