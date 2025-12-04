@@ -34,6 +34,8 @@
   <properties>
     <xwikipro.commons.version>1.0.4</xwikipro.commons.version>
     <licensing.version>1.28</licensing.version>
+    <authservicebackport.version>1.1.1</authservicebackport.version>
+    <oidc.version>2.19.4</oidc.version>
   </properties>
   <packaging>pom</packaging>
   <issueManagement>
@@ -48,5 +50,6 @@
   </scm>
   <modules>
     <module>oidc-pro-ui</module>
+    <module>oidc-pro-api</module>
   </modules>
 </project>

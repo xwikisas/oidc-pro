@@ -519,7 +519,7 @@
       <skipLogoutIdToken>0</skipLogoutIdToken>
     </property>
     <property>
-      <skipped/>
+      <skipped>1</skipped>
     </property>
     <property>
       <tokenEndpoint/>
