@@ -46,6 +46,17 @@
         padding: 1em;
       }
     </style>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".oidcpro-providers").forEach(function (el) {
+    el.addEventListener("change", function (event) {
+      console.log('value changed' + event);
+      var providerName = encodeURIComponent(event.target.value);
+      document.cookie = "oidcProvider=" + providerName + "; path=/; SameSite=Strict";
+    });
+  });
+});
+    </script>
   </head>
   <body>
     <h1>Something</h1>
@@ -56,6 +67,7 @@
           <dt>Choose the OIDC provider that you want to use:</dt>
           <dd>
             <select class="oidcpro-providers">
+              <option value="" selected disabled>---</option>
               #foreach ($cfg in $services.query.xwql("select distinct oidc.configurationName, doc.fullName from Document doc, doc.object('XWiki.OIDC.ClientConfigurationClass') as oidc where oidc.skipped <> '1'").execute())
                 <option value="$cfg[0]">$cfg[0]</option>
               #end
