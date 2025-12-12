@@ -145,8 +145,9 @@ dsa
       <code>require(['jquery'], function($) {
   $('.oidcpro-login-option').on('click', function(event) {
     event.preventDefault();
-    document.cookie = "oidcProvider=" + $(this).data('name') + "; path=/";
-    window.location.href = event.currentTarget.href;
+    debugger;
+    document.cookie = "oidcProvider=" + encodeURIComponent($(this).data('name')) + "; path=/ ; SameSite=Strict";
+    window.location.href = event.target.href;
   });
 })</code>
     </property>
@@ -158,288 +159,6 @@ dsa
     </property>
     <property>
       <use>onDemand</use>
-    </property>
-  </object>
-  <object>
-    <name>OIDCPro.Code.LoginDecoration</name>
-    <number>0</number>
-    <className>XWiki.UIExtensionClass</className>
-    <guid>c60956bc-11ba-43b5-85e3-0c600660ef80</guid>
-    <class>
-      <name>XWiki.UIExtensionClass</name>
-      <customClass/>
-      <customMapping/>
-      <defaultViewSheet/>
-      <defaultEditSheet/>
-      <defaultWeb/>
-      <nameField/>
-      <validationScript/>
-      <async_cached>
-        <defaultValue>0</defaultValue>
-        <disabled>0</disabled>
-        <displayFormType>select</displayFormType>
-        <displayType/>
-        <name>async_cached</name>
-        <number>3</number>
-        <prettyName>Cached</prettyName>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
-      </async_cached>
-      <async_context>
-        <cache>0</cache>
-        <disabled>0</disabled>
-        <displayType>select</displayType>
-        <freeText>forbidden</freeText>
-        <largeStorage>0</largeStorage>
-        <multiSelect>1</multiSelect>
-        <name>async_context</name>
-        <number>4</number>
-        <prettyName>Context elements</prettyName>
-        <relationalStorage>0</relationalStorage>
-        <separator>, </separator>
-        <separators>|, </separators>
-        <size>5</size>
-        <unmodifiable>0</unmodifiable>
-        <values>action=Action|doc.reference=Document|doc.revision|icon.theme=Icon theme|locale=Language|rendering.defaultsyntax=Default syntax|rendering.restricted=Restricted|rendering.targetsyntax=Target syntax|request.base=Request base URL|request.cookies|request.headers|request.parameters=Request parameters|request.remoteAddr|request.session|request.url=Request URL|request.wiki=Request wiki|sheet|user=User|wiki=Wiki</values>
-        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-      </async_context>
-      <async_enabled>
-        <defaultValue>0</defaultValue>
-        <disabled>0</disabled>
-        <displayFormType>select</displayFormType>
-        <displayType/>
-        <name>async_enabled</name>
-        <number>2</number>
-        <prettyName>Asynchronous rendering</prettyName>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
-      </async_enabled>
-      <content>
-        <disabled>0</disabled>
-        <editor>Text</editor>
-        <name>content</name>
-        <number>1</number>
-        <prettyName>Executed Content</prettyName>
-        <restricted>0</restricted>
-        <rows>25</rows>
-        <size>120</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
-      </content>
-      <extensionPointId>
-        <disabled>0</disabled>
-        <name>extensionPointId</name>
-        <number>5</number>
-        <prettyName>Extension Point ID</prettyName>
-        <size>30</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-      </extensionPointId>
-      <name>
-        <disabled>0</disabled>
-        <name>name</name>
-        <number>6</number>
-        <prettyName>Extension ID</prettyName>
-        <size>30</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-      </name>
-      <parameters>
-        <contenttype>PureText</contenttype>
-        <disabled>0</disabled>
-        <editor>PureText</editor>
-        <name>parameters</name>
-        <number>7</number>
-        <prettyName>Extension Parameters</prettyName>
-        <restricted>0</restricted>
-        <rows>10</rows>
-        <size>40</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
-      </parameters>
-      <scope>
-        <cache>0</cache>
-        <disabled>0</disabled>
-        <displayType>select</displayType>
-        <freeText>forbidden</freeText>
-        <largeStorage>0</largeStorage>
-        <multiSelect>0</multiSelect>
-        <name>scope</name>
-        <number>8</number>
-        <prettyName>Extension Scope</prettyName>
-        <relationalStorage>0</relationalStorage>
-        <separator> </separator>
-        <separators>|, </separators>
-        <size>1</size>
-        <unmodifiable>0</unmodifiable>
-        <values>wiki=Current Wiki|user=Current User|global=Global</values>
-        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-      </scope>
-    </class>
-    <property>
-      <async_cached>0</async_cached>
-    </property>
-    <property>
-      <async_context/>
-    </property>
-    <property>
-      <async_enabled>0</async_enabled>
-    </property>
-    <property>
-      <content>hello there1</content>
-    </property>
-    <property>
-      <extensionPointId>org.xwiki.plaftorm.drawer.header</extensionPointId>
-    </property>
-    <property>
-      <name>com.xwiki.oidcpro.drawer.header</name>
-    </property>
-    <property>
-      <parameters/>
-    </property>
-    <property>
-      <scope>wiki</scope>
-    </property>
-  </object>
-  <object>
-    <name>OIDCPro.Code.LoginDecoration</name>
-    <number>1</number>
-    <className>XWiki.UIExtensionClass</className>
-    <guid>0247377a-ba4f-418c-8d0c-120677c93456</guid>
-    <class>
-      <name>XWiki.UIExtensionClass</name>
-      <customClass/>
-      <customMapping/>
-      <defaultViewSheet/>
-      <defaultEditSheet/>
-      <defaultWeb/>
-      <nameField/>
-      <validationScript/>
-      <async_cached>
-        <defaultValue>0</defaultValue>
-        <disabled>0</disabled>
-        <displayFormType>select</displayFormType>
-        <displayType/>
-        <name>async_cached</name>
-        <number>3</number>
-        <prettyName>Cached</prettyName>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
-      </async_cached>
-      <async_context>
-        <cache>0</cache>
-        <disabled>0</disabled>
-        <displayType>select</displayType>
-        <freeText>forbidden</freeText>
-        <largeStorage>0</largeStorage>
-        <multiSelect>1</multiSelect>
-        <name>async_context</name>
-        <number>4</number>
-        <prettyName>Context elements</prettyName>
-        <relationalStorage>0</relationalStorage>
-        <separator>, </separator>
-        <separators>|, </separators>
-        <size>5</size>
-        <unmodifiable>0</unmodifiable>
-        <values>action=Action|doc.reference=Document|doc.revision|icon.theme=Icon theme|locale=Language|rendering.defaultsyntax=Default syntax|rendering.restricted=Restricted|rendering.targetsyntax=Target syntax|request.base=Request base URL|request.cookies|request.headers|request.parameters=Request parameters|request.remoteAddr|request.session|request.url=Request URL|request.wiki=Request wiki|sheet|user=User|wiki=Wiki</values>
-        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-      </async_context>
-      <async_enabled>
-        <defaultValue>0</defaultValue>
-        <disabled>0</disabled>
-        <displayFormType>select</displayFormType>
-        <displayType/>
-        <name>async_enabled</name>
-        <number>2</number>
-        <prettyName>Asynchronous rendering</prettyName>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
-      </async_enabled>
-      <content>
-        <disabled>0</disabled>
-        <editor>Text</editor>
-        <name>content</name>
-        <number>1</number>
-        <prettyName>Executed Content</prettyName>
-        <restricted>0</restricted>
-        <rows>25</rows>
-        <size>120</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
-      </content>
-      <extensionPointId>
-        <disabled>0</disabled>
-        <name>extensionPointId</name>
-        <number>5</number>
-        <prettyName>Extension Point ID</prettyName>
-        <size>30</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-      </extensionPointId>
-      <name>
-        <disabled>0</disabled>
-        <name>name</name>
-        <number>6</number>
-        <prettyName>Extension ID</prettyName>
-        <size>30</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-      </name>
-      <parameters>
-        <contenttype>PureText</contenttype>
-        <disabled>0</disabled>
-        <editor>PureText</editor>
-        <name>parameters</name>
-        <number>7</number>
-        <prettyName>Extension Parameters</prettyName>
-        <restricted>0</restricted>
-        <rows>10</rows>
-        <size>40</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
-      </parameters>
-      <scope>
-        <cache>0</cache>
-        <disabled>0</disabled>
-        <displayType>select</displayType>
-        <freeText>forbidden</freeText>
-        <largeStorage>0</largeStorage>
-        <multiSelect>0</multiSelect>
-        <name>scope</name>
-        <number>8</number>
-        <prettyName>Extension Scope</prettyName>
-        <relationalStorage>0</relationalStorage>
-        <separator> </separator>
-        <separators>|, </separators>
-        <size>1</size>
-        <unmodifiable>0</unmodifiable>
-        <values>wiki=Current Wiki|user=Current User|global=Global</values>
-        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-      </scope>
-    </class>
-    <property>
-      <async_cached>0</async_cached>
-    </property>
-    <property>
-      <async_context/>
-    </property>
-    <property>
-      <async_enabled>0</async_enabled>
-    </property>
-    <property>
-      <content>hello there2</content>
-    </property>
-    <property>
-      <extensionPointId>org.xwiki.plaftorm.drawer</extensionPointId>
-    </property>
-    <property>
-      <name>com.xwiki.oidcpro.drawer</name>
-    </property>
-    <property>
-      <parameters/>
-    </property>
-    <property>
-      <scope>wiki</scope>
     </property>
   </object>
   <object>
@@ -569,42 +288,46 @@ dsa
     </property>
     <property>
       <content>{{velocity}}
-#set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProAdministration'))
-#set ($discard = $xwiki.jsx.use('OIDCPro.Code.LoginDecoration'))
-{{html clean=false}}
+#if ($isGuest &amp;&amp; $services.oidcpro.isOIDCAuthServiceEnabled())
+  #set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProAdministration'))
+  #set ($discard = $xwiki.jsx.use('OIDCPro.Code.LoginDecoration'))
+  {{html clean=false}}
 
-&lt;li class="dropdown"&gt;
-  &lt;a class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"&gt;
-    Dropdown
-    &lt;span class="caret"&gt;&lt;/span&gt;
-  &lt;/a&gt;
-  #set ($defaultTemplateDoc = $xwiki.getDocument('OIDCPro.Code.Templates.DefaultTemplate'))
-  #set ($defaultTemplateObj = $defaultTemplateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
-  &lt;ul class="dropdown-menu" aria-labelledby="dropdownMenu1"&gt;
-    #foreach ($cfg in $services.query.xwql("select distinct doc.fullName from Document doc, doc.object('XWiki.OIDC.ClientConfigurationClass') as oidc where oidc.skipped &lt;&gt; '1'").execute())
-      #set ($cfgDoc = $xwiki.getDocument($cfg))
-      #set ($cfgObj = $cfgDoc.getObject('XWiki.OIDC.ClientConfigurationClass'))
-      #set ($cfgTemplateBinderObj = $cfgDoc.getObject('OIDCPro.Code.OIDCProTemplateBinderClass'))
-      #set ($templateName = $cfgTemplateBinderObj.getProperty('name').value)
-      #set ($templateObj = $defaultTemplateObj)
-      #if ("$!templateName" != '' &amp;&amp; "$!templateName" != 'default')
-
+  &lt;li class="dropdown"&gt;
+    &lt;a class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"&gt;
+      Login with
+      &lt;span class="caret"&gt;&lt;/span&gt;
+    &lt;/a&gt;
+    #set ($defaultTemplateDoc = $xwiki.getDocument('OIDCPro.Code.Templates.DefaultTemplate'))
+    #set ($defaultTemplateObj = $defaultTemplateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
+    &lt;ul class="dropdown-menu" aria-labelledby="dropdownMenu1"&gt;
+      #foreach ($cfg in $services.query.xwql("select distinct doc.fullName from Document doc, doc.object('XWiki.OIDC.ClientConfigurationClass') as oidc where oidc.skipped &lt;&gt; '1'").execute())
+        #set ($cfgDoc = $xwiki.getDocument($cfg))
+        #set ($cfgObj = $cfgDoc.getObject('XWiki.OIDC.ClientConfigurationClass'))
+        #set ($cfgTemplateBinderObj = $cfgDoc.getObject('OIDCPro.Code.OIDCProTemplateBinderClass'))
+        #set ($templateName = $cfgTemplateBinderObj.getProperty('templateName').value)
+        #set ($templateObj = $defaultTemplateObj)
+        #if ("$!templateName" != '' &amp;&amp; "$!templateName" != 'default')
+          #set ($templateDocRef = $services.query.xwql("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as template where template.name = :templateName").bindValue('templateName', $templateName).setLimit(1).execute())
+          #set ($templateDoc = $xwiki.getDocument($templateDocRef[0]))
+          #set ($templateObj = $templateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
+        #end
+        &lt;li class="oidcpro-login-option" data-name='$escapetool.xml($cfgObj.getProperty('configurationName').value)' &gt;
+          &lt;a href="$xwiki.getURL('XWiki.XWikiLogin', 'login', $escapetool.url({
+          'loginLink': 1
+          }))"&gt;
+            #if ("$!templateObj.getProperty('iconName').value" != '')
+              &lt;span class="oidcpro-admin-icon"&gt;$services.icon.renderHTML("$templateObj.getProperty('iconName').value")&lt;/span&gt;
+            #elseif("$!templateObj.getProperty('iconReference').value" != '')
+              &lt;span class="oidcpro-admin-icon"&gt;&lt;img src="/xwiki/bin/download/OIDCPro/Code/Templates/DefaultTemplate/openid-logo.png?rev=1.1" /&gt;&lt;/span&gt;
+            #end
+            $cfgObj.getProperty('configurationName').value&lt;/a&gt;
+        &lt;/li&gt;
       #end
-      &lt;li class="oidcpro-login-option" data-name='$cfgObj.getProperty('configurationName').value' &gt;
-        &lt;a href='#'&gt;
-          #if ("$!templateObj.getProperty('iconName').value" != '')
-            &lt;span class="oidcpro-admin-icon"&gt;$services.icon.renderHTML("$templateXObj.getProperty('iconName').value")&lt;/span&gt;
-          #elseif("$!templateObj.getProperty('iconReference').value" != '')
-            &lt;span class="oidcpro-admin-icon"&gt;&lt;img src="/xwiki/bin/download/OIDCPro/Code/Templates/DefaultTemplate/openid-logo.png?rev=1.1" /&gt;&lt;/span&gt;
-          #end
-          $cfgObj.getProperty('configurationName').value&lt;/a&gt;
-      &lt;/li&gt;
-    #end
-  &lt;/ul&gt;
-&lt;/li&gt;
-
-&lt;li&gt;&lt;a&gt;hello&lt;/a&gt;&lt;/li&gt;
-{{/html}}
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  {{/html}}
+#end
 {{/velocity}}</content>
     </property>
     <property>

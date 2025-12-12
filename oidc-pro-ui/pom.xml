@@ -41,9 +41,9 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.xwiki.contrib.oidc</groupId>
-      <artifactId>oidc-authenticator</artifactId>
-      <version>${oidc.contrib.version}</version>
+      <groupId>com.xwiki.oidcpro</groupId>
+      <artifactId>oidc-pro-api</artifactId>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
