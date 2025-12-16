@@ -289,44 +289,46 @@ dsa
     <property>
       <content>{{velocity}}
 #if ($isGuest &amp;&amp; $services.oidcpro.isOIDCAuthServiceEnabled())
-  #set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProAdministration'))
-  #set ($discard = $xwiki.jsx.use('OIDCPro.Code.LoginDecoration'))
-  {{html clean=false}}
-
-  &lt;li class="dropdown"&gt;
-    &lt;a class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"&gt;
-      Login with
-      &lt;span class="caret"&gt;&lt;/span&gt;
-    &lt;/a&gt;
-    #set ($defaultTemplateDoc = $xwiki.getDocument('OIDCPro.Code.Templates.DefaultTemplate'))
-    #set ($defaultTemplateObj = $defaultTemplateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
-    &lt;ul class="dropdown-menu" aria-labelledby="dropdownMenu1"&gt;
-      #foreach ($cfg in $services.query.xwql("select distinct doc.fullName from Document doc, doc.object('XWiki.OIDC.ClientConfigurationClass') as oidc where oidc.skipped &lt;&gt; '1'").execute())
-        #set ($cfgDoc = $xwiki.getDocument($cfg))
-        #set ($cfgObj = $cfgDoc.getObject('XWiki.OIDC.ClientConfigurationClass'))
-        #set ($cfgTemplateBinderObj = $cfgDoc.getObject('OIDCPro.Code.OIDCProTemplateBinderClass'))
-        #set ($templateName = $cfgTemplateBinderObj.getProperty('templateName').value)
-        #set ($templateObj = $defaultTemplateObj)
-        #if ("$!templateName" != '' &amp;&amp; "$!templateName" != 'default')
-          #set ($templateDocRef = $services.query.xwql("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as template where template.name = :templateName").bindValue('templateName', $templateName).setLimit(1).execute())
-          #set ($templateDoc = $xwiki.getDocument($templateDocRef[0]))
-          #set ($templateObj = $templateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
+  #set ($oidcProviders = $services.query.xwql("select distinct doc.fullName from Document doc, doc.object('XWiki.OIDC.ClientConfigurationClass') as oidc where oidc.skipped &lt;&gt; '1'").execute())
+  #if ("$!oidcProviders" != '' &amp;&amp; $oidcProviders.size() &gt; 0)
+    #set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProAdministration'))
+    #set ($discard = $xwiki.jsx.use('OIDCPro.Code.LoginDecoration'))
+    {{html clean=false}}
+    &lt;li class="dropdown"&gt;
+      &lt;a class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"&gt;
+        $escapetool.xml($services.localization.render('oidcpro.login.title'))
+        &lt;span class="caret"&gt;&lt;/span&gt;
+      &lt;/a&gt;
+      #set ($defaultTemplateDoc = $xwiki.getDocument('OIDCPro.Code.Templates.DefaultTemplate'))
+      #set ($defaultTemplateObj = $defaultTemplateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
+      &lt;ul class="dropdown-menu" aria-labelledby="dropdownMenu1"&gt;
+        #foreach ($cfg in $oidcProviders)
+          #set ($cfgDoc = $xwiki.getDocument($cfg))
+          #set ($cfgObj = $cfgDoc.getObject('XWiki.OIDC.ClientConfigurationClass'))
+          #set ($cfgTemplateBinderObj = $cfgDoc.getObject('OIDCPro.Code.OIDCProTemplateBinderClass'))
+          #set ($templateName = $cfgTemplateBinderObj.getProperty('templateName').value)
+          #set ($templateObj = $defaultTemplateObj)
+          #if ("$!templateName" != '' &amp;&amp; "$!templateName" != 'default')
+            #set ($templateDocRef = $services.query.xwql("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as template where template.name = :templateName").bindValue('templateName', $templateName).setLimit(1).execute())
+            #set ($templateDoc = $xwiki.getDocument($templateDocRef[0]))
+            #set ($templateObj = $templateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
+          #end
+          &lt;li class="oidcpro-login-option" data-name='$escapetool.xml($cfgObj.getProperty('configurationName').value)' &gt;
+            &lt;a href="$xwiki.getURL('XWiki.XWikiLogin', 'login', $escapetool.url({
+            'loginLink': 1
+            }))"&gt;
+              #if ("$!templateObj.getProperty('iconName').value" != '')
+                &lt;span class="oidcpro-admin-icon"&gt;$services.icon.renderHTML("$templateObj.getProperty('iconName').value")&lt;/span&gt;
+              #elseif("$!templateObj.getProperty('iconReference').value" != '')
+                &lt;span class="oidcpro-admin-icon"&gt;&lt;img src="/xwiki/bin/download/OIDCPro/Code/Templates/DefaultTemplate/openid-logo.png?rev=1.1" /&gt;&lt;/span&gt;
+              #end
+              $cfgObj.getProperty('configurationName').value&lt;/a&gt;
+          &lt;/li&gt;
         #end
-        &lt;li class="oidcpro-login-option" data-name='$escapetool.xml($cfgObj.getProperty('configurationName').value)' &gt;
-          &lt;a href="$xwiki.getURL('XWiki.XWikiLogin', 'login', $escapetool.url({
-          'loginLink': 1
-          }))"&gt;
-            #if ("$!templateObj.getProperty('iconName').value" != '')
-              &lt;span class="oidcpro-admin-icon"&gt;$services.icon.renderHTML("$templateObj.getProperty('iconName').value")&lt;/span&gt;
-            #elseif("$!templateObj.getProperty('iconReference').value" != '')
-              &lt;span class="oidcpro-admin-icon"&gt;&lt;img src="/xwiki/bin/download/OIDCPro/Code/Templates/DefaultTemplate/openid-logo.png?rev=1.1" /&gt;&lt;/span&gt;
-            #end
-            $cfgObj.getProperty('configurationName').value&lt;/a&gt;
-        &lt;/li&gt;
-      #end
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  {{/html}}
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    {{/html}}
+  #end
 #end
 {{/velocity}}</content>
     </property>

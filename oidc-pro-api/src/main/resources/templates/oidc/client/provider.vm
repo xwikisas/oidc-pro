@@ -59,20 +59,22 @@ document.addEventListener("DOMContentLoaded", function () {
     </script>
   </head>
   <body>
-    <h1>Something</h1>
     <div id="content">
       <form class="xform">
         <dl>
-          ## Allow the user to choose from the xwiki oidc providers.
-          <dt>Choose the OIDC provider that you want to use:</dt>
+          ## Allow the user to choose from the configured xwiki oidc providers.
+          <dt>$escapetool.xml($services.localization.render('oidcpro.login.provider.select.title'))</dt>
           <dd>
             <select class="oidcpro-providers">
               <option value="" selected disabled>---</option>
               #foreach ($cfg in $services.query.xwql("select distinct oidc.configurationName, doc.fullName from Document doc, doc.object('XWiki.OIDC.ClientConfigurationClass') as oidc where oidc.skipped <> '1'").execute())
-                <option value="$cfg[0]">$cfg[0]</option>
+                <option value="$escapetool.xml($cfg[0])">$escapetool.xml($cfg[0])</option>
               #end
             </select>
           </dd>
+          ## Ask the provider
+          <dt>$escapetool.xml($services.localization.render('oidcpro.login.provider.domain'))</dt>
+          <dd><input type="text" name="oidc.provider"/></dd>
         </dl>
 
         ## Repeat input parameters

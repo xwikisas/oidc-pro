@@ -36,7 +36,12 @@
   <minorEdit>false</minorEdit>
   <syntaxId>plain/1.0</syntaxId>
   <hidden>true</hidden>
-  <content># Admin section
+  <content># LOGIN
+oidcpro.login.title=Login with
+oidcpro.login.provider.select.title=Select the OIDC provider..
+oidcpro.login.provider.domain=Or specify it's domain
+
+# Admin section
 oidcpro.admin.create.title=Create a new OIDC Client Configuration
 oidcpro.admin.create.button.label=Create
 
@@ -46,6 +51,7 @@ oidcpro.admin.livedata.configurationName=Configuration Name
 oidcpro.admin.livedata.clientId=Cliend ID
 oidcpro.admin.livedata.authorizationEndpoint=Authorization endpoint
 oidcpro.admin.livedata._actions=Actions
+oidcpro.admin.livedata.oidcpro.is_enabled=Enabled?
 
 oidcpro.templates.default.name=Default
 oidcpro.templates.test.name=Entra ID test
@@ -56,8 +62,8 @@ oidcpro.config.section.User.label=User Configuration
 oidcpro.config.section.Group.label=Group Configuration
 oidcpro.config.section.advanced=Advanced properties
 
-oidcpro.config.property.skipped.label=Is enabled?
-oidcpro.config.property.skipped.hint=Defines whether this oidc client is enabled or not.
+oidcpro.config.property.skipped.label=Is skipped?
+oidcpro.config.property.skipped.hint=Defines whether the users can authenticate using this OIDC client or not.
 
 oidcpro.config.property.configurationName.label=Configuration name
 oidcpro.config.property.configurationName.hint=The name of this OIDC configuration

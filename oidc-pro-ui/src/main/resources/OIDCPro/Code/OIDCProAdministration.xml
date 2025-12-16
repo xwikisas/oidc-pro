@@ -279,7 +279,7 @@
       #foreach ($template in $services.query.xwql("select distinct doc.fullName, template.name from Document doc, doc.object('OIDCPro.Code.OIDCProTemplateClass') as template").execute())
         #set ($templateDoc = $xwiki.getDocument($template[0]))
         #set ($templateXObj = $templateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
-        &lt;li class="oidcpro-config-create" data-templateid="$template[1]" title="$escapetool.xml($services.localization.render("oidcpro.templates.${template[1]}.hint"))"&gt;
+        &lt;li class="oidcpro-config-create" data-templateid="$escapetool.xml($template[1])" title="$escapetool.xml($services.localization.render("oidcpro.templates.${template[1]}.hint"))"&gt;
           &lt;a href="#"&gt;
             #if ("$!templateXObj.getProperty('iconName').value" != '')
               &lt;span class="oidcpro-admin-icon"&gt;$services.icon.renderHTML("$templateXObj.getProperty('iconName').value")&lt;/span&gt;
@@ -457,7 +457,8 @@
     let createURL = newConfigurationDoc.getURL('edit', $.param({
       template: 'OIDCPro.Code.OIDCProTemplate',
       oidcTemplate: $(this).data('templateid') || 'default',
-      form_token: xm.form_token
+      form_token: xm.form_token,
+      collapsed: 1
     }));
     console.log(createURL);
     window.open(createURL, '_blank');
