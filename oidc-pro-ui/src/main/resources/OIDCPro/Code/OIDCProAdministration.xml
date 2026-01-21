@@ -458,6 +458,7 @@
       template: 'OIDCPro.Code.OIDCProTemplate',
       oidcTemplate: $(this).data('templateid') || 'default',
       form_token: xm.form_token,
+      title: "New OIDC Client Configuration",
       collapsed: 1
     }));
     console.log(createURL);

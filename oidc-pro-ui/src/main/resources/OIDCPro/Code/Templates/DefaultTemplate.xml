@@ -338,7 +338,31 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "data": {
+        "selectize": {
+          "delimiter": " ",
+          "create": true,
+          "options": [
+            {
+              "value": "code",
+              "label": "code"
+            },
+            {
+              "value": "token",
+              "label": "token"
+            },
+            {
+              "value": "id_token",
+              "label": "id_token"
+            },
+            {
+              "value": "none",
+              "label": "none"
+            }
+          ]
+        }
+      }
     },
     {
       "id": "idTokenClaims",
@@ -347,7 +371,55 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "data": {
+        "selectize": {
+          "delimiter": " ",
+          "create": true,
+          "options": [
+            {
+              "value": "iss",
+              "label": "Issuer Identifier"
+            },
+            {
+              "value": "sub",
+              "label": "Subject Identifier"
+            },
+            {
+              "value": "aud",
+              "label": "Audience(s) "
+            },
+            {
+              "value": "exp",
+              "label": "Expiration time"
+            },
+            {
+              "value": "iat",
+              "label": "JWT issue time"
+            },
+            {
+              "value": "auth_time",
+              "label": "End-User authentication time"
+            },
+            {
+              "value": "nonce",
+              "label": "Nonce"
+            },
+            {
+              "value": "acr",
+              "label": "Authentication Context Class Reference"
+            },
+            {
+              "value": "amr",
+              "label": "Authentication Methods References"
+            },
+            {
+              "value": "azp",
+              "label": "Authorized party"
+            }
+          ]
+        }
+      }
     },
     {
       "id": "claims",

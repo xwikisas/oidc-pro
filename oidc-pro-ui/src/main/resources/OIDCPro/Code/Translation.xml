@@ -72,49 +72,49 @@ oidcpro.config.property.clientId.hint=The client id retrieved from the OIDC prov
 oidcpro.config.property.clientSecret.label=Client Secret
 oidcpro.config.property.clientSecret.hint=The client secret retrieved from the same OIDC Provider. The secret is usually displayed only once so make sure to copy it as soon as you get your hands on it.
 oidcpro.config.property.authorizationEndpoint.label=Authorization Endpoint
-oidcpro.config.property.authorizationEndpoint.hint=The endpoint of your provider where XWiki will try to authorize itself using the client id and secret you provided.
+oidcpro.config.property.authorizationEndpoint.hint=The endpoint of your provider where XWiki will try to authorize itself using the client id and secret you provided. i.e. https://myprovider/openidconnect/auth
 oidcpro.config.property.tokenEndpoint.label=Token Endpoint
-oidcpro.config.property.tokenEndpoint.hint=The provider endpoint from where XWiki will retrieve the access and refresh tokens.
+oidcpro.config.property.tokenEndpoint.hint=The provider endpoint from where XWiki will retrieve the access and refresh tokens. i.e. https://myprovider/openidconnect/token
 oidcpro.config.property.userInfoEndpoint.label=User Info Endpoint
-oidcpro.config.property.userInfoEndpoint.hint=The provider endpoint where XWiki will retrieve the information of the user that wants to login.
+oidcpro.config.property.userInfoEndpoint.hint=The provider endpoint where XWiki will retrieve the information of the user that wants to login. i.e. https://myprovider/openidconnect/userinfo
 oidcpro.config.property.logoutEndpoint.label=Logout Endpoint
-oidcpro.config.property.logoutEndpoint.hint=If this property is filled, once the user logsout from XWiki, a logout request will also be sent to the OIDC provider, to the specified endpoint.
+oidcpro.config.property.logoutEndpoint.hint=If this property is filled, once the user logs out from XWiki, a logout request will also be sent to the OIDC provider, to the specified endpoint.
 
 oidcpro.config.property.xwikiProvider.label=XWiki Provider
-oidcpro.config.property.xwikiProvider.hint=TODO:FILL
+oidcpro.config.property.xwikiProvider.hint=The URL to the xwiki instance that acts as an identity provider. Should only be used if xwiki serves as a provider.
 oidcpro.config.property.userInfoEndpointMethod.label=User Info Endpoint Method
 oidcpro.config.property.userInfoEndpointMethod.hint=The HTTP method that will be used when requesting the user information. i.e. GET, POST
 oidcpro.config.property.userInfoEndpointHeaders.label=User Info Endpoint Headers
-oidcpro.config.property.userInfoEndpointHeaders.hint=Any additional HTTP headers that need be used when requesting the user information. i.e. Accept: * TODO:FILL
+oidcpro.config.property.userInfoEndpointHeaders.hint=Any additional HTTP headers that need be used when requesting the user information. i.e. Accept:application/json,SomeOtherHeader:header value
 oidcpro.config.property.logoutEndpointMethod.label=Logout Endpoint Method
 oidcpro.config.property.logoutEndpointMethod.hint=The method that will be used to logout the user from the provider. i.e. POST, GET
 oidcpro.config.property.logoutMechanism.label=Logout Mechanisn
-oidcpro.config.property.logoutMechanism.hint=TODO:FILL
+oidcpro.config.property.logoutMechanism.hint=The mechanism that should be used in the case of logging out. i.e. rpInitiated
 oidcpro.config.property.responseType.label=Response Type
-oidcpro.config.property.responseType.hint=TODO:FILL
-oidcpro.config.property.idTokenClaims.label=ID Token Clains
-oidcpro.config.property.idTokenClaims.hint=TODO:FILL
+oidcpro.config.property.responseType.hint=The response type that we want to get from the OIDC provider after a successful authorization. i.e. code (authorization code), token (access token), id_token. The default value is `code`.
+oidcpro.config.property.idTokenClaims.label=ID Token Claims
+oidcpro.config.property.idTokenClaims.hint=The claims/information that should be contained in the ID Token returned by the provider. i.e. acc, iss, exp.
 oidcpro.config.property.claims.label=Claims
-oidcpro.config.property.claims.hint=TODO:FILL
+oidcpro.config.property.claims.hint=The claims, in json format, that are to be retrieved from the OIDC provider. This field should only be used if certain claims (i.e. acc) require a value, otherwise, the claims are constructed from the "Id Token Claims" and "User Info Claims" properties.
 oidcpro.config.property.afterLogoutURL.label=After-Logout URL
 oidcpro.config.property.afterLogoutURL.hint=The URL where the user should be redirected to after they logout
 oidcpro.config.property.tokenEndpointMethod.label=Token Endpoint Method
 oidcpro.config.property.tokenEndpointMethod.hint=The method that should be used when XWiki requests the tokens from the provided endpoint.
 oidcpro.config.property.tokenStorageScope.label=Token Storage Scope
-oidcpro.config.property.tokenStorageScope.hint=TODO:FILL
+oidcpro.config.property.tokenStorageScope.hint=Defines where the retrieved tokens should be stored in the XWiki instance. i.e. NONE (no storage), WIKI (tokens will be stored at the wiki level), USER (tokens will be stored in the profile of each user - default).
 
 
 oidcpro.config.property.userNameFormatter.label=Username Formatter
-oidcpro.config.property.userNameFormatter.hint=The format that will be used in order to generate the xwiki username of a user coming from the OIDC provider. i.e. TODO:FILL
+oidcpro.config.property.userNameFormatter.hint=The format that will be used in order to generate the xwiki username of a user coming from the OIDC provider. i.e. ${oidc.issuer.host._clean}-${oidc.user.preferredUsername._clean}
 oidcpro.config.property.userSubjectFormatter.label=User Subject Formatter
-oidcpro.config.property.userSubjectFormatter.hint=TODO:FILL
+oidcpro.config.property.userSubjectFormatter.hint=The pattern to use to generate the unique identifier of the user in the OpenId Connect provider. i.e. ${oidc.user.subject}
 oidcpro.config.property.userMapping.label=User Attribute Mapping
 oidcpro.config.property.userMapping.hint=This property maps the attributes of the user coming from the OIDC provider to XWiki user attributes. i.e. if the OIDC provider stores the user email in a property named 'electronic-mail', we want to let XWiki know this by filling this property like so: electronic-mail=email.
 
 oidcpro.config.property.userInfoClaims.label=User Info Claims
-oidcpro.config.property.userInfoClaims.hint=TODO:FILL
+oidcpro.config.property.userInfoClaims.hint=The user information that should be returned by the oidc provider. i.e.: sub, name, gender, given_name.
 oidcpro.config.property.userInfoRefreshRate.label=User Info Refresh Rate
-oidcpro.config.property.userInfoRefreshRate.hint=TODO:FILL
+oidcpro.config.property.userInfoRefreshRate.hint=The time after which the user information should be refreshed (in milliseconds).
 oidcpro.config.property.userInfoSkip.label=User Info Skip
 oidcpro.config.property.userInfoSkip.hint=If this property is set, then XWiki will skip the retrieval of the user information from the specialised endpoint. Useful for OAuth providers.
 
@@ -123,16 +123,16 @@ oidcpro.config.property.enableUser.hint=TODO:FILL
 
 
 oidcpro.config.property.groupsClaim.label=Group Claims
-oidcpro.config.property.groupsClaim.hint=TODO:FILL
+oidcpro.config.property.groupsClaim.hint=Define if user accounts should be enabled (marked as active) on first login.
 oidcpro.config.property.groupsMapping.label=Groups Mapping
 oidcpro.config.property.groupsMapping.hint=This property maps the groups coming from the OIDC provider to XWiki Groups. When a user coming from the OIDC provider logs in, they will also be added to the XWiki groups according to this mapping. i.e. OIDCGroupId=XWiki.AdminGroup
 
 oidcpro.config.property.allowedGroups.label=Allowed Groups
-oidcpro.config.property.allowedGroups.hint=List all the OIDC groups that should be allowed to login into XWiki. OIDC users that belong to other groups will not be allowed to login.
+oidcpro.config.property.allowedGroups.hint=Regular expression that will be used to determine the groups that should be included in the synchronization process. If the incoming group matches this regex, then it will be synced.
 oidcpro.config.property.forbiddenGroups.label=Forbidden Groups
-oidcpro.config.property.forbiddenGroups.hint=List all the OIDC groups that should be denied entry to XWiki. Users belonging to these groups will not be allowed to login. i.e. OIDCGroup1,OIDCAdminGroup2
+oidcpro.config.property.forbiddenGroups.hint=Defines a list of groups that should not be able to login into xwiki. If an user belongs to one of the listed groups, access to xwiki will be forbidden. i.e. Group1,Group2.
 oidcpro.config.property.groupsMappingExclude.label=Groups Mapping Exclude
-oidcpro.config.property.groupsMappingExclude.hint=TODO:FILL
+oidcpro.config.property.groupsMappingExclude.hint=Regular expression that will be used to determine the groups that should not be included in the synchronization process. If the incoming group matches this regex, then it will not be synced.
 </content>
   <object>
     <name>OIDCPro.Code.Translation</name>
