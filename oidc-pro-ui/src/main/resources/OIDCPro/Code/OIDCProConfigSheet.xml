@@ -338,17 +338,18 @@ require(['jquery', 'xwiki-propertize', 'xwiki-selectize'], function ($) {
       }
     ]
   });
-  $('#XWiki\\.OIDC\\.ClientConfigurationClass_0_userMapping').xwikiPropertize({
-    separator: '|'
-  });
-  $('#XWiki\\.OIDC\\.ClientConfigurationClass_0_groupsMapping').xwikiPropertize({
-    separator: '|'
-  });
+
   $('.oidcpro-property').each(function () {
     let selectizeCfg = $(this).data('selectize');
     if (selectizeCfg) {
-      let foundInput = $(this).find('input,textarea,select')[0]
+      let foundInput = $(this).find('input,textarea,select')[0];
       $(foundInput).xwikiSelectize(selectizeCfg);
+      return;
+    }
+    let propertizeCfg = $(this).data('propertize');
+    if (propertizeCfg) {
+      let foundInput = $(this).find('input,textarea,select')[0];
+      $(foundInput).xwikiPropertize(propertizeCfg);
     }
   });
   // XWiki.OIDC.ClientConfigurationClass_0_groupsMapping

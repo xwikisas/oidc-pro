@@ -119,20 +119,22 @@ oidcpro.config.property.userInfoSkip.label=User Info Skip
 oidcpro.config.property.userInfoSkip.hint=If this property is set, then XWiki will skip the retrieval of the user information from the specialised endpoint. Useful for OAuth providers.
 
 oidcpro.config.property.enableUser.label=Enable User
-oidcpro.config.property.enableUser.hint=TODO:FILL
+oidcpro.config.property.enableUser.hint=Define if user accounts should be enabled (marked as active) on first login.
 
 
 oidcpro.config.property.groupsClaim.label=Group Claims
-oidcpro.config.property.groupsClaim.hint=Define if user accounts should be enabled (marked as active) on first login.
+oidcpro.config.property.groupsClaim.hint=The name of the claim used to get the list of groups the user belong to.
 oidcpro.config.property.groupsMapping.label=Groups Mapping
 oidcpro.config.property.groupsMapping.hint=This property maps the groups coming from the OIDC provider to XWiki Groups. When a user coming from the OIDC provider logs in, they will also be added to the XWiki groups according to this mapping. i.e. OIDCGroupId=XWiki.AdminGroup
 
-oidcpro.config.property.allowedGroups.label=Allowed Groups
-oidcpro.config.property.allowedGroups.hint=Regular expression that will be used to determine the groups that should be included in the synchronization process. If the incoming group matches this regex, then it will be synced.
-oidcpro.config.property.forbiddenGroups.label=Forbidden Groups
-oidcpro.config.property.forbiddenGroups.hint=Defines a list of groups that should not be able to login into xwiki. If an user belongs to one of the listed groups, access to xwiki will be forbidden. i.e. Group1,Group2.
+oidcpro.config.property.groupsMappingInclude.label=Group Mapping Include
+oidcpro.config.property.groupsMappingInclude.hint=Regular expression that will be used to determine the groups that should be included in the synchronization process. If the incoming group matches this regex, then it will be synced.
 oidcpro.config.property.groupsMappingExclude.label=Groups Mapping Exclude
 oidcpro.config.property.groupsMappingExclude.hint=Regular expression that will be used to determine the groups that should not be included in the synchronization process. If the incoming group matches this regex, then it will not be synced.
+oidcpro.config.property.allowedGroups.label=Allowed groups
+oidcpro.config.property.allowedGroups.hint=The groups the user need to belong to be allowed to authenticate.
+oidcpro.config.property.forbiddenGroups.label=Forbidden Groups
+oidcpro.config.property.forbiddenGroups.hint=Defines a list of groups that should not be able to login into xwiki. If an user belongs to one of the listed groups, access to xwiki will be forbidden. i.e. Group1,Group2.
 </content>
   <object>
     <name>OIDCPro.Code.Translation</name>

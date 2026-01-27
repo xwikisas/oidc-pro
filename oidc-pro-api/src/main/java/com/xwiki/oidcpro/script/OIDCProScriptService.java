@@ -20,6 +20,8 @@
 
 package com.xwiki.oidcpro.script;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -34,6 +36,8 @@ import org.xwiki.security.authservice.internal.DefaultXWikiAuthServiceComponent;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.user.api.XWikiAuthService;
+import com.xwiki.oidcpro.OIDCProClientConfiguration;
+import com.xwiki.oidcpro.internal.ConfigurationStore;
 
 /**
  * Provides methods related to the OIDC Pro implementation accessible in the xwiki platform.
@@ -47,6 +51,9 @@ public class OIDCProScriptService implements ScriptService
 {
     @Inject
     private Provider<XWikiContext> contextProvider;
+
+    @Inject
+    private ConfigurationStore configurationStore;
 
     /**
      * @return true if the current xwiki authenticator is OIDC.
@@ -71,5 +78,13 @@ public class OIDCProScriptService implements ScriptService
         }
 
         return authService instanceof OIDCAuthServiceImpl || authService instanceof OIDCAuthService;
+    }
+
+    /**
+     * @return the OIDC configurations of the current wiki.
+     */
+    public List<OIDCProClientConfiguration> getConfigurations()
+    {
+        return configurationStore.getConfigurations();
     }
 }

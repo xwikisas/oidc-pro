@@ -294,7 +294,13 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "data": {
+        "propertize": {
+          "separator": ",",
+          "keyValueSeparator": ":"
+        }
+      }
     },
     {
       "id": "logoutEndpointMethod",
@@ -501,7 +507,12 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "data": {
+        "propertize": {
+          "separator": "|"
+        }
+      }
     },
     {
       "id": "userInfoClaims",
@@ -510,7 +521,94 @@
       "value": "Some value",
       "advanced": true,
       "class": "extraClass",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "data": {
+        "selectize": {
+          "delimiter": ",",
+          "create": true,
+          "options": [
+            {
+              "value": "sub",
+              "label": "Subject"
+            },
+            {
+              "value": "name",
+              "label": "Name"
+            },
+            {
+              "value": "given_name",
+              "label": "Given Name"
+            },
+            {
+              "value": "family_name",
+              "label": "Family Name"
+            },
+            {
+              "value": "middle_name",
+              "label": "Middle Name"
+            },
+            {
+              "value": "nickname",
+              "label": "Nickname"
+            },            {
+              "value": "preferred_username",
+              "label": "Preferred Username"
+            },
+            {
+              "value": "profile",
+              "label": "Profile"
+            },
+            {
+              "value": "picture",
+              "label": "Picture"
+            },
+            {
+              "value": "website",
+              "label": "Website"
+            },
+            {
+              "value": "email",
+              "label": "Email"
+            },
+            {
+              "value": "email_verified",
+              "label": "Email Verified"
+            },
+            {
+              "value": "gender",
+              "label": "Gender"
+            },
+            {
+              "value": "birthdate",
+              "label": "Birthdate"
+            },
+            {
+              "value": "zoneinfo",
+              "label": "Zone Info"
+            },
+            {
+              "value": "locale",
+              "label": "Locale"
+            },
+            {
+              "value": "phone_number",
+              "label": "Phone Number"
+            },
+            {
+              "value": "phone_number_verified",
+              "label": "Phone Number Verified"
+            },
+            {
+              "value": "address",
+              "label": "Address"
+            },
+            {
+              "value": "updated_at",
+              "label": "Updated At"
+            }
+          ]
+        }
+      }
     },
     {
       "id": "userInfoRefreshRate",
@@ -555,7 +653,12 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "data": {
+        "propertize": {
+          "separator": "|"
+        }
+      }
     },
     {
       "id": "allowedGroups",
