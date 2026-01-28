@@ -29,12 +29,15 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.xwiki.cache.Cache;
 import org.xwiki.cache.CacheException;
 import org.xwiki.cache.CacheManager;
 import org.xwiki.cache.config.LRUCacheConfiguration;
 import org.xwiki.component.annotation.Component;
+import org.xwiki.component.manager.ComponentLifecycleException;
+import org.xwiki.component.phase.Disposable;
 import org.xwiki.component.phase.Initializable;
 import org.xwiki.component.phase.InitializationException;
 import org.xwiki.contrib.oidc.auth.internal.store.OIDCClientConfigurationCache;
@@ -58,7 +61,7 @@ import com.xwiki.oidcpro.OIDCProClientConfiguration;
  */
 @Component(roles = ConfigurationStore.class)
 @Singleton
-public class ConfigurationStore implements Initializable
+public class ConfigurationStore implements Initializable, Disposable
 {
     private static final String TEMPLATE_NAME = "templateName";
 
@@ -97,7 +100,7 @@ public class ConfigurationStore implements Initializable
             this.proClientConfigurationCache =
                 this.cacheManager.createNewCache(new LRUCacheConfiguration("oidcpro.client.configuration", 10));
         } catch (CacheException e) {
-            throw new InitializationException("Failed to create cache with if [oidc.client.configuration]");
+            throw new InitializationException("Failed to create cache with id [oidcpro.client.configuration]");
         }
     }
 
@@ -120,6 +123,7 @@ public class ConfigurationStore implements Initializable
                 OIDCProClientConfiguration proClientConfiguration = proClientConfigurationCache.get(cfgName);
                 if (proClientConfiguration == null) {
                     proClientConfiguration = getClientConfiguration(cfgName, serializedDocument, context);
+                    proClientConfigurationCache.set(cfgName, proClientConfiguration);
                 }
                 configurations.add(proClientConfiguration);
             }
@@ -128,6 +132,14 @@ public class ConfigurationStore implements Initializable
             return Collections.emptyList();
         }
         return configurations;
+    }
+
+    @Override
+    public void dispose() throws ComponentLifecycleException
+    {
+        if (proClientConfigurationCache != null) {
+            proClientConfigurationCache.dispose();
+        }
     }
 
     private OIDCProClientConfiguration getClientConfiguration(String cfgName, String serializedDocument,
@@ -139,28 +151,43 @@ public class ConfigurationStore implements Initializable
         BaseObject templateObj = null;
         if (cacheEntry == null) {
             XWikiDocument document =
-                contextProvider.get().getWiki()
+                context.getWiki()
                     .getDocument(documentReferenceResolver.resolve(serializedDocument), context);
             clientConfiguration =
                 new OIDCClientConfiguration(document.getXObject(OIDCClientConfiguration.CLASS_REFERENCE));
 
-            BaseObject templateBinderObj = document.getXObject(PRO_TEMPLATE_BINDER_CLASS);
-            String templateId = templateBinderObj.getStringValue(TEMPLATE_NAME);
-            templateId = templateId == null || templateId.isEmpty() ? "default" : templateId;
-
-            List<Object> result = queryManager.createQuery("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as "
-                + "template where template"
-                + ".name = :templateName", Query.XWQL).bindValue(TEMPLATE_NAME, templateId).execute();
-            String templateDocRef = result.get(0).toString();
-
-            XWikiDocument templateDoc =
-                context.getWiki().getDocument(documentReferenceResolver.resolve(templateDocRef), context);
-            templateObj = templateDoc.getXObject(PRO_TEMPLATE_CLASS);
+            templateObj = getTemplateObject(context, document);
 
             configurationCache.set(cfgName, clientConfiguration);
         } else {
             clientConfiguration = cacheEntry.getConfiguration();
         }
+
+        if (templateObj == null) {
+            templateObj = getTemplateObject(context, context.getWiki()
+                .getDocument(documentReferenceResolver.resolve(serializedDocument), context));
+        }
         return new OIDCProClientConfiguration(clientConfiguration, templateObj);
+    }
+
+    private BaseObject getTemplateObject(XWikiContext context, XWikiDocument document)
+        throws QueryException, XWikiException
+    {
+        BaseObject templateObj;
+        BaseObject templateBinderObj = document.getXObject(PRO_TEMPLATE_BINDER_CLASS);
+        String templateId = "default";
+        if (templateBinderObj != null && !StringUtils.isEmpty(templateBinderObj.getStringValue(TEMPLATE_NAME))) {
+            templateId = templateBinderObj.getStringValue(TEMPLATE_NAME);
+        }
+
+        List<Object> result = queryManager.createQuery("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as "
+            + "template where template"
+            + ".name = :templateName", Query.XWQL).bindValue(TEMPLATE_NAME, templateId).execute();
+        String templateDocRef = result.get(0).toString();
+
+        XWikiDocument templateDoc =
+            context.getWiki().getDocument(documentReferenceResolver.resolve(templateDocRef), context);
+        templateObj = templateDoc.getXObject(PRO_TEMPLATE_CLASS);
+        return templateObj;
     }
 }
