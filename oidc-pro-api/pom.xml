@@ -41,22 +41,11 @@
       <version>${platform.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.xwiki.contrib</groupId>
-      <artifactId>authservice-backport-default</artifactId>
-      <version>${authservicebackport.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.xwiki.contrib.oidc</groupId>
       <artifactId>oidc-authenticator</artifactId>
       <version>${oidc.version}</version>
     </dependency>
-    <!--  I dont know why but depending solely on the oidc-authenticator will trigger the RequireUpperBounds enforcing
-      rule.  -->
-    <dependency>
-      <groupId>com.nimbusds</groupId>
-      <artifactId>nimbus-jose-jwt</artifactId>
-      <version>10.5</version>
-    </dependency>
+
     <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-oldcore</artifactId>

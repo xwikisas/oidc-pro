@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.6" reference="OIDCPro.Code.OIDCProTemplate" locale="">
+<xwikidoc version="1.5" reference="OIDCPro.Code.OIDCProTemplate" locale="">
   <web>OIDCPro.Code</web>
   <name>OIDCProTemplate</name>
   <language/>
@@ -143,8 +143,9 @@
         <number>17</number>
         <prettyName>Secret</prettyName>
         <size>255</size>
+        <storageType>Clear</storageType>
         <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+        <classType>com.xpn.xwiki.objects.classes.PasswordClass</classType>
       </clientSecret>
       <configurationName>
         <disabled>0</disabled>

@@ -31,10 +31,8 @@ import org.xwiki.component.annotation.Component;
 import org.xwiki.contrib.oidc.auth.OIDCAuthServiceImpl;
 import org.xwiki.contrib.oidc.auth.internal.OIDCAuthService;
 import org.xwiki.script.service.ScriptService;
-import org.xwiki.security.authservice.internal.DefaultXWikiAuthServiceComponent;
 
 import com.xpn.xwiki.XWikiContext;
-import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.user.api.XWikiAuthService;
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 import com.xwiki.oidcpro.internal.ConfigurationStore;
@@ -66,16 +64,6 @@ public class OIDCProScriptService implements ScriptService
         }
 
         XWikiAuthService authService = context.getWiki().getAuthService();
-
-        try {
-            authService =
-                // Remove after upgrading minimal version to >=15.3 and leave only the final check.
-                authService.getClass().toString().contains("DefaultXWikiAuthServiceComponent")
-                    && authService instanceof DefaultXWikiAuthServiceComponent
-                    ? ((DefaultXWikiAuthServiceComponent) authService).getAuthService() : authService;
-        } catch (XWikiException e) {
-            return false;
-        }
 
         return authService instanceof OIDCAuthServiceImpl || authService instanceof OIDCAuthService;
     }

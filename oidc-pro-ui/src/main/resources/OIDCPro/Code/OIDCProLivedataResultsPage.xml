@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.6" reference="OIDCPro.Code.OIDCProLivedataResultsPage" locale="">
+<xwikidoc version="1.5" reference="OIDCPro.Code.OIDCProLivedataResultsPage" locale="">
   <web>OIDCPro.Code</web>
   <name>OIDCProLivedataResultsPage</name>
   <language/>
@@ -42,7 +42,7 @@
 #if($xcontext.action == 'get' &amp;&amp; "$!{request.outputSyntax}" == 'plain')
   $response.setContentType('application/json')
   #set($map = {})
-  #gridresult_buildJSON("$!request.classname" $request.collist.split(',') $map)
+  #gridresultwithfilter_buildJSON("$!request.classname" $request.collist.split(',') '' " and doc.fullName &lt;&gt; 'OIDCPro.Code.OIDCProTemplate'" {} $map)
   #set ($oidcSheet = "OIDCPro.Code.OIDCProConfigSheet")
   #foreach($row in $map.get('rows'))
     #set($rowDocRef = $services.model.resolveDocument($row.get('doc_fullName')))

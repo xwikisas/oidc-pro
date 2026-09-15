@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.6" reference="OIDCPro.Code.OIDCProAdministration" locale="">
+<xwikidoc version="1.5" reference="OIDCPro.Code.OIDCProAdministration" locale="">
   <web>OIDCPro.Code</web>
   <name>OIDCProAdministration</name>
   <language/>
@@ -449,7 +449,15 @@
       <cache>long</cache>
     </property>
     <property>
-      <code>require(['jquery', 'xwiki-meta'], function ($, xm) {
+      <code>define('oidcpro-admin-translation-keys', {
+  prefix: 'oidcpro.admin.enable.',
+  keys: [
+    'progress',
+    'done',
+    'error'
+  ]
+});
+require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], function ($, xm, l10n) {
   $('.oidcpro-config-create').on('click', function (e) {
     e.preventDefault();
     let newConfigurationRef = XWiki.Model.resolve('OIDCPro.Configurations.Configuration' + Date.now(), XWiki.EntityType.DOCUMENT, XWiki.currentDocument.getDocumentReference());
@@ -473,20 +481,20 @@
     let oidcConfigDocRef = XWiki.Model.resolve(oidcConfigSerializedDocRef, XWiki.EntityType.DOCUMENT, XWiki.currentDocument.getDocumentReference());
     let oidcConfigDoc = new XWiki.Document(oidcConfigDocRef);
     let restURL = oidcConfigDoc.getRestURL('objects/XWiki.OIDC.ClientConfigurationClass/0/properties/skipped');
-    var notification = new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('oidcpro.admin.enable.progress'))", 'inprogress')
+    var notification = new XWiki.widgets.Notification(l10n.get('progress'), 'inprogress')
     $.ajax(restURL, {
       method: 'PUT',
       contentType: 'text/plain',
       data: checked ? '0' : '1'
     }).then(data =&gt; {
       notification.hide();
-      new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('oidcpro.admin.enable.done'))", 'done');
+      new XWiki.widgets.Notification(l10n.get('done'), 'done');
       elem.attr('disabled', null);
     }).catch(() =&gt; {
       notification.hide();
       elem[0].checked = !checked;
       elem.attr('disabled', null);
-      new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('oidcpro.admin.enable.error'))", 'error');
+      new XWiki.widgets.Notification(l10n.get('error'), 'error');
     });
   });
 });</code>

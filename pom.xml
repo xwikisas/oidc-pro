@@ -25,17 +25,16 @@
   <parent>
     <groupId>com.xwiki.parent</groupId>
     <artifactId>xwikisas-parent-platform</artifactId>
-    <version>14.10</version>
+    <version>15.10</version>
   </parent>
   <groupId>com.xwiki.oidcpro</groupId>
   <artifactId>oidc-pro</artifactId>
   <version>1.11-SNAPSHOT</version>
   <name>OIDC Pro - Parent POM</name>
   <properties>
-    <xwikipro.commons.version>1.0.4</xwikipro.commons.version>
-    <licensing.version>1.28</licensing.version>
-    <authservicebackport.version>1.1.1</authservicebackport.version>
-    <oidc.version>2.19.4</oidc.version>
+    <xwikipro.commons.version>1.5.0</xwikipro.commons.version>
+    <licensing.version>1.32.4</licensing.version>
+    <oidc.version>2.27.0</oidc.version>
   </properties>
   <packaging>pom</packaging>
   <issueManagement>

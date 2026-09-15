@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.6" reference="OIDCPro.Code.Translation" locale="">
+<xwikidoc version="1.5" reference="OIDCPro.Code.Translation" locale="">
   <web>OIDCPro.Code</web>
   <name>Translation</name>
   <language/>
@@ -55,6 +55,10 @@ oidcpro.admin.livedata.oidcpro.is_enabled=Enabled?
 
 oidcpro.templates.default.name=Default
 oidcpro.templates.test.name=Entra ID test
+
+oidcpro.admin.enable.progress=Toggling OIDC client
+oidcpro.admin.enable.done=OIDC client successfully toggled
+oidcpro.admin.enable.error=Failed to toggle the OIDC client
 
 # Config Sheet
 oidcpro.config.section.General.label=General Configuration
@@ -134,8 +138,7 @@ oidcpro.config.property.groupsMappingExclude.hint=Regular expression that will b
 oidcpro.config.property.allowedGroups.label=Allowed groups
 oidcpro.config.property.allowedGroups.hint=The groups the user need to belong to be allowed to authenticate.
 oidcpro.config.property.forbiddenGroups.label=Forbidden Groups
-oidcpro.config.property.forbiddenGroups.hint=Defines a list of groups that should not be able to login into xwiki. If an user belongs to one of the listed groups, access to xwiki will be forbidden. i.e. Group1,Group2.
-</content>
+oidcpro.config.property.forbiddenGroups.hint=Defines a list of groups that should not be able to login into xwiki. If an user belongs to one of the listed groups, access to xwiki will be forbidden. i.e. Group1,Group2.</content>
   <object>
     <name>OIDCPro.Code.Translation</name>
     <number>0</number>

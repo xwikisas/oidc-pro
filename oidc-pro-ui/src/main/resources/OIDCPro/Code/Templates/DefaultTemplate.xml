@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.6" reference="OIDCPro.Code.Templates.DefaultTemplate" locale="">
+<xwikidoc version="1.5" reference="OIDCPro.Code.Templates.DefaultTemplate" locale="">
   <web>OIDCPro.Code.Templates</web>
   <name>DefaultTemplate</name>
   <language/>
@@ -196,7 +196,8 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "icon": "book"
+      "icon": "book",
+      "required": true
     },
     {
       "id": "clientId",
@@ -205,7 +206,8 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "icon": "user"
+      "icon": "user",
+      "required": true
     },
     {
       "id": "clientSecret",
@@ -214,7 +216,8 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "icon": "key"
+      "icon": "key",
+      "required": true
     },
     {
       "id": "authorizationEndpoint",
