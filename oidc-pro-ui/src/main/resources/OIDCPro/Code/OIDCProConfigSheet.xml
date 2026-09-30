@@ -31,7 +31,7 @@
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title>#set($name = $!{doc.getObject('XWiki.OIDC.ClientConfigurationClass').getProperty('configurationName').value})#if($name)${name}#elseif("$!request.title"!='')${request.title}#else OIDC Configuration #end</title>
+  <title>#set($name = $!{doc.getObject('XWiki.OIDC.ClientConfigurationClass').getProperty('configurationName').value})#if("$!name" != '')${name}#elseif("$!request.title"!='')${request.title}#else$!{services.localization.render('oidcpro.config.defaultTitle')}#end</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
@@ -112,6 +112,10 @@
 #else
   #set ($templateId = 'default')
 #end
+#set ($oidcAdminSection = $xwiki.getURL('XWiki.XWikiPreferences', 'admin', $escapetool.url({'section' : 'OIDC Pro'})))
+
+[[$services.rendering.escape($services.localization.render('oidcpro.config.backToAdmin'), $doc.getSyntax())>>path:$oidcAdminSection]]
+
 #set ($queryResult = $services.query.xwql("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as template where template.name = :templateName").bindValue('templateName', $templateId).execute())
 #if (!$queryResult || $queryResult.size() == 0)
   {{warning}}No OIDC template found with '$templateId' name.{{/warning}}

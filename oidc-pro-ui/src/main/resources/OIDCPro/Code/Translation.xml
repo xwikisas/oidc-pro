@@ -44,6 +44,7 @@ oidcpro.login.provider.domain=Or specify it's domain
 # Admin section
 oidcpro.admin.create.title=Create a new OIDC Client Configuration
 oidcpro.admin.create.button.label=Create
+oidcpro.admin.create.placeholderTitle=New OIDC Client Configuration
 
 oidcpro.admin.livedata.title=Available OIDC Client Configurations
 oidcpro.admin.livedata.emptyvalue=-
@@ -61,6 +62,8 @@ oidcpro.admin.enable.done=OIDC client successfully toggled
 oidcpro.admin.enable.error=Failed to toggle the OIDC client
 
 # Config Sheet
+oidcpro.config.defaultTitle=OIDC Configuration
+oidcpro.config.backToAdmin=Go back to the Administration Section
 oidcpro.config.section.General.label=General Configuration
 oidcpro.config.section.User.label=User Configuration
 oidcpro.config.section.Group.label=Group Configuration

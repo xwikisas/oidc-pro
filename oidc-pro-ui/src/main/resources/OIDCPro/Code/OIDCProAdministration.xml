@@ -450,11 +450,12 @@
     </property>
     <property>
       <code>define('oidcpro-admin-translation-keys', {
-  prefix: 'oidcpro.admin.enable.',
+  prefix: 'oidcpro.admin.',
   keys: [
-    'progress',
-    'done',
-    'error'
+    'create.placeholderTitle',
+    'enable.progress',
+    'enable.done',
+    'enable.error'
   ]
 });
 require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], function ($, xm, l10n) {
@@ -466,7 +467,7 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
       template: 'OIDCPro.Code.OIDCProTemplate',
       oidcTemplate: $(this).data('templateid') || 'default',
       form_token: xm.form_token,
-      title: "New OIDC Client Configuration",
+      title: l10n.get('create.placeholderTitle'),
       collapsed: 1
     }));
     console.log(createURL);
@@ -481,20 +482,20 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
     let oidcConfigDocRef = XWiki.Model.resolve(oidcConfigSerializedDocRef, XWiki.EntityType.DOCUMENT, XWiki.currentDocument.getDocumentReference());
     let oidcConfigDoc = new XWiki.Document(oidcConfigDocRef);
     let restURL = oidcConfigDoc.getRestURL('objects/XWiki.OIDC.ClientConfigurationClass/0/properties/skipped');
-    var notification = new XWiki.widgets.Notification(l10n.get('progress'), 'inprogress')
+    var notification = new XWiki.widgets.Notification(l10n.get('enable.progress'), 'inprogress')
     $.ajax(restURL, {
       method: 'PUT',
       contentType: 'text/plain',
       data: checked ? '0' : '1'
     }).then(data =&gt; {
       notification.hide();
-      new XWiki.widgets.Notification(l10n.get('done'), 'done');
+      new XWiki.widgets.Notification(l10n.get('enable.done'), 'done');
       elem.attr('disabled', null);
     }).catch(() =&gt; {
       notification.hide();
       elem[0].checked = !checked;
       elem.attr('disabled', null);
-      new XWiki.widgets.Notification(l10n.get('error'), 'error');
+      new XWiki.widgets.Notification(l10n.get('enable.error'), 'error');
     });
   });
 });</code>
