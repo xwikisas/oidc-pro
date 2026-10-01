@@ -25,14 +25,14 @@
   <parent>
     <groupId>com.xwiki.oidcpro</groupId>
     <artifactId>oidc-pro</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-rc-1</version>
   </parent>
 
   <artifactId>oidc-pro-ui</artifactId>
 
   <packaging>xar</packaging>
 
-  <name>OpenIDConnect (Pro)</name>
+  <name>OpenIDConnect Manager (Pro)</name>
   <description>Manage your OpenID Connect (OIDC) integrations from a single place. Create and configure OIDC clients and connections, manage their settings, and connect your applications to identity providers for secure authentication.</description>
   <properties>
     <xwiki.extension.name>Open ID Connect (Pro)</xwiki.extension.name>

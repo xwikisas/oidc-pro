@@ -24,10 +24,11 @@
   <parent>
     <groupId>com.xwiki.oidcpro</groupId>
     <artifactId>oidc-pro</artifactId>
-    <version>1.11-SNAPSHOT</version>
+    <version>1.0.0-rc-1</version>
   </parent>
 
   <artifactId>oidc-pro-api</artifactId>
+  <name>OIDC Pro - API Module</name>
 
   <dependencies>
     <dependency>

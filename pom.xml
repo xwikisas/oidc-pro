@@ -29,7 +29,7 @@
   </parent>
   <groupId>com.xwiki.oidcpro</groupId>
   <artifactId>oidc-pro</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0-rc-1</version>
   <name>OIDC Pro - Parent POM</name>
   <properties>
     <xwikipro.commons.version>1.5.0</xwikipro.commons.version>
@@ -45,7 +45,7 @@
     <connection>scm:git:git://github.com/xwikisas/oidc-pro.git</connection>
     <developerConnection>scm:git:git@github.com:xwikisas/oidc-pro.git</developerConnection>
     <url>https://github.com/xwikisas/oidc-pro/tree/main</url>
-    <tag>HEAD</tag>
+    <tag>oidc-pro-1.0.0-rc-1</tag>
   </scm>
   <modules>
     <module>oidc-pro-ui</module>
