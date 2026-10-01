@@ -27,7 +27,7 @@
   <defaultLanguage/>
   <translation>0</translation>
   <creator>xwiki:XWiki.Admin</creator>
-  <parent>Main.WebHome</parent>
+  <parent>OIDCPro.Code.WebHome</parent>
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
@@ -49,7 +49,6 @@
     #set($rowDoc = $xwiki.getDocument($rowDocRef))
     #set($templateBinderObj = $rowDoc.getObject('OIDCPro.Code.OIDCProTemplateBinderClass'))
     #if ($templateBinderObj)
-      ##set ($discard = $row.put('xxxxxxxsmth', $templateBinderObj))
       #set ($discard = $row.put('oidcpro.view_url', $row.get('doc_url')))
       #set ($discard = $row.put('oidcpro.edit_url', "${row.get('doc_edit_url')}?collapsed=1"))
     #else
@@ -61,15 +60,15 @@
     #else
       #set ($checked = '')
     #end
-    #set ($discard = $row.put('oidcpro.is_enabled', "&lt;label data-docref='$row.get('doc_fullName')' class='oidcpro-switch oidcpro-toggle'&gt;&lt;input type='checkbox' $checked&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
-    #if ($services.oidcpro.isDefaultClient("$!row.get('configurationName')"))
+    #set ($discard = $row.put('oidcpro.is_enabled', "&lt;label data-docref='$escapetool.xml($row.get('doc_fullName'))' class='oidcpro-switch oidcpro-toggle'&gt;&lt;input type='checkbox' $checked&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
+    ## Use the raw property value: the one in the row is displayed (and possibly escaped) by the live table macros.
+    #set ($clientName = "$!rowDoc.getObject('XWiki.OIDC.ClientConfigurationClass').getValue('configurationName')")
+    #if ($services.oidcpro.isDefaultClient($clientName))
       #set ($checked = 'checked')
     #else
       #set ($checked = '')
     #end
-    #set ($discard = $row.put('oidcpro.is_default', "&lt;label data-name='$!row.get('configurationName')' class='oidcpro-switch-default oidcpro-toggle'&gt;&lt;input name='oidc-pro-default' type='radio' $checked&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
-    ##set ($discard = $row.put('oidcpro.view_url', 'https://google.com'))
-    ##set($discard = $row.put('doc_delete_url', $xwiki.getURL('AppWithinMinutes.DeleteApplication', 'view', $appQueryString)))
+    #set ($discard = $row.put('oidcpro.is_default', "&lt;label data-name='$escapetool.xml($clientName)' class='oidcpro-switch-default oidcpro-toggle'&gt;&lt;input name='oidc-pro-default' type='radio' $checked&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
   #end
   $jsontool.serialize($map)
 #end

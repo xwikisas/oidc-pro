@@ -59,10 +59,16 @@ public class ConfigurationStore
 
     private static final List<String> OIDC_PRO_CODE_SPACE = Arrays.asList("OIDCPro", "Code");
 
-    private static final LocalDocumentReference PRO_TEMPLATE_BINDER_CLASS =
+    /**
+     * The class of the object that binds an OIDC client configuration to a template.
+     */
+    static final LocalDocumentReference PRO_TEMPLATE_BINDER_CLASS =
         new LocalDocumentReference(OIDC_PRO_CODE_SPACE, "OIDCProTemplateBinderClass");
 
-    private static final LocalDocumentReference PRO_TEMPLATE_CLASS =
+    /**
+     * The class of the OIDC Pro template objects.
+     */
+    static final LocalDocumentReference PRO_TEMPLATE_CLASS =
         new LocalDocumentReference(OIDC_PRO_CODE_SPACE, "OIDCProTemplateClass");
 
     @Inject

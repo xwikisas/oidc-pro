@@ -27,7 +27,7 @@
   <defaultLanguage/>
   <translation>0</translation>
   <creator>xwiki:XWiki.Admin</creator>
-  <parent>OIDCPro.Code.Some page.WebHome</parent>
+  <parent>OIDCPro.Code.WebHome</parent>
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
@@ -479,7 +479,6 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
       title: l10n.get('create.placeholderTitle'),
       collapsed: 1
     }));
-    console.log(createURL);
     window.open(createURL, '_blank');
   });
   // Enable / Disable client.
