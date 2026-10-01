@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.6" reference="OIDCPro.Code.OIDCProTemplateClass" locale="">
+<xwikidoc version="1.5" reference="OIDCPro.Code.OIDCProTemplateClass" locale="">
   <web>OIDCPro.Code</web>
   <name>OIDCProTemplateClass</name>
   <language/>
@@ -46,6 +46,61 @@
     <defaultWeb/>
     <nameField/>
     <validationScript/>
+    <codeInsertionPoint>
+      <disabled>0</disabled>
+      <name>codeInsertionPoint</name>
+      <number>6</number>
+      <prettyName>codeInsertionPoint</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+    </codeInsertionPoint>
+    <customCode>
+      <contenttype>FullyRenderedText</contenttype>
+      <customDisplay/>
+      <disabled>0</disabled>
+      <editor>Text</editor>
+      <hint/>
+      <name>customCode</name>
+      <number>5</number>
+      <picker>1</picker>
+      <prettyName>customCode</prettyName>
+      <restricted>0</restricted>
+      <rows>5</rows>
+      <size>40</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+    </customCode>
+    <iconName>
+      <customDisplay/>
+      <disabled>0</disabled>
+      <hint/>
+      <name>iconName</name>
+      <number>3</number>
+      <picker>1</picker>
+      <prettyName>iconName</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+    </iconName>
+    <iconAttachment>
+      <customDisplay/>
+      <disabled>0</disabled>
+      <hint>Name of an image attached to this template page.</hint>
+      <name>iconAttachment</name>
+      <number>4</number>
+      <picker>1</picker>
+      <prettyName>iconAttachment</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+    </iconAttachment>
     <layoutJson>
       <contenttype>PureText</contenttype>
       <customDisplay/>
@@ -64,5 +119,19 @@
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
     </layoutJson>
+    <name>
+      <customDisplay/>
+      <disabled>0</disabled>
+      <hint/>
+      <name>name</name>
+      <number>2</number>
+      <picker>1</picker>
+      <prettyName>name</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+    </name>
   </class>
 </xwikidoc>

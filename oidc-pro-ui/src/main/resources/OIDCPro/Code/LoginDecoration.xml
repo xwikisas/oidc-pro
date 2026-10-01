@@ -1,0 +1,219 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
+<xwikidoc version="1.5" reference="OIDCPro.Code.LoginDecoration" locale="">
+  <web>OIDCPro.Code</web>
+  <name>LoginDecoration</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.Admin</creator>
+  <parent>OIDCPro.Code.OIDCProAdministration</parent>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
+  <title>LoginDecoration</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content/>
+  <object>
+    <name>OIDCPro.Code.LoginDecoration</name>
+    <number>2</number>
+    <className>XWiki.UIExtensionClass</className>
+    <guid>e25e60b7-c1ac-4e53-9c65-20b202615c0c</guid>
+    <class>
+      <name>XWiki.UIExtensionClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <async_cached>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType/>
+        <name>async_cached</name>
+        <number>3</number>
+        <prettyName>Cached</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </async_cached>
+      <async_context>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>1</multiSelect>
+        <name>async_context</name>
+        <number>4</number>
+        <prettyName>Context elements</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator>, </separator>
+        <separators>|, </separators>
+        <size>5</size>
+        <unmodifiable>0</unmodifiable>
+        <values>action=Action|doc.reference=Document|doc.revision|icon.theme=Icon theme|locale=Language|rendering.defaultsyntax=Default syntax|rendering.restricted=Restricted|rendering.targetsyntax=Target syntax|request.base=Request base URL|request.cookies|request.headers|request.parameters=Request parameters|request.remoteAddr|request.session|request.url=Request URL|request.wiki=Request wiki|sheet|user=User|wiki=Wiki</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </async_context>
+      <async_enabled>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType/>
+        <name>async_enabled</name>
+        <number>2</number>
+        <prettyName>Asynchronous rendering</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </async_enabled>
+      <content>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>content</name>
+        <number>1</number>
+        <prettyName>Executed Content</prettyName>
+        <restricted>0</restricted>
+        <rows>25</rows>
+        <size>120</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <extensionPointId>
+        <disabled>0</disabled>
+        <name>extensionPointId</name>
+        <number>5</number>
+        <prettyName>Extension Point ID</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </extensionPointId>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>6</number>
+        <prettyName>Extension ID</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parameters>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>parameters</name>
+        <number>7</number>
+        <prettyName>Extension Parameters</prettyName>
+        <restricted>0</restricted>
+        <rows>10</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </parameters>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>8</number>
+        <prettyName>Extension Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>wiki=Current Wiki|user=Current User|global=Global</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <async_cached>0</async_cached>
+    </property>
+    <property>
+      <async_context/>
+    </property>
+    <property>
+      <async_enabled>0</async_enabled>
+    </property>
+    <property>
+      <content>{{velocity}}
+#if (!$xcontext.userReference &amp;&amp; $services.oidcpro.isOIDCAuthServiceEnabled())
+  #set ($oidcProviders = $services.oidcpro.configurations)
+  #if ($oidcProviders.size() &gt; 0)
+    ## Load the resources from the WebJar because guests can't load skin extensions when the wiki requires authentication.
+    #set ($oidcProWebJar = 'com.xwiki.oidcpro:oidc-pro-api')
+    #set ($discard = $xwiki.linkx.use($services.webjars.url($oidcProWebJar, 'login.css'), {'type': 'text/css', 'rel': 'stylesheet'}))
+    #set ($oidcCookieName = $services.oidcpro.clientConfigurationCookie)
+    #set ($loginURL = $xwiki.getURL('XWiki.XWikiLogin', 'login', $escapetool.url({
+      'xredirect': $xwiki.relativeRequestURL,
+      'loginLink': 1
+    })))
+    {{html clean="false"}}
+    &lt;script src="$escapetool.xml($services.webjars.url($oidcProWebJar, 'login.js'))" defer&gt;&lt;/script&gt;
+    &lt;li class="dropdown oidcpro-login-menu"&gt;
+      &lt;a class="btn btn-link dropdown-toggle" href="#" role="button" id="oidcpro-login-menu-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;
+        $escapetool.xml($services.localization.render('oidcpro.login.title'))
+        &lt;span class="caret"&gt;&lt;/span&gt;
+      &lt;/a&gt;
+      &lt;ul class="dropdown-menu dropdown-menu-right" aria-labelledby="oidcpro-login-menu-toggle"&gt;
+        #foreach ($cfg in $oidcProviders)
+          #set ($cfgName = $cfg.clientConfiguration.configurationName)
+          &lt;li class="oidcpro-login-option"&gt;
+            &lt;a href="$escapetool.xml($loginURL)" rel="nofollow" data-oidcpro-cookie="$escapetool.xml($oidcCookieName)" data-oidcpro-client="$escapetool.xml($cfgName)"&gt;
+              #if ("$!cfg.iconName" != '')
+                &lt;span class="oidcpro-login-icon" aria-hidden="true"&gt;$services.icon.renderHTML($cfg.iconName)&lt;/span&gt;
+              #elseif ("$!cfg.iconURL" != '')
+                &lt;span class="oidcpro-login-icon" aria-hidden="true"&gt;&lt;img src="$escapetool.xml($cfg.iconURL)" alt="" /&gt;&lt;/span&gt;
+              #end
+              &lt;span class="oidcpro-login-label"&gt;$escapetool.xml($cfgName)&lt;/span&gt;
+            &lt;/a&gt;
+          &lt;/li&gt;
+        #end
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    {{/html}}
+  #end
+#end
+{{/velocity}}</content>
+    </property>
+    <property>
+      <extensionPointId>org.xwiki.platform.topmenu.right</extensionPointId>
+    </property>
+    <property>
+      <name>com.xwiki.oidcpro.topmenu.right</name>
+    </property>
+    <property>
+      <parameters/>
+    </property>
+    <property>
+      <scope/>
+    </property>
+  </object>
+</xwikidoc>

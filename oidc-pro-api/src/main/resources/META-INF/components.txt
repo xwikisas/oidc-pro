@@ -1,0 +1,4 @@
+com.xwiki.oidcpro.internal.ConfigurationStore
+com.xwiki.oidcpro.internal.OIDCProClientConfigurationCache
+com.xwiki.oidcpro.internal.TemplateIconResolver
+com.xwiki.oidcpro.script.OIDCProScriptService
