@@ -23,85 +23,74 @@
 #if(!$srid)
   #set($srid = $request.get('oidc.srid'))
 #end
- <!DOCTYPE html>
- <html>
-  <head>
-    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-    <title>$services.localization.render('oidc.template.consent.title')</title>
+## The client selected by the user is sent in a cookie, which the authenticator reads only when no client is stored in
+## the session yet.
+$services.oidcpro.resetClientConfigurationSelection()
+#template("startpage.vm")
+<div class="main layoutsubsection">
+## Set as an HTML main for better DOM tree semantics to facilitate navigation with assistive technologies.
+<main id="mainContentArea">
+#set ($oidcProWebJar = 'com.xwiki.oidcpro:oidc-pro-api')
+<link rel="stylesheet" href="$escapetool.xml($services.webjars.url($oidcProWebJar, 'login.css'))" />
+<script src="$escapetool.xml($services.webjars.url($oidcProWebJar, 'login.js'))" defer></script>
+#set ($oidcCookieName = $services.oidcpro.clientConfigurationCookie)
+<div id="content">
+  ## Submit the login request again, now that the client is selected. The saved request (srid) and the repeated
+  ## parameters (e.g. xredirect) bring the user back where the authentication started.
+  <form class="xform" method="get" action="$escapetool.xml($request.requestURI)">
+  #xwikimessageboxstart($services.localization.render('login') '')
+  #set ($oidcClients = $services.oidcpro.configurations)
+  ## Repeat input parameters, except the saved request identifier which is added below.
+  #set ($params = ['srid', 'oidc.srid'])
+  #foreach ($entry in $request.parameterMap.entrySet())
+    #if (!$params.contains($entry.key))
+      #foreach ($value in $entry.value)
+        <input type="hidden" name="$escapetool.xml($entry.key)" value="$escapetool.xml($value)"/>
+      #end
+    #end
+  #end
 
-    <style type="text/css">
-      body{
-        background-color: gray;
-        font-family: sans-serif;
-        font-size: 87.5%;
-      }
-      #content{
-        margin: 1em auto;
-        width: 80%;
-        color: #4D4D4D;
-        border: 1px solid #E8E8E8;
-        background-color: #FFF;
-        border-radius: 4px;
-        box-shadow: 0px 0px 7px #E8E8E8;
-        padding: 1em;
-      }
-    </style>
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll(".oidcpro-providers").forEach(function (el) {
-    el.addEventListener("change", function (event) {
-      console.log('value changed' + event);
-      var providerName = encodeURIComponent(event.target.value);
-      document.cookie = "oidcProvider=" + providerName + "; path=/; SameSite=Strict";
-    });
-  });
-});
-    </script>
-  </head>
-  <body>
-    <div id="content">
-      <form class="xform">
-        <dl>
-          ## Allow the user to choose from the configured xwiki oidc providers.
-          <dt>$escapetool.xml($services.localization.render('oidcpro.login.provider.select.title'))</dt>
-          <dd>
-            <select class="oidcpro-providers">
-              <option value="" selected disabled>---</option>
-              #foreach ($cfg in $services.query.xwql("select distinct oidc.configurationName, doc.fullName from Document doc, doc.object('XWiki.OIDC.ClientConfigurationClass') as oidc where oidc.skipped <> '1'").execute())
-                <option value="$escapetool.xml($cfg[0])">$escapetool.xml($cfg[0])</option>
-              #end
-            </select>
-          </dd>
-          ## Ask the provider
-          <dt>$escapetool.xml($services.localization.render('oidcpro.login.provider.domain'))</dt>
-          <dd><input type="text" name="oidc.provider"/></dd>
-        </dl>
+  ## Remember the srid
+  #if ($srid)
+    <input type="hidden" name="oidc.srid" value="$escapetool.xml($srid)"/>
+  #end
+  #if ($oidcClients.size() <= 0)
+    <dl>
+        ## Ask the provider
+        <dt>$escapetool.xml($services.localization.render('oidc.template.provider.provider'))</dt>
+        <dd><input type="text" name="oidc.provider"/></dd>
+    </dl>
+    <input type="submit" class="button" value="$escapetool.xml($services.localization.render('oidc.template.provider.submit'))"/>
+  #else
+  <ul class="auth-methods">
+    #foreach ($client in $oidcClients)
+      <li>
+        <button type="submit" class="auth-method btn btn-default"
+          data-oidcpro-cookie="$escapetool.xml($oidcCookieName)"
+          data-oidcpro-client="$escapetool.xml($client.clientConfiguration.configurationName)">
+          ## Keep the icon markup on one line so that the span is :empty when there is no icon.
+          <span class="auth-method-icon" aria-hidden="true">#if ("$!client.iconName" != '')$services.icon.renderHTML($client.iconName)#elseif ("$!client.iconURL" != '')<img src="$escapetool.xml($client.iconURL)" alt="" />#end</span>
+          <span class="auth-method-label">$escapetool.xml($client.clientConfiguration.configurationName)</span>
+        </button>
+      </li>
+    #end
+    </ul>
 
-        ## Repeat input parameters
-        #foreach ($entry in $request.queryParameters.entrySet())
-          <input type="hidden" name="$escapetool.xml($entry.key)" value="$escapetool.xml($entry.value)"/>
-        #end
+  #end
+    
+  </form>
 
-        ## Remember the srid
-        #if ($srid)
-          <input type="hidden" name="oidc.srid" value="$escapetool.xml($srid)"/>
-        #end
+  <hr/>
 
-        ## TODO: allow giving the endpoints
+  <form>
+    <input type="hidden" name="oidc.skipped" value="true"/>
+    #if ($srid)
+      <input type="hidden" name="srid" value="$escapetool.xml($srid)"/>
+    #end
 
-        <input type="submit" class="button" value="$escapetool.xml($services.localization.render('oidc.template.provider.submit'))"/>
-      </form>
-
-      <hr/>
-
-      <form>
-        <input type="hidden" name="oidc.skipped" value="true"/>
-        #if ($srid)
-          <input type="hidden" name="srid" value="$escapetool.xml($srid)"/>
-        #end
-
-        <input type="submit" class="button" value="$escapetool.xml($services.localization.render('oidc.template.provider.skip.submit'))"/>
-      </form>
-    </div>
-  </body>
-</html>
+    <input type="submit" class="button" value="$escapetool.xml($services.localization.render('oidc.template.provider.skip.submit'))"/>
+  #xwikimessageboxend()
+  
+  </form>
+</div>
+#template("endpage.vm")

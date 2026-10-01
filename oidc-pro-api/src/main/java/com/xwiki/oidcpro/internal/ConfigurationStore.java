@@ -31,15 +31,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
-import org.xwiki.cache.Cache;
-import org.xwiki.cache.CacheException;
-import org.xwiki.cache.CacheManager;
-import org.xwiki.cache.config.LRUCacheConfiguration;
 import org.xwiki.component.annotation.Component;
-import org.xwiki.component.manager.ComponentLifecycleException;
-import org.xwiki.component.phase.Disposable;
-import org.xwiki.component.phase.Initializable;
-import org.xwiki.component.phase.InitializationException;
 import org.xwiki.contrib.oidc.auth.internal.store.OIDCClientConfigurationCache;
 import org.xwiki.contrib.oidc.auth.store.OIDCClientConfiguration;
 import org.xwiki.model.reference.DocumentReferenceResolver;
@@ -61,7 +53,7 @@ import com.xwiki.oidcpro.OIDCProClientConfiguration;
  */
 @Component(roles = ConfigurationStore.class)
 @Singleton
-public class ConfigurationStore implements Initializable, Disposable
+public class ConfigurationStore
 {
     private static final String TEMPLATE_NAME = "templateName";
 
@@ -77,9 +69,6 @@ public class ConfigurationStore implements Initializable, Disposable
     private QueryManager queryManager;
 
     @Inject
-    private CacheManager cacheManager;
-
-    @Inject
     private OIDCClientConfigurationCache configurationCache;
 
     @Inject
@@ -89,20 +78,13 @@ public class ConfigurationStore implements Initializable, Disposable
     private Provider<XWikiContext> contextProvider;
 
     @Inject
+    private OIDCProClientConfigurationCache proClientConfigurationCache;
+
+    @Inject
+    private TemplateIconResolver templateIconResolver;
+
+    @Inject
     private Logger logger;
-
-    private Cache<OIDCProClientConfiguration> proClientConfigurationCache;
-
-    @Override
-    public void initialize() throws InitializationException
-    {
-        try {
-            this.proClientConfigurationCache =
-                this.cacheManager.createNewCache(new LRUCacheConfiguration("oidcpro.client.configuration", 10));
-        } catch (CacheException e) {
-            throw new InitializationException("Failed to create cache with id [oidcpro.client.configuration]");
-        }
-    }
 
     /**
      * @return the OIDC configurations of the current wiki.
@@ -134,14 +116,6 @@ public class ConfigurationStore implements Initializable, Disposable
         return configurations;
     }
 
-    @Override
-    public void dispose() throws ComponentLifecycleException
-    {
-        if (proClientConfigurationCache != null) {
-            proClientConfigurationCache.dispose();
-        }
-    }
-
     private OIDCProClientConfiguration getClientConfiguration(String cfgName, String serializedDocument,
         XWikiContext context) throws XWikiException, QueryException
     {
@@ -167,7 +141,8 @@ public class ConfigurationStore implements Initializable, Disposable
             templateObj = getTemplateObject(context, context.getWiki()
                 .getDocument(documentReferenceResolver.resolve(serializedDocument), context));
         }
-        return new OIDCProClientConfiguration(clientConfiguration, templateObj);
+        return new OIDCProClientConfiguration(clientConfiguration, templateObj,
+            templateIconResolver.getIconDataURI(templateObj));
     }
 
     private BaseObject getTemplateObject(XWikiContext context, XWikiDocument document)

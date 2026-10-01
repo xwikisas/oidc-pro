@@ -53,6 +53,7 @@ oidcpro.admin.livedata.clientId=Cliend ID
 oidcpro.admin.livedata.authorizationEndpoint=Authorization endpoint
 oidcpro.admin.livedata._actions=Actions
 oidcpro.admin.livedata.oidcpro.is_enabled=Enabled?
+oidcpro.admin.livedata.oidcpro.is_default=Default
 
 oidcpro.templates.default.name=Default
 oidcpro.templates.test.name=Entra ID test

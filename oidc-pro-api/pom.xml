@@ -51,6 +51,27 @@
       <artifactId>xwiki-platform-oldcore</artifactId>
       <version>${platform.version}</version>
     </dependency>
+    <!-- Serves the login page resources from src/main/webjar. -->
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-webjars-api</artifactId>
+      <version>${platform.version}</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <!-- Package the login page resources as a WebJar, so that they can be loaded by guest users even when the wiki
+        requires authentication to view pages. -->
+      <resource>
+        <directory>src/main/webjar</directory>
+        <targetPath>META-INF/resources/webjars/${project.artifactId}/${project.version}</targetPath>
+      </resource>
+    </resources>
+  </build>
 
 </project>

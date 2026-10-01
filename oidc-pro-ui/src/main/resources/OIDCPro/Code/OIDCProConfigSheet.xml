@@ -114,7 +114,7 @@
 #end
 #set ($oidcAdminSection = $xwiki.getURL('XWiki.XWikiPreferences', 'admin', $escapetool.url({'section' : 'OIDC Pro'})))
 
-[[$services.rendering.escape($services.localization.render('oidcpro.config.backToAdmin'), $doc.getSyntax())>>path:$oidcAdminSection]]
+[[$services.rendering.escape($services.localization.render('oidcpro.config.backToAdmin'), $doc.getSyntax())&gt;&gt;path:$oidcAdminSection]]
 
 #set ($queryResult = $services.query.xwql("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as template where template.name = :templateName").bindValue('templateName', $templateId).execute())
 #if (!$queryResult || $queryResult.size() == 0)

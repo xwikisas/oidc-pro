@@ -36,131 +36,7 @@
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
-  <content>
-{{velocity}}
-#set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProAdministration'))
-{{html}}
-&lt;a id="tmLogin" href="/xwiki/bin/login/XWiki/XWikiLogin?xredirect=%2Fxwiki%2Fbin%2Fview%2FMain%2F&amp;amp;loginLink=1" rel="nofollow"&gt;Log-in&lt;/a&gt;
-{{/html}}
-
-das
-
-da
-
-
-da
-
-dsa
-
-{{/velocity}}
-</content>
-  <object>
-    <name>OIDCPro.Code.LoginDecoration</name>
-    <number>0</number>
-    <className>XWiki.JavaScriptExtension</className>
-    <guid>67cbd211-9b2a-4c7b-b42f-0e82fc000831</guid>
-    <class>
-      <name>XWiki.JavaScriptExtension</name>
-      <customClass/>
-      <customMapping/>
-      <defaultViewSheet/>
-      <defaultEditSheet/>
-      <defaultWeb/>
-      <nameField/>
-      <validationScript/>
-      <cache>
-        <cache>0</cache>
-        <defaultValue>long</defaultValue>
-        <disabled>0</disabled>
-        <displayType>select</displayType>
-        <freeText>forbidden</freeText>
-        <largeStorage>0</largeStorage>
-        <multiSelect>0</multiSelect>
-        <name>cache</name>
-        <number>5</number>
-        <prettyName>Caching policy</prettyName>
-        <relationalStorage>0</relationalStorage>
-        <separator> </separator>
-        <separators>|, </separators>
-        <size>1</size>
-        <unmodifiable>0</unmodifiable>
-        <values>long|short|default|forbid</values>
-        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-      </cache>
-      <code>
-        <contenttype>PureText</contenttype>
-        <disabled>0</disabled>
-        <editor>PureText</editor>
-        <name>code</name>
-        <number>2</number>
-        <prettyName>Code</prettyName>
-        <restricted>0</restricted>
-        <rows>20</rows>
-        <size>50</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
-      </code>
-      <name>
-        <disabled>0</disabled>
-        <name>name</name>
-        <number>1</number>
-        <prettyName>Name</prettyName>
-        <size>30</size>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-      </name>
-      <parse>
-        <disabled>0</disabled>
-        <displayFormType>select</displayFormType>
-        <displayType>yesno</displayType>
-        <name>parse</name>
-        <number>4</number>
-        <prettyName>Parse content</prettyName>
-        <unmodifiable>0</unmodifiable>
-        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
-      </parse>
-      <use>
-        <cache>0</cache>
-        <disabled>0</disabled>
-        <displayType>select</displayType>
-        <freeText>forbidden</freeText>
-        <largeStorage>0</largeStorage>
-        <multiSelect>0</multiSelect>
-        <name>use</name>
-        <number>3</number>
-        <prettyName>Use this extension</prettyName>
-        <relationalStorage>0</relationalStorage>
-        <separator> </separator>
-        <separators>|, </separators>
-        <size>1</size>
-        <unmodifiable>0</unmodifiable>
-        <values>currentPage|onDemand|always</values>
-        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-      </use>
-    </class>
-    <property>
-      <cache>long</cache>
-    </property>
-    <property>
-      <code>require(['jquery'], function($) {
-  $('.oidcpro-login-option').on('click', function(event) {
-    event.preventDefault();
-    debugger;
-    document.cookie = "oidcProvider=" + encodeURIComponent($(this).data('name')) + "; path=/ ; SameSite=Strict";
-    window.location.href = event.target.href;
-  });
-})</code>
-    </property>
-    <property>
-      <name/>
-    </property>
-    <property>
-      <parse/>
-    </property>
-    <property>
-      <use>onDemand</use>
-    </property>
-  </object>
+  <content/>
   <object>
     <name>OIDCPro.Code.LoginDecoration</name>
     <number>2</number>
@@ -288,37 +164,43 @@ dsa
     </property>
     <property>
       <content>{{velocity}}
-##if ($isGuest &amp;&amp; $services.oidcpro.isOIDCAuthServiceEnabled())
-  #set ($oidcProviders = $services.oidcpro.getConfigurations())
-  #if ("$!oidcProviders" != '' &amp;&amp; $oidcProviders.size() &gt; 0)
-    #set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProAdministration'))
-    #set ($discard = $xwiki.jsx.use('OIDCPro.Code.LoginDecoration'))
-    {{html clean=false}}
-    &lt;li class="dropdown"&gt;
-      &lt;a class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"&gt;
+#if (!$xcontext.userReference &amp;&amp; $services.oidcpro.isOIDCAuthServiceEnabled())
+  #set ($oidcProviders = $services.oidcpro.configurations)
+  #if ($oidcProviders.size() &gt; 0)
+    ## Load the resources from the WebJar because guests can't load skin extensions when the wiki requires authentication.
+    #set ($oidcProWebJar = 'com.xwiki.oidcpro:oidc-pro-api')
+    #set ($discard = $xwiki.linkx.use($services.webjars.url($oidcProWebJar, 'login.css'), {'type': 'text/css', 'rel': 'stylesheet'}))
+    #set ($oidcCookieName = $services.oidcpro.clientConfigurationCookie)
+    #set ($loginURL = $xwiki.getURL('XWiki.XWikiLogin', 'login', $escapetool.url({
+      'xredirect': $xwiki.relativeRequestURL,
+      'loginLink': 1
+    })))
+    {{html clean="false"}}
+    &lt;script src="$escapetool.xml($services.webjars.url($oidcProWebJar, 'login.js'))" defer&gt;&lt;/script&gt;
+    &lt;li class="dropdown oidcpro-login-menu"&gt;
+      &lt;a class="btn btn-link dropdown-toggle" href="#" role="button" id="oidcpro-login-menu-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;
         $escapetool.xml($services.localization.render('oidcpro.login.title'))
         &lt;span class="caret"&gt;&lt;/span&gt;
       &lt;/a&gt;
-      &lt;ul class="dropdown-menu" aria-labelledby="dropdownMenu1"&gt;
+      &lt;ul class="dropdown-menu dropdown-menu-right" aria-labelledby="oidcpro-login-menu-toggle"&gt;
         #foreach ($cfg in $oidcProviders)
-          &lt;li class="oidcpro-login-option" data-name='$escapetool.xml($cfg.clientConfiguration.configurationName)' &gt;
-            &lt;a href="$xwiki.getURL('XWiki.XWikiLogin', 'login', $escapetool.url({
-            'loginLink': 1
-            }))"&gt;
+          #set ($cfgName = $cfg.clientConfiguration.configurationName)
+          &lt;li class="oidcpro-login-option"&gt;
+            &lt;a href="$escapetool.xml($loginURL)" rel="nofollow" data-oidcpro-cookie="$escapetool.xml($oidcCookieName)" data-oidcpro-client="$escapetool.xml($cfgName)"&gt;
               #if ("$!cfg.iconName" != '')
-                &lt;span class="oidcpro-admin-icon"&gt;$services.icon.renderHTML("$cfg.iconName")&lt;/span&gt;
+                &lt;span class="oidcpro-login-icon" aria-hidden="true"&gt;$services.icon.renderHTML($cfg.iconName)&lt;/span&gt;
+              #elseif ("$!cfg.iconURL" != '')
+                &lt;span class="oidcpro-login-icon" aria-hidden="true"&gt;&lt;img src="$escapetool.xml($cfg.iconURL)" alt="" /&gt;&lt;/span&gt;
               #end
-              ##elseif("$!cfg.iconReference" != '')
-              ##  &lt;span class="oidcpro-admin-icon"&gt;&lt;img src="/xwiki/bin/download/OIDCPro/Code/Templates/DefaultTemplate/openid-logo.png?rev=1.1" /&gt;&lt;/span&gt;
-              ##end
-              $escapetool.xml($cfg.clientConfiguration.configurationName)&lt;/a&gt;
+              &lt;span class="oidcpro-login-label"&gt;$escapetool.xml($cfgName)&lt;/span&gt;
+            &lt;/a&gt;
           &lt;/li&gt;
         #end
       &lt;/ul&gt;
     &lt;/li&gt;
     {{/html}}
   #end
-##end
+#end
 {{/velocity}}</content>
     </property>
     <property>

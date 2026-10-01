@@ -61,7 +61,13 @@
     #else
       #set ($checked = '')
     #end
-    #set ($discard = $row.put('oidcpro.is_enabled', "&lt;label data-docref='$row.get('doc_fullName')' class='oidcpro-switch'&gt;&lt;input type='checkbox' $checked&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
+    #set ($discard = $row.put('oidcpro.is_enabled', "&lt;label data-docref='$row.get('doc_fullName')' class='oidcpro-switch oidcpro-toggle'&gt;&lt;input type='checkbox' $checked&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
+    #if ($services.oidcpro.isDefaultClient("$!row.get('configurationName')"))
+      #set ($checked = 'checked')
+    #else
+      #set ($checked = '')
+    #end
+    #set ($discard = $row.put('oidcpro.is_default', "&lt;label data-name='$!row.get('configurationName')' class='oidcpro-switch-default oidcpro-toggle'&gt;&lt;input name='oidc-pro-default' type='radio' $checked&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
     ##set ($discard = $row.put('oidcpro.view_url', 'https://google.com'))
     ##set($discard = $row.put('doc_delete_url', $xwiki.getURL('AppWithinMinutes.DeleteApplication', 'view', $appQueryString)))
   #end

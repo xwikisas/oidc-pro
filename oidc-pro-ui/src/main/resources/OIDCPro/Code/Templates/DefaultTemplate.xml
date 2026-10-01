@@ -102,20 +102,20 @@
         <validationRegExp/>
         <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
       </iconName>
-      <iconReference>
+      <iconAttachment>
         <customDisplay/>
         <disabled>0</disabled>
-        <hint/>
-        <name>iconReference</name>
+        <hint>Name of an image attached to this template page.</hint>
+        <name>iconAttachment</name>
         <number>4</number>
         <picker>1</picker>
-        <prettyName>iconReference</prettyName>
+        <prettyName>iconAttachment</prettyName>
         <size>30</size>
         <unmodifiable>0</unmodifiable>
         <validationMessage/>
         <validationRegExp/>
         <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-      </iconReference>
+      </iconAttachment>
       <layoutJson>
         <contenttype>PureText</contenttype>
         <customDisplay/>
@@ -159,7 +159,7 @@
       <iconName/>
     </property>
     <property>
-      <iconReference>/xwiki/bin/download/OIDCPro/Code/Templates/DefaultTemplate/openid-logo.png?rev=1.1</iconReference>
+      <iconAttachment>openid-logo.png</iconAttachment>
     </property>
     <property>
       <layoutJson>{

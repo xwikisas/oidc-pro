@@ -48,9 +48,9 @@ public class OIDCProClientConfiguration
     public static final String PROPERTY_ICON_NAME = "iconName";
 
     /**
-     * Name of the property that contains the icon reference..
+     * Name of the property that contains the file name of the icon, attached to the template page.
      */
-    public static final String PROPERTY_ICON_REFERENCE = "iconReference";
+    public static final String PROPERTY_ICON_ATTACHMENT = "iconAttachment";
 
     /**
      * Name of the property that contains the custom code.
@@ -66,14 +66,19 @@ public class OIDCProClientConfiguration
 
     private final OIDCClientConfiguration clientConfiguration;
 
+    private final String iconURL;
+
     /**
      * @param configuration the OIDCClientConfiguration that gets wrapped by this class.
      * @param templateObject the template object that is associated to the client configuration.
+     * @param iconURL the icon attached to the template page, as a data URI
      */
-    public OIDCProClientConfiguration(OIDCClientConfiguration configuration, BaseObject templateObject)
+    public OIDCProClientConfiguration(OIDCClientConfiguration configuration, BaseObject templateObject,
+        String iconURL)
     {
         this.clientConfiguration = configuration;
         this.templateObject = templateObject;
+        this.iconURL = iconURL;
     }
 
     /**
@@ -109,12 +114,20 @@ public class OIDCProClientConfiguration
     }
 
     /**
-     * @return the reference of the icon that is associated to this configuration. It can be used for displaying in
-     *     various places.
+     * @return the file name of the icon, attached to the template page.
      */
-    public String getIconReference()
+    public String getIconAttachment()
     {
-        return this.templateObject.getStringValue(PROPERTY_ICON_REFERENCE);
+        return this.templateObject.getStringValue(PROPERTY_ICON_ATTACHMENT);
+    }
+
+    /**
+     * @return the icon attached to the template page, inlined as a data URI so that it can be displayed to users that
+     *     can't view the template page (e.g. guests on the login page). Empty if there is no icon.
+     */
+    public String getIconURL()
+    {
+        return this.iconURL;
     }
 
     /**

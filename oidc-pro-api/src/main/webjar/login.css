@@ -1,0 +1,94 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+.auth-methods {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-methods li {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* Icon column, label column and an empty column of the same width as the icon, so that the label stays centered
+   whether or not the client has an icon. */
+.auth-method {
+  display: grid;
+  grid-template-columns: 24px 1fr 24px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+/* Icons of the OIDC clients, on the login page and in the top menu. */
+.auth-method-icon,
+.oidcpro-login-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.auth-method-icon img,
+.auth-method-icon svg,
+.oidcpro-login-icon img,
+.oidcpro-login-icon svg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.auth-method-icon {
+  width: 24px;
+  height: 24px;
+  /* Font icons (e.g. Font Awesome) */
+  font-size: 20px;
+}
+
+.auth-method-icon:empty {
+  visibility: hidden;
+}
+
+.auth-method-label {
+  overflow-wrap: anywhere;
+}
+
+/* Top menu */
+.oidcpro-login-option > a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.oidcpro-login-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 16px;
+}

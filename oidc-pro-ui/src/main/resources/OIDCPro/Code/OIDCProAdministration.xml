@@ -283,8 +283,8 @@
           &lt;a href="#"&gt;
             #if ("$!templateXObj.getProperty('iconName').value" != '')
               &lt;span class="oidcpro-admin-icon"&gt;$services.icon.renderHTML("$templateXObj.getProperty('iconName').value")&lt;/span&gt;
-            #elseif("$!templateXObj.getProperty('iconReference').value" != '')
-              &lt;span class="oidcpro-admin-icon"&gt;&lt;img src="/xwiki/bin/download/OIDCPro/Code/Templates/DefaultTemplate/openid-logo.png?rev=1.1" /&gt;&lt;/span&gt;
+            #elseif("$!templateXObj.getProperty('iconAttachment').value" != '')
+              &lt;span class="oidcpro-admin-icon"&gt;&lt;img src="$escapetool.xml($templateDoc.getAttachmentURL($templateXObj.getProperty('iconAttachment').value))" alt="" /&gt;&lt;/span&gt;
             #end
             $escapetool.xml($services.localization.render("oidcpro.templates.${template[1]}.name"))
           &lt;/a&gt;
@@ -298,7 +298,7 @@
 
 {{liveData
   id="oidcpro-connections"
-  properties="configurationName,clientId,authorizationEndpoint,oidcpro.is_enabled,_actions,skipped"
+  properties="configurationName,clientId,authorizationEndpoint,oidcpro.is_enabled,oidcpro.is_default,_actions,skipped"
   source="liveTable"
   sourceParameters="className=XWiki.OIDC.ClientConfigurationClass&amp;resultPage=OIDCPro.Code.OIDCProLivedataResultsPage&amp;translationPrefix=oidcpro.admin.livedata."
 }}
@@ -309,6 +309,13 @@
         "id": "oidcpro.is_enabled",
         "displayer": "html",
         "editable": false
+      },
+      {
+        "id": "oidcpro.is_default",
+        "displayer": "html",
+        "editable": false,
+        "sortable": false,
+        "filterable": false
       },
       {
         "id": "skipped",
@@ -458,7 +465,9 @@
     'enable.error'
   ]
 });
+
 require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], function ($, xm, l10n) {
+  // Create OIDC client button.
   $('.oidcpro-config-create').on('click', function (e) {
     e.preventDefault();
     let newConfigurationRef = XWiki.Model.resolve('OIDCPro.Configurations.Configuration' + Date.now(), XWiki.EntityType.DOCUMENT, XWiki.currentDocument.getDocumentReference());
@@ -473,11 +482,12 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
     console.log(createURL);
     window.open(createURL, '_blank');
   });
+  // Enable / Disable client.
   $(document).on('change', '.oidcpro-switch input', function (e) {
     let elem = $(this);
     let checked = elem[0].checked;
     elem.attr('disabled', 1);
-    let oidcConfigSerializedDocRef = elem.closest('.oidcpro-switch').data('docref');
+    let oidcConfigSerializedDocRef = elem.closest('.oidcpro-toggle').data('docref');
     if (!oidcConfigSerializedDocRef) return;
     let oidcConfigDocRef = XWiki.Model.resolve(oidcConfigSerializedDocRef, XWiki.EntityType.DOCUMENT, XWiki.currentDocument.getDocumentReference());
     let oidcConfigDoc = new XWiki.Document(oidcConfigDocRef);
@@ -497,6 +507,43 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
       elem.attr('disabled', null);
       new XWiki.widgets.Notification(l10n.get('enable.error'), 'error');
     });
+  });
+  // Make client default.
+  let setDefaultClientConfiguration = function (newValue) {
+    const wiki = XWiki.currentWiki || 'xwiki';
+    const url = XWiki.contextPath + '/rest/wikis/' + encodeURIComponent(wiki)
+      + '/spaces/XWiki/spaces/OIDC/pages/ClientsConfiguration'
+      + '/objects/XWiki.OIDC.ClientsConfigurationClass/0';   // 0 = object number
+    var notification = new XWiki.widgets.Notification(l10n.get('enable.progress'), 'inprogress')
+    return $.ajax({
+      url: url,
+      method: 'PUT',
+      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+      headers: {
+        // CSRF token, required by recent XWiki versions for cookie-authenticated REST calls
+        'XWiki-Form-Token': xm.form_token
+      },
+      data: {
+        'property#defaultClientConfiguration': newValue
+      }
+    })
+    .done(function () {
+      notification.hide();
+      new XWiki.widgets.Notification(l10n.get('enable.done'), 'done');
+    })
+    .fail(function (xhr) {
+      notification.hide();
+      new XWiki.widgets.Notification(l10n.get('enable.error'), 'error');
+    });
+  };
+  $(document).on('change', '.oidcpro-switch-default input', function (e) {
+    let elem = $(this);
+    let checked = elem[0].checked;
+    if (checked) {
+      setDefaultClientConfiguration(elem.closest('.oidcpro-toggle').data('name'));
+    } else {
+      setDefaultClientConfiguration('default');
+    }
   });
 });</code>
     </property>
@@ -633,7 +680,7 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
 }
 
 /* The switch container */
-.oidcpro-switch {
+.oidcpro-toggle {
   position: relative;
   display: inline-block;
   width: 50px;
@@ -641,7 +688,7 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
 }
 
 /* Hide checkbox */
-.oidcpro-switch input {
+.oidcpro-toggle input {
   display: none;
 }
 
@@ -669,11 +716,11 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
 }
 
 /* Checked state */
-.oidcpro-switch input:checked + .oidcpro-slider {
+.oidcpro-toggle input:checked + .oidcpro-slider {
   background-color: @brand-success;
 }
 
-.oidcpro-switch input:checked + .oidcpro-slider:before {
+.oidcpro-toggle input:checked + .oidcpro-slider:before {
   transform: translateX(26px);
 }
 </code>
