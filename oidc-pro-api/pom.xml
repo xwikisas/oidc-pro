@@ -28,7 +28,12 @@
   </parent>
 
   <artifactId>oidc-pro-api</artifactId>
+
   <name>OIDC Pro - API Module</name>
+
+  <properties>
+    <xwiki.jacoco.instructionRatio>0.95</xwiki.jacoco.instructionRatio>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -58,6 +63,14 @@
       <artifactId>xwiki-platform-webjars-api</artifactId>
       <version>${platform.version}</version>
       <scope>runtime</scope>
+    </dependency>
+
+    <!-- Test dependencies -->
+    <dependency>
+      <groupId>org.xwiki.commons</groupId>
+      <artifactId>xwiki-commons-tool-test-component</artifactId>
+      <version>${commons.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

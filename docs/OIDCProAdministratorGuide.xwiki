@@ -1,0 +1,137 @@
+= Overview =
+
+OIDC Pro lets an administrator manage several OpenID Connect clients from the XWiki Administration, without editing configuration files or raw XWiki objects. It is built on top of the [[OpenID Connect Authenticator>>https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/]] and stores every client in that extension's own configuration format.
+
+What it adds:
+
+* An **OIDC Pro** administration section listing every client configuration, with switches to enable or disable each one and to choose the default client.
+* **Templates** that preset the form for a given provider: which fields are shown, how they are grouped, and the provider icon.
+* A guided **configuration form** with help text for every OpenID Connect setting, split into General, User and Group sections.
+* A **login menu** in the top bar and a **provider selection page**, so users pick the client they want to log in with.
+
+This guide is for wiki administrators. It assumes you know which OpenID Connect provider you connect to and have its client ID, client secret and endpoints.
+
+= Requirements and setup =
+
+OIDC Pro needs XWiki 15.10 or later. Installing it from the Extension Manager also installs the OpenID Connect Authenticator (version 2.28.0 or later) it depends on.
+
+1. Install **Open ID Connect (Pro)** from //Administration › Extensions//.
+1. Make OpenID Connect the active authentication service:
+1*. in //Administration › Users & Rights › Authentication//, select **OpenID Connect**, or
+1*. set ##xwiki.authentication.authclass=org.xwiki.contrib.oidc.auth.OIDCAuthServiceImpl## in ##xwiki.cfg## and restart.
+1. Register XWiki as a client application at your provider. Use ##<your wiki URL>/oidc/authenticator/callback## as the redirect URI, then note the client ID, client secret and endpoints the provider gives you.
+
+The login menu and the provider selection page only appear once OpenID Connect is the active authentication service.
+
+= The OIDC Pro administration section =
+
+Everything starts in //Administration › Other › OIDC Pro//. The page has a **Create** button for new client configurations and a table of every configuration in the wiki.
+
+[[image:01-admin-section.png||alt="The OIDC Pro section with the Create button and the configurations table"]]
+
+The table lists all OpenID Connect client configurations, including ones created outside OIDC Pro. You can sort and filter by the text columns.
+
+|=Column|=What it shows
+|Configuration Name|The name users see in the login menu and on the provider page
+|Client ID|The client ID registered at the provider
+|Authorization endpoint|The provider URL users are sent to when they log in ("-" when empty)
+|Enabled?|Switch: whether users can log in with this client
+|Default|Switch: the client used when the user has not picked one
+|Actions|View, edit or delete the configuration
+
+= Creating a client configuration =
+
+A new configuration is always created from a template, which decides which fields the form shows. Use the **Default** template unless one exists for your provider.
+
+1. In the OIDC Pro section, click **Create** to use the Default template, or click the arrow next to it and pick a template.(((
+[[image:02-create-menu.png||alt="The template list under the Create button"]]
+)))
+1. The form opens in a new browser tab, on a new page under //OIDCPro › Configurations//. Replace the title "New OIDC Client Configuration" with something meaningful.
+1. Fill in the required fields, outlined in red: **Configuration name**, **Client ID** and **Client Secret**.
+1. Fill in the provider endpoints: **Authorization**, **Token** and **User Info**, and **Logout** if the provider supports single logout.
+1. Click **Save & View**, then **Go back to the Administration Section** to see the new client in the table.
+
+[[image:04-new-configuration.png||alt="The form of a new configuration created from the Default template"]]
+
+The configuration name identifies the client everywhere else: in the login menu, on the provider page and as the default client. Keep it unique and readable, and avoid renaming it once users rely on it.
+
+A new configuration starts with **Is skipped?** set to ##1##, which means disabled. Set it to ##0## before saving, or turn on its **Enabled?** switch in the table afterwards.
+
+= Editing a configuration =
+
+To change a client, click **Edit** in its row of the table. The form groups the settings into three sections, and every field carries help text with an example value.
+
+[[image:06-configuration-edit.png||alt="Editing an existing configuration"]]
+
+|=Section|=Settings
+|General|Is skipped?, configuration name, client ID and secret, authorization, token, user info and logout endpoints
+|General › Advanced properties|XWiki provider, HTTP methods and headers for the endpoints, logout mechanism, response type, ID token and other claims, after-logout URL, token storage scope
+|User|Username and user subject formatters, user attribute mapping, user info claims, refresh rate and skip, enable new users
+|Group|Groups claim, groups mapping, include and exclude patterns, allowed and forbidden groups
+
+//Advanced properties// is collapsed by default; click it to show those fields. The User and Group sections can also be collapsed from their headings.
+
+Most providers only need the General section. Use User and Group to control how accounts are named and which XWiki groups users join. For example, ##OIDCGroupId=XWiki.AdminGroup## in **Groups Mapping** makes members of that provider group XWiki administrators.
+
+Changes take effect for the next login as soon as you save. Users who are already logged in keep their session until they log out.
+
+= Enabling clients and choosing the default =
+
+Both switches in the table save immediately; a notification confirms each change, and the switch flips back if saving fails.
+
+[[image:03-configurations-table.png||alt="The Enabled? and Default switches"]]
+
+**Enabled?** controls whether users can log in with a client. A disabled client disappears from the login menu and the provider page, but keeps its settings, so you can turn it back on later. It is the same setting as **Is skipped?** in the form.
+
+**Default** marks the client XWiki uses when a user logs in without picking one, for example from a plain //Log-in// link or a page that requires login. Only one client can be the default: turning one on turns the previous one off. Turning the default off resets it to the client named ##default##.
+
+If the default client has no authorization endpoint, or no client is named ##default##, users get the provider selection page instead and pick a client themselves.
+
+= Templates and icons =
+
+A template is a wiki page holding an ##OIDCPro.Code.OIDCProTemplateClass## object. It decides which fields the configuration form shows, how they are grouped, and which icon represents the provider. OIDC Pro ships the **Default** template at //OIDCPro › Code › Templates › DefaultTemplate//.
+
+[[image:07-template-object.png||alt="The template object of the Default template, opened with the object editor"]]
+
+|=Property|=Purpose
+|name|Identifier of the template, used by the Create menu. Its label comes from the translation key ##oidcpro.templates.<name>.name##
+|layoutJson|The form layout: its sections, and for each field the section, whether it is advanced, hidden or required, its icon, and optional input helpers
+|iconName|An icon from the wiki's icon theme, for example ##key##
+|iconAttachment|The file name of an image attached to the template page, for example ##openid-logo.png##
+|customCode|Extra HTML, CSS or JavaScript added to the form of configurations that use this template
+|codeInsertionPoint|Where the custom code goes: ##header## or ##footer##
+
+To add a template for a provider:
+
+1. Copy //DefaultTemplate// to a new page under //OIDCPro › Code › Templates//.
+1. In the object editor, set a new **name** and adapt **layoutJson**: hide fields the provider does not use, and mark the ones it requires.
+1. Attach the provider logo to the page and enter its file name in **iconAttachment**, or set **iconName** instead.
+1. Add the translation ##oidcpro.templates.<name>.name## so the Create menu shows a readable label.
+
+The icon is shown on the login menu and the provider page. **iconName** wins when both are set. Attachments must be images of at most 512 KB. They are embedded into the login page itself, so guests see them even when the wiki does not let them view pages.
+
+= What users see =
+
+Users who are not logged in get two ways to pick a client. Both list every enabled client, with its icon and configuration name.
+
+**The Login with menu.** It sits in the top bar of every page. Choosing a client logs the user in with it, then brings them back to the page they were on.
+
+[[image:09-login-menu.png||alt="The Login with menu opened in the top bar"]]
+
+**The provider selection page.** It appears when a user has to log in and the default client cannot be used. One button per client logs the user in with that client and keeps any page they were being redirected to.
+
+[[image:08-provider-page.png||alt="The provider selection page"]]
+
+**Skip OpenID Connect** at the bottom of the page lets the user log in with a local XWiki account instead, for example the administrator account. When no client is enabled at all, the page instead asks for the provider's address.
+
+= Troubleshooting =
+
+When a user picks a client, OIDC Pro stores the choice in a browser cookie named ##oidcProvider## for 5 minutes, long enough to reach the provider and come back. The authenticator then keeps that client for the rest of the user's session. Set ##oidc.clientConfigurationCookie## in ##xwiki.properties## to use another cookie name.
+
+|=Symptom|=Likely cause|=What to do
+|The Login with menu does not appear|OpenID Connect is not the active authentication service, or no client is enabled|Check step 2 of the setup, and turn on at least one client
+|A client is missing from the menu and the provider page|The client is disabled|Turn on its Enabled? switch
+|Users always land on the provider selection page|The default client has no authorization endpoint, or no default is set|Fill in the endpoint, or mark a working client as Default
+|A user keeps being sent to the wrong provider|Their session still holds the client they picked earlier|Ask them to log out, or close the browser, and pick again
+|A provider icon does not show|The attachment is missing, is not an image, or is larger than 512 KB|Check the file name in iconAttachment; the wiki log names the problem
+|A change to a configuration or template does not show|The page was changed without being saved through the wiki, for example directly in the database|Save the page again from the wiki, or restart XWiki
