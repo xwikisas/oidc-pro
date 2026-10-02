@@ -23,33 +23,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.xwiki.parent</groupId>
-    <artifactId>xwikisas-parent-platform</artifactId>
-    <version>15.10</version>
+    <groupId>com.xwiki.oidcpro</groupId>
+    <artifactId>oidc-pro</artifactId>
+    <version>1.0.0-rc-2-SNAPSHOT</version>
   </parent>
-  <groupId>com.xwiki.oidcpro</groupId>
-  <artifactId>oidc-pro</artifactId>
-  <version>1.0.0-rc-2-SNAPSHOT</version>
-  <name>OIDC Pro - Parent POM</name>
-  <properties>
-    <xwikipro.commons.version>1.5.0</xwikipro.commons.version>
-    <licensing.version>1.32.4</licensing.version>
-    <oidc.version>2.28.0</oidc.version>
-  </properties>
+  <artifactId>oidc-pro-test</artifactId>
+  <name>OIDC Pro - Tests - Parent POM</name>
   <packaging>pom</packaging>
-  <issueManagement>
-    <system>GitHub</system>
-    <url>https://github.com/xwikisas/oidc-pro/issues</url>
-  </issueManagement>
-  <scm>
-    <connection>scm:git:git://github.com/xwikisas/oidc-pro.git</connection>
-    <developerConnection>scm:git:git@github.com:xwikisas/oidc-pro.git</developerConnection>
-    <url>https://github.com/xwikisas/oidc-pro/tree/main</url>
-    <tag>HEAD</tag>
-  </scm>
+  <description>Tests for OIDC Pro</description>
+  <properties>
+    <!-- Don't run backward-compatibility checks in test modules since we don't consider them as public APIs -->
+    <xwiki.revapi.skip>true</xwiki.revapi.skip>
+    <!-- Don't run Checkstyle in test modules -->
+    <xwiki.checkstyle.skip>true</xwiki.checkstyle.skip>
+  </properties>
   <modules>
-    <module>oidc-pro-ui</module>
-    <module>oidc-pro-api</module>
-    <module>oidc-pro-test</module>
+    <module>oidc-pro-test-pageobjects</module>
   </modules>
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <modules>
+        <module>oidc-pro-test-docker</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>

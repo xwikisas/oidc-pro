@@ -53,6 +53,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.xwiki.contrib.oidc</groupId>
+      <artifactId>oidc-provider</artifactId>
+      <version>${oidc.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-oldcore</artifactId>
       <version>${platform.version}</version>
