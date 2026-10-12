@@ -32,7 +32,7 @@
   <name>OIDC Pro - API Module</name>
 
   <properties>
-    <xwiki.jacoco.instructionRatio>0.95</xwiki.jacoco.instructionRatio>
+    <xwiki.jacoco.instructionRatio>1.00</xwiki.jacoco.instructionRatio>
   </properties>
 
   <dependencies>

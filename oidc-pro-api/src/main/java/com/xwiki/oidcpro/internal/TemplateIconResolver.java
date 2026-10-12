@@ -62,12 +62,13 @@ public class TemplateIconResolver
      * The icon is an image attached to the template page. It is inlined as a data URI because the login page is
      * displayed to guest users, who usually can't view the template page.
      *
-     * @param templateObj the template object that references the icon
+     * @param templateObj the template object that references the icon, can be {@code null}
      * @return the icon as a data URI, or an empty string if the template has no valid icon
      */
     public String getIconDataURI(BaseObject templateObj)
     {
-        String iconAttachment = templateObj.getStringValue(OIDCProClientConfiguration.PROPERTY_ICON_ATTACHMENT);
+        String iconAttachment = templateObj != null
+            ? templateObj.getStringValue(OIDCProClientConfiguration.PROPERTY_ICON_ATTACHMENT) : null;
         if (StringUtils.isBlank(iconAttachment)) {
             return "";
         }

@@ -26,19 +26,24 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
-import org.xwiki.contrib.oidc.auth.internal.store.OIDCClientConfigurationCache;
 import org.xwiki.contrib.oidc.auth.store.OIDCClientConfiguration;
+import org.xwiki.contrib.oidc.auth.store.OIDCClientConfigurationStore;
+import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.model.reference.LocalDocumentReference;
 import org.xwiki.query.Query;
 import org.xwiki.query.QueryException;
 import org.xwiki.query.QueryManager;
+import org.xwiki.security.authorization.AuthorizationManager;
+import org.xwiki.security.authorization.Right;
+import org.xwiki.user.UserReferenceSerializer;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -56,6 +61,8 @@ import com.xwiki.oidcpro.OIDCProClientConfiguration;
 public class ConfigurationStore
 {
     private static final String TEMPLATE_NAME = "templateName";
+
+    private static final String DEFAULT_TEMPLATE = "default";
 
     private static final List<String> OIDC_PRO_CODE_SPACE = Arrays.asList("OIDCPro", "Code");
 
@@ -75,7 +82,14 @@ public class ConfigurationStore
     private QueryManager queryManager;
 
     @Inject
-    private OIDCClientConfigurationCache configurationCache;
+    private OIDCClientConfigurationStore oidcConfigurationStore;
+
+    @Inject
+    private AuthorizationManager authorizationManager;
+
+    @Inject
+    @Named("document")
+    private UserReferenceSerializer<DocumentReference> documentUserReferenceSerializer;
 
     @Inject
     private DocumentReferenceResolver<String> documentReferenceResolver;
@@ -111,6 +125,9 @@ public class ConfigurationStore
                 OIDCProClientConfiguration proClientConfiguration = proClientConfigurationCache.get(cfgName);
                 if (proClientConfiguration == null) {
                     proClientConfiguration = getClientConfiguration(cfgName, serializedDocument, context);
+                    if (proClientConfiguration == null) {
+                        continue;
+                    }
                     proClientConfigurationCache.set(cfgName, proClientConfiguration);
                 }
                 configurations.add(proClientConfiguration);
@@ -125,27 +142,26 @@ public class ConfigurationStore
     private OIDCProClientConfiguration getClientConfiguration(String cfgName, String serializedDocument,
         XWikiContext context) throws XWikiException, QueryException
     {
-        OIDCClientConfigurationCache.CacheEntry cacheEntry =
-            this.configurationCache.get(cfgName);
-        OIDCClientConfiguration clientConfiguration = null;
-        BaseObject templateObj = null;
-        if (cacheEntry == null) {
-            XWikiDocument document =
-                context.getWiki()
-                    .getDocument(documentReferenceResolver.resolve(serializedDocument), context);
-            clientConfiguration =
-                new OIDCClientConfiguration(document.getXObject(OIDCClientConfiguration.CLASS_REFERENCE));
-
-            templateObj = getTemplateObject(context, document);
-
-            configurationCache.set(cfgName, clientConfiguration);
-        } else {
-            clientConfiguration = cacheEntry.getConfiguration();
+        // Only the OIDC store decides which document provides a configuration, since it is the one that checks that
+        // the document can be trusted. Any other document holding a configuration with the same name is ignored.
+        XWikiDocument document = this.oidcConfigurationStore.getOIDCClientConfigurationDocument(cfgName);
+        DocumentReference listedReference = this.documentReferenceResolver.resolve(serializedDocument);
+        if (document == null || !listedReference.equals(document.getDocumentReference())) {
+            logger.debug("Ignoring the OIDC client configuration [{}] from the untrusted document [{}].", cfgName,
+                listedReference);
+            return null;
         }
 
+        OIDCClientConfiguration clientConfiguration = this.oidcConfigurationStore.getOIDCClientConfiguration(cfgName);
+        if (clientConfiguration == null) {
+            return null;
+        }
+
+        // The template only changes how the configuration is displayed, so configurations created outside OIDC Pro
+        // are still offered when no template applies to them.
+        BaseObject templateObj = getTemplateObject(context, document);
         if (templateObj == null) {
-            templateObj = getTemplateObject(context, context.getWiki()
-                .getDocument(documentReferenceResolver.resolve(serializedDocument), context));
+            logger.debug("No trusted OIDC Pro template was found for the OIDC client configuration [{}].", cfgName);
         }
         return new OIDCProClientConfiguration(clientConfiguration, templateObj,
             templateIconResolver.getIconDataURI(templateObj));
@@ -154,21 +170,40 @@ public class ConfigurationStore
     private BaseObject getTemplateObject(XWikiContext context, XWikiDocument document)
         throws QueryException, XWikiException
     {
-        BaseObject templateObj;
         BaseObject templateBinderObj = document.getXObject(PRO_TEMPLATE_BINDER_CLASS);
-        String templateId = "default";
+        String templateId = DEFAULT_TEMPLATE;
         if (templateBinderObj != null && !StringUtils.isEmpty(templateBinderObj.getStringValue(TEMPLATE_NAME))) {
             templateId = templateBinderObj.getStringValue(TEMPLATE_NAME);
         }
 
+        BaseObject templateObj = findTrustedTemplate(templateId, context);
+        if (templateObj == null && !DEFAULT_TEMPLATE.equals(templateId)) {
+            templateObj = findTrustedTemplate(DEFAULT_TEMPLATE, context);
+        }
+        return templateObj;
+    }
+
+    private BaseObject findTrustedTemplate(String templateId, XWikiContext context)
+        throws QueryException, XWikiException
+    {
         List<Object> result = queryManager.createQuery("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as "
             + "template where template"
             + ".name = :templateName", Query.XWQL).bindValue(TEMPLATE_NAME, templateId).execute();
-        String templateDocRef = result.get(0).toString();
 
-        XWikiDocument templateDoc =
-            context.getWiki().getDocument(documentReferenceResolver.resolve(templateDocRef), context);
-        templateObj = templateDoc.getXObject(PRO_TEMPLATE_CLASS);
-        return templateObj;
+        // The template contributes code to the login page, so only use templates written by a wiki administrator.
+        for (Object templateDocRef : result) {
+            XWikiDocument templateDoc =
+                context.getWiki().getDocument(documentReferenceResolver.resolve(templateDocRef.toString()), context);
+            DocumentReference author = this.documentUserReferenceSerializer
+                .serialize(templateDoc.getAuthors().getEffectiveMetadataAuthor());
+            if (this.authorizationManager.hasAccess(Right.ADMIN, author,
+                templateDoc.getDocumentReference().getWikiReference()))
+            {
+                return templateDoc.getXObject(PRO_TEMPLATE_CLASS);
+            }
+            logger.debug("Ignoring the OIDC Pro template from [{}] because its author [{}] is not a wiki "
+                + "administrator.", templateDoc.getDocumentReference(), author);
+        }
+        return null;
     }
 }

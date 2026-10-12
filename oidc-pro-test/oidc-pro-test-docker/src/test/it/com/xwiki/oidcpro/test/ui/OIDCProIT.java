@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.LocalDocumentReference;
@@ -65,8 +66,7 @@ class OIDCProIT
     static void beforeAll(TestUtils setup) throws Exception
     {
         setup.loginAsSuperAdmin();
-        setup.deletePage(AUTH_SERVICE_CONFIGURATION);
-        setup.addObject(AUTH_SERVICE_CONFIGURATION, "XWiki.AuthService.ConfigurationClass", "authService", "oidc");
+        enableOIDCAuthService(setup);
     }
 
     @AfterAll
@@ -78,6 +78,7 @@ class OIDCProIT
     }
 
     @Test
+    @Order(1)
     void administration(TestUtils setup, TestReference testReference)
     {
         setup.loginAsSuperAdmin();
@@ -119,6 +120,7 @@ class OIDCProIT
     }
 
     @Test
+    @Order(2)
     void loginWithClient(TestUtils setup, TestReference testReference)
     {
         setup.loginAsSuperAdmin();
@@ -128,6 +130,13 @@ class OIDCProIT
         String firstClient = createClient(setup, testReference, "First", true);
         String secondClient = createClient(setup, testReference, "Second", true);
         String disabledClient = createClient(setup, testReference, "Disabled", false);
+        // A configuration written by a user who is not a wiki administrator must never be offered. Users can't log
+        // in with a password while OIDC is the authentication service, so switch back to the standard one meanwhile.
+        setup.deletePage(AUTH_SERVICE_CONFIGURATION);
+        setup.createUserAndLogin("OIDCProEditor", "pass");
+        String plantedClient = createClient(setup, testReference, "Planted", true);
+        setup.loginAsSuperAdmin();
+        enableOIDCAuthService(setup);
         setup.createPage(testReference, "", "");
         String pageURL = setup.getURL(testReference, "view", null);
 
@@ -137,6 +146,7 @@ class OIDCProIT
         List<String> clients = loginPage.getClientNames();
         assertTrue(clients.containsAll(List.of(firstClient, secondClient)), clients.toString());
         assertFalse(clients.contains(disabledClient), clients.toString());
+        assertFalse(clients.contains(plantedClient), clients.toString());
         assertTrue(loginPage.getIconSource(firstClient).startsWith("data:image/png;base64,"));
 
         // Picking a client sends the user to its provider.
@@ -154,8 +164,15 @@ class OIDCProIT
         clients = menu.open().getClientNames();
         assertTrue(clients.containsAll(List.of(firstClient, secondClient)), clients.toString());
         assertFalse(clients.contains(disabledClient), clients.toString());
+        assertFalse(clients.contains(plantedClient), clients.toString());
         request = menu.loginWith(firstClient, getAuthorizationEndpoint(setup, testReference, "First"));
         assertEquals("First-client", request.getParameter(CLIENT_ID_PARAMETER));
+    }
+
+    private static void enableOIDCAuthService(TestUtils setup)
+    {
+        setup.deletePage(AUTH_SERVICE_CONFIGURATION);
+        setup.addObject(AUTH_SERVICE_CONFIGURATION, "XWiki.AuthService.ConfigurationClass", "authService", "oidc");
     }
 
     /**

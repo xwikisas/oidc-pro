@@ -70,7 +70,8 @@ public class OIDCProClientConfiguration
 
     /**
      * @param configuration the OIDCClientConfiguration that gets wrapped by this class.
-     * @param templateObject the template object that is associated to the client configuration.
+     * @param templateObject the template object that is associated to the client configuration, or {@code null} when
+     *     no trusted template applies to it (e.g. for configurations created by other applications)
      * @param iconURL the icon attached to the template page, as a data URI
      */
     public OIDCProClientConfiguration(OIDCClientConfiguration configuration, BaseObject templateObject,
@@ -94,7 +95,7 @@ public class OIDCProClientConfiguration
      */
     public String getLayoutJson()
     {
-        return this.templateObject.getLargeStringValue(PROPERTY_LAYOUT_JSON);
+        return getLargeStringValue(PROPERTY_LAYOUT_JSON);
     }
 
     /**
@@ -102,7 +103,7 @@ public class OIDCProClientConfiguration
      */
     public String getTemplateName()
     {
-        return this.templateObject.getStringValue(PROPERTY_NAME);
+        return getStringValue(PROPERTY_NAME);
     }
 
     /**
@@ -110,7 +111,7 @@ public class OIDCProClientConfiguration
      */
     public String getIconName()
     {
-        return this.templateObject.getStringValue(PROPERTY_ICON_NAME);
+        return getStringValue(PROPERTY_ICON_NAME);
     }
 
     /**
@@ -118,7 +119,7 @@ public class OIDCProClientConfiguration
      */
     public String getIconAttachment()
     {
-        return this.templateObject.getStringValue(PROPERTY_ICON_ATTACHMENT);
+        return getStringValue(PROPERTY_ICON_ATTACHMENT);
     }
 
     /**
@@ -136,7 +137,7 @@ public class OIDCProClientConfiguration
      */
     public String getCustomCode()
     {
-        return this.templateObject.getLargeStringValue(PROPERTY_CUSTOM_CODE);
+        return getLargeStringValue(PROPERTY_CUSTOM_CODE);
     }
 
     /**
@@ -145,6 +146,16 @@ public class OIDCProClientConfiguration
      */
     public String getCodeInsertionPoint()
     {
-        return this.templateObject.getStringValue(PROPERTY_CODE_INSERTION_POINT);
+        return getStringValue(PROPERTY_CODE_INSERTION_POINT);
+    }
+
+    private String getStringValue(String property)
+    {
+        return this.templateObject != null ? this.templateObject.getStringValue(property) : null;
+    }
+
+    private String getLargeStringValue(String property)
+    {
+        return this.templateObject != null ? this.templateObject.getLargeStringValue(property) : null;
     }
 }

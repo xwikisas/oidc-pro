@@ -153,4 +153,10 @@ class TemplateIconResolverTest
         assertEquals("Failed to load the OIDC Pro icon [logo.png] attached to [xwiki:Templates.MyTemplate].",
             this.logCapture.getMessage(0));
     }
+
+    @Test
+    void getIconDataURIWithoutTemplate()
+    {
+        assertEquals("", this.resolver.getIconDataURI(null));
+    }
 }

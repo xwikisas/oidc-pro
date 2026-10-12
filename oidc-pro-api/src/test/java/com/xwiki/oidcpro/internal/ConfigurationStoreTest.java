@@ -22,23 +22,30 @@ package com.xwiki.oidcpro.internal;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.xwiki.contrib.oidc.auth.internal.store.OIDCClientConfigurationCache;
 import org.xwiki.contrib.oidc.auth.store.OIDCClientConfiguration;
+import org.xwiki.contrib.oidc.auth.store.OIDCClientConfigurationStore;
+import org.xwiki.model.document.DocumentAuthors;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.DocumentReferenceResolver;
+import org.xwiki.model.reference.WikiReference;
 import org.xwiki.query.Query;
 import org.xwiki.query.QueryException;
 import org.xwiki.query.QueryManager;
+import org.xwiki.security.authorization.AuthorizationManager;
+import org.xwiki.security.authorization.Right;
 import org.xwiki.test.LogLevel;
 import org.xwiki.test.junit5.LogCaptureExtension;
 import org.xwiki.test.junit5.mockito.ComponentTest;
 import org.xwiki.test.junit5.mockito.InjectMockComponents;
 import org.xwiki.test.junit5.mockito.MockComponent;
+import org.xwiki.user.UserReference;
+import org.xwiki.user.UserReferenceSerializer;
 
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiContext;
@@ -47,6 +54,7 @@ import com.xpn.xwiki.objects.BaseObject;
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -69,9 +77,19 @@ class ConfigurationStoreTest
 
     private static final String CONFIGURATION_PAGE = "OIDCPro.Configurations.EntraID";
 
+    private static final String PLANTED_PAGE = "Sandbox.Planted";
+
     private static final String TEMPLATE_PAGE = "OIDCPro.Code.Templates.EntraTemplate";
 
+    private static final String UNTRUSTED_TEMPLATE_PAGE = "Sandbox.PlantedTemplate";
+
     private static final String TEMPLATE_NAME = "templateName";
+
+    private static final WikiReference WIKI = new WikiReference("xwiki");
+
+    private static final DocumentReference ADMIN = new DocumentReference("xwiki", "XWiki", "Admin");
+
+    private static final DocumentReference EDITOR = new DocumentReference("xwiki", "XWiki", "Editor");
 
     @RegisterExtension
     private LogCaptureExtension logCapture = new LogCaptureExtension(LogLevel.WARN);
@@ -83,7 +101,14 @@ class ConfigurationStoreTest
     private QueryManager queryManager;
 
     @MockComponent
-    private OIDCClientConfigurationCache configurationCache;
+    private OIDCClientConfigurationStore oidcConfigurationStore;
+
+    @MockComponent
+    private AuthorizationManager authorizationManager;
+
+    @MockComponent
+    @Named("document")
+    private UserReferenceSerializer<DocumentReference> documentUserReferenceSerializer;
 
     @MockComponent
     private DocumentReferenceResolver<String> documentReferenceResolver;
@@ -99,23 +124,24 @@ class ConfigurationStoreTest
 
     private XWikiContext context;
 
+    private XWiki wiki;
+
     private Query configurationsQuery;
 
     private Query templateQuery;
 
     private XWikiDocument configurationDocument;
 
-    private BaseObject clientObject;
-
-    private BaseObject templateObject;
+    private OIDCClientConfiguration clientConfiguration;
 
     @BeforeEach
     void setUp() throws Exception
     {
         this.context = mock(XWikiContext.class);
-        XWiki wiki = mock(XWiki.class);
-        when(this.context.getWiki()).thenReturn(wiki);
+        this.wiki = mock(XWiki.class);
+        when(this.context.getWiki()).thenReturn(this.wiki);
         when(this.contextProvider.get()).thenReturn(this.context);
+        when(this.authorizationManager.hasAccess(Right.ADMIN, ADMIN, WIKI)).thenReturn(true);
 
         this.configurationsQuery = mock(Query.class);
         when(this.queryManager.createQuery(startsWith("select distinct doc.fullName"), eq(Query.XWQL)))
@@ -129,25 +155,40 @@ class ConfigurationStoreTest
         when(this.templateQuery.bindValue(eq(TEMPLATE_NAME), any())).thenReturn(this.templateQuery);
         when(this.templateQuery.execute()).thenReturn(List.of(TEMPLATE_PAGE));
 
-        DocumentReference configurationReference =
-            new DocumentReference("xwiki", List.of("OIDCPro", "Configurations"), CONFIGURATION_NAME);
-        when(this.documentReferenceResolver.resolve(CONFIGURATION_PAGE)).thenReturn(configurationReference);
-        this.configurationDocument = mock(XWikiDocument.class);
-        when(wiki.getDocument(configurationReference, this.context)).thenReturn(this.configurationDocument);
-        this.clientObject = mock(BaseObject.class);
-        when(this.configurationDocument.getXObject(OIDCClientConfiguration.CLASS_REFERENCE))
-            .thenReturn(this.clientObject);
+        this.configurationDocument = mockDocument(CONFIGURATION_PAGE, ADMIN);
+        when(this.oidcConfigurationStore.getOIDCClientConfigurationDocument(CONFIGURATION_NAME))
+            .thenReturn(this.configurationDocument);
+        this.clientConfiguration = new OIDCClientConfiguration(mock(BaseObject.class));
+        when(this.oidcConfigurationStore.getOIDCClientConfiguration(CONFIGURATION_NAME))
+            .thenReturn(this.clientConfiguration);
 
-        DocumentReference templateReference =
-            new DocumentReference("xwiki", List.of("OIDCPro", "Code", "Templates"), "EntraTemplate");
-        when(this.documentReferenceResolver.resolve(TEMPLATE_PAGE)).thenReturn(templateReference);
-        XWikiDocument templateDocument = mock(XWikiDocument.class);
-        when(wiki.getDocument(templateReference, this.context)).thenReturn(templateDocument);
-        this.templateObject = mock(BaseObject.class);
-        when(templateDocument.getXObject(ConfigurationStore.PRO_TEMPLATE_CLASS)).thenReturn(this.templateObject);
-        when(this.templateObject.getStringValue(OIDCProClientConfiguration.PROPERTY_NAME)).thenReturn("entra");
+        mockTemplate(TEMPLATE_PAGE, ADMIN, "entra");
+    }
 
-        when(this.templateIconResolver.getIconDataURI(this.templateObject)).thenReturn("data:image/png;base64,");
+    private XWikiDocument mockDocument(String serializedReference, DocumentReference author) throws Exception
+    {
+        DocumentReference reference = new DocumentReference("xwiki", "Space", serializedReference);
+        when(this.documentReferenceResolver.resolve(serializedReference)).thenReturn(reference);
+        XWikiDocument document = mock(XWikiDocument.class);
+        when(document.getDocumentReference()).thenReturn(reference);
+        UserReference authorUserReference = mock(UserReference.class);
+        DocumentAuthors authors = mock(DocumentAuthors.class);
+        when(authors.getEffectiveMetadataAuthor()).thenReturn(authorUserReference);
+        when(document.getAuthors()).thenReturn(authors);
+        when(this.documentUserReferenceSerializer.serialize(authorUserReference)).thenReturn(author);
+        when(this.wiki.getDocument(reference, this.context)).thenReturn(document);
+        return document;
+    }
+
+    private BaseObject mockTemplate(String serializedReference, DocumentReference author, String name)
+        throws Exception
+    {
+        XWikiDocument templateDocument = mockDocument(serializedReference, author);
+        BaseObject template = mock(BaseObject.class);
+        when(templateDocument.getXObject(ConfigurationStore.PRO_TEMPLATE_CLASS)).thenReturn(template);
+        when(template.getStringValue(OIDCProClientConfiguration.PROPERTY_NAME)).thenReturn(name);
+        when(this.templateIconResolver.getIconDataURI(template)).thenReturn("data:image/png;base64," + name);
+        return template;
     }
 
     @Test
@@ -158,7 +199,7 @@ class ConfigurationStoreTest
 
         assertEquals(List.of(cachedConfiguration), this.store.getConfigurations());
 
-        verify(this.context.getWiki(), never()).getDocument(any(DocumentReference.class), any(XWikiContext.class));
+        verify(this.oidcConfigurationStore, never()).getOIDCClientConfigurationDocument(any());
     }
 
     @Test
@@ -173,27 +214,115 @@ class ConfigurationStoreTest
 
         assertEquals(1, configurations.size());
         OIDCProClientConfiguration configuration = configurations.get(0);
+        assertSame(this.clientConfiguration, configuration.getClientConfiguration());
         assertEquals("entra", configuration.getTemplateName());
-        assertEquals("data:image/png;base64,", configuration.getIconURL());
+        assertEquals("data:image/png;base64,entra", configuration.getIconURL());
         verify(this.templateQuery).bindValue(TEMPLATE_NAME, "entra");
-        verify(this.configurationCache).set(eq(CONFIGURATION_NAME), any(OIDCClientConfiguration.class));
         verify(this.proClientConfigurationCache).set(CONFIGURATION_NAME, configuration);
     }
 
     @Test
-    void getConfigurationsWithCachedClientConfigurationAndDefaultTemplate()
+    void getConfigurationsWithDefaultTemplate()
     {
-        OIDCClientConfiguration clientConfiguration = new OIDCClientConfiguration(this.clientObject);
-        OIDCClientConfigurationCache.CacheEntry cacheEntry = mock(OIDCClientConfigurationCache.CacheEntry.class);
-        when(cacheEntry.getConfiguration()).thenReturn(clientConfiguration);
-        when(this.configurationCache.get(CONFIGURATION_NAME)).thenReturn(cacheEntry);
+        List<OIDCProClientConfiguration> configurations = this.store.getConfigurations();
+
+        assertEquals(1, configurations.size());
+        assertEquals("entra", configurations.get(0).getTemplateName());
+        verify(this.templateQuery).bindValue(TEMPLATE_NAME, "default");
+    }
+
+    @Test
+    void getConfigurationsIgnoresConfigurationNotSelectedByTheOIDCStore() throws Exception
+    {
+        // The OIDC store only selects documents authored by a wiki administrator, so a configuration planted by
+        // another user is never the one it returns.
+        mockDocument(PLANTED_PAGE, EDITOR);
+        when(this.configurationsQuery.execute()).thenReturn(List.of(new Object[] { PLANTED_PAGE, CONFIGURATION_NAME },
+            new Object[] { CONFIGURATION_PAGE, CONFIGURATION_NAME }));
 
         List<OIDCProClientConfiguration> configurations = this.store.getConfigurations();
 
         assertEquals(1, configurations.size());
-        assertSame(clientConfiguration, configurations.get(0).getClientConfiguration());
+        assertSame(this.clientConfiguration, configurations.get(0).getClientConfiguration());
+    }
+
+    @Test
+    void getConfigurationsWithoutTrustedConfigurationDocument() throws Exception
+    {
+        when(this.oidcConfigurationStore.getOIDCClientConfigurationDocument(CONFIGURATION_NAME)).thenReturn(null);
+
+        assertTrue(this.store.getConfigurations().isEmpty());
+
+        verify(this.oidcConfigurationStore, never()).getOIDCClientConfiguration(any());
+        verify(this.proClientConfigurationCache, never()).set(any(), any());
+    }
+
+    @Test
+    void getConfigurationsWhenOIDCStoreReturnsNoConfiguration() throws Exception
+    {
+        when(this.oidcConfigurationStore.getOIDCClientConfiguration(CONFIGURATION_NAME)).thenReturn(null);
+
+        assertTrue(this.store.getConfigurations().isEmpty());
+    }
+
+    @Test
+    void getConfigurationsIgnoresTemplateNotAuthoredByWikiAdmin() throws Exception
+    {
+        mockTemplate(UNTRUSTED_TEMPLATE_PAGE, EDITOR, "planted");
+        when(this.templateQuery.execute()).thenReturn(List.of(UNTRUSTED_TEMPLATE_PAGE, TEMPLATE_PAGE));
+
+        List<OIDCProClientConfiguration> configurations = this.store.getConfigurations();
+
+        assertEquals(1, configurations.size());
+        assertEquals("entra", configurations.get(0).getTemplateName());
+    }
+
+    @Test
+    void getConfigurationsFallsBackToDefaultTemplateWhenBoundTemplateIsNotTrusted() throws Exception
+    {
+        BaseObject binderObject = mock(BaseObject.class);
+        when(binderObject.getStringValue(TEMPLATE_NAME)).thenReturn("planted");
+        when(this.configurationDocument.getXObject(ConfigurationStore.PRO_TEMPLATE_BINDER_CLASS))
+            .thenReturn(binderObject);
+        mockTemplate(UNTRUSTED_TEMPLATE_PAGE, EDITOR, "planted");
+        when(this.templateQuery.execute()).thenReturn(List.of(UNTRUSTED_TEMPLATE_PAGE), List.of(TEMPLATE_PAGE));
+
+        List<OIDCProClientConfiguration> configurations = this.store.getConfigurations();
+
+        assertEquals(1, configurations.size());
+        assertEquals("entra", configurations.get(0).getTemplateName());
+        verify(this.templateQuery).bindValue(TEMPLATE_NAME, "planted");
         verify(this.templateQuery).bindValue(TEMPLATE_NAME, "default");
-        verify(this.configurationCache, never()).set(any(), any());
+    }
+
+    @Test
+    void getConfigurationsWithoutTrustedTemplate() throws Exception
+    {
+        mockTemplate(UNTRUSTED_TEMPLATE_PAGE, EDITOR, "planted");
+        when(this.templateQuery.execute()).thenReturn(List.of(UNTRUSTED_TEMPLATE_PAGE));
+        when(this.templateIconResolver.getIconDataURI(null)).thenReturn("");
+
+        List<OIDCProClientConfiguration> configurations = this.store.getConfigurations();
+
+        assertEquals(1, configurations.size());
+        OIDCProClientConfiguration configuration = configurations.get(0);
+        assertSame(this.clientConfiguration, configuration.getClientConfiguration());
+        assertNull(configuration.getTemplateName());
+        assertEquals("", configuration.getIconURL());
+    }
+
+    @Test
+    void getConfigurationsCreatedByAnotherApplicationWithoutAnyTemplate() throws Exception
+    {
+        // Configurations created by other applications (e.g. the EntraID application) are not bound to a template.
+        when(this.templateQuery.execute()).thenReturn(Collections.emptyList());
+
+        List<OIDCProClientConfiguration> configurations = this.store.getConfigurations();
+
+        assertEquals(1, configurations.size());
+        assertSame(this.clientConfiguration, configurations.get(0).getClientConfiguration());
+        assertNull(configurations.get(0).getTemplateName());
+        verify(this.proClientConfigurationCache).set(CONFIGURATION_NAME, configurations.get(0));
     }
 
     @Test
