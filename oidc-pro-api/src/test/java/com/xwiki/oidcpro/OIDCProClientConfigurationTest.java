@@ -50,11 +50,13 @@ class OIDCProClientConfigurationTest
         when(templateObject.getStringValue(OIDCProClientConfiguration.PROPERTY_CODE_INSERTION_POINT))
             .thenReturn("footer");
         OIDCClientConfiguration clientConfiguration = mock(OIDCClientConfiguration.class);
+        when(clientConfiguration.getConfigurationName()).thenReturn("EntraID");
 
         OIDCProClientConfiguration configuration =
             new OIDCProClientConfiguration(clientConfiguration, templateObject, "data:");
 
         assertSame(clientConfiguration, configuration.getClientConfiguration());
+        assertEquals("EntraID", configuration.getConfigurationName());
         assertEquals("{}", configuration.getLayoutJson());
         assertEquals("entra", configuration.getTemplateName());
         assertEquals("key", configuration.getIconName());

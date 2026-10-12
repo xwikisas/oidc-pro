@@ -22,6 +22,7 @@ package com.xwiki.oidcpro.script;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,7 +44,6 @@ import org.xwiki.script.service.ScriptService;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.user.api.XWikiAuthService;
-import com.xwiki.oidcpro.OIDCProClientConfiguration;
 import com.xwiki.oidcpro.internal.ConfigurationStore;
 
 /**
@@ -90,11 +90,15 @@ public class OIDCProScriptService implements ScriptService
     }
 
     /**
-     * @return the OIDC configurations of the current wiki.
+     * The configurations are offered to every user (including guests, on the login page), so they don't give access to
+     * the OIDC client configurations themselves, which hold the client secrets.
+     *
+     * @return the OIDC configurations of the current wiki
      */
-    public List<OIDCProClientConfiguration> getConfigurations()
+    public List<SafeOIDCProClientConfiguration> getConfigurations()
     {
-        return configurationStore.getConfigurations();
+        return configurationStore.getConfigurations().stream().map(SafeOIDCProClientConfiguration::new)
+            .collect(Collectors.toList());
     }
 
     /**

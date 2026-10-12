@@ -25,8 +25,10 @@ import org.xwiki.contrib.oidc.auth.store.OIDCClientConfiguration;
 import com.xpn.xwiki.objects.BaseObject;
 
 /**
- * Provides the configuration on an OIDC client together with the configuration of the template that is used to display
- * it.
+ * Provides the configuration of an OIDC client together with the template that is used to display it.
+ * <p>
+ * The client configuration holds sensitive data, such as the client secret, so this object must not be handed to
+ * scripts: use {@link com.xwiki.oidcpro.script.SafeOIDCProClientConfiguration} instead.
  *
  * @version $Id$
  */
@@ -62,32 +64,57 @@ public class OIDCProClientConfiguration
      */
     public static final String PROPERTY_CODE_INSERTION_POINT = "codeInsertionPoint";
 
-    private final BaseObject templateObject;
-
     private final OIDCClientConfiguration clientConfiguration;
+
+    private final String layoutJson;
+
+    private final String templateName;
+
+    private final String iconName;
+
+    private final String iconAttachment;
 
     private final String iconURL;
 
+    private final String customCode;
+
+    private final String codeInsertionPoint;
+
     /**
-     * @param configuration the OIDCClientConfiguration that gets wrapped by this class.
+     * The template values are copied, so that this object doesn't keep a reference to the shared template object.
+     *
+     * @param clientConfiguration the OIDC client configuration
      * @param templateObject the template object that is associated to the client configuration, or {@code null} when
      *     no trusted template applies to it (e.g. for configurations created by other applications)
      * @param iconURL the icon attached to the template page, as a data URI
      */
-    public OIDCProClientConfiguration(OIDCClientConfiguration configuration, BaseObject templateObject,
+    public OIDCProClientConfiguration(OIDCClientConfiguration clientConfiguration, BaseObject templateObject,
         String iconURL)
     {
-        this.clientConfiguration = configuration;
-        this.templateObject = templateObject;
+        this.clientConfiguration = clientConfiguration;
+        this.layoutJson = getLargeStringValue(templateObject, PROPERTY_LAYOUT_JSON);
+        this.templateName = getStringValue(templateObject, PROPERTY_NAME);
+        this.iconName = getStringValue(templateObject, PROPERTY_ICON_NAME);
+        this.iconAttachment = getStringValue(templateObject, PROPERTY_ICON_ATTACHMENT);
         this.iconURL = iconURL;
+        this.customCode = getLargeStringValue(templateObject, PROPERTY_CUSTOM_CODE);
+        this.codeInsertionPoint = getStringValue(templateObject, PROPERTY_CODE_INSERTION_POINT);
     }
 
     /**
-     * @return the OIDC client configuration where the information is stored and retrieved from.
+     * @return the OIDC client configuration, which holds sensitive data such as the client secret
      */
     public OIDCClientConfiguration getClientConfiguration()
     {
-        return clientConfiguration;
+        return this.clientConfiguration;
+    }
+
+    /**
+     * @return the name of the OIDC client configuration, used to select it when authenticating
+     */
+    public String getConfigurationName()
+    {
+        return this.clientConfiguration.getConfigurationName();
     }
 
     /**
@@ -95,15 +122,15 @@ public class OIDCProClientConfiguration
      */
     public String getLayoutJson()
     {
-        return getLargeStringValue(PROPERTY_LAYOUT_JSON);
+        return this.layoutJson;
     }
 
     /**
-     * @return the name of the
+     * @return the name of the template that is used to display the configuration
      */
     public String getTemplateName()
     {
-        return getStringValue(PROPERTY_NAME);
+        return this.templateName;
     }
 
     /**
@@ -111,7 +138,7 @@ public class OIDCProClientConfiguration
      */
     public String getIconName()
     {
-        return getStringValue(PROPERTY_ICON_NAME);
+        return this.iconName;
     }
 
     /**
@@ -119,7 +146,7 @@ public class OIDCProClientConfiguration
      */
     public String getIconAttachment()
     {
-        return getStringValue(PROPERTY_ICON_ATTACHMENT);
+        return this.iconAttachment;
     }
 
     /**
@@ -137,7 +164,7 @@ public class OIDCProClientConfiguration
      */
     public String getCustomCode()
     {
-        return getLargeStringValue(PROPERTY_CUSTOM_CODE);
+        return this.customCode;
     }
 
     /**
@@ -146,16 +173,16 @@ public class OIDCProClientConfiguration
      */
     public String getCodeInsertionPoint()
     {
-        return getStringValue(PROPERTY_CODE_INSERTION_POINT);
+        return this.codeInsertionPoint;
     }
 
-    private String getStringValue(String property)
+    private static String getStringValue(BaseObject templateObject, String property)
     {
-        return this.templateObject != null ? this.templateObject.getStringValue(property) : null;
+        return templateObject != null ? templateObject.getStringValue(property) : null;
     }
 
-    private String getLargeStringValue(String property)
+    private static String getLargeStringValue(BaseObject templateObject, String property)
     {
-        return this.templateObject != null ? this.templateObject.getLargeStringValue(property) : null;
+        return templateObject != null ? templateObject.getLargeStringValue(property) : null;
     }
 }

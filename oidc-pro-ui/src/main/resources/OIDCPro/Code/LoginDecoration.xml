@@ -184,7 +184,7 @@
       &lt;/a&gt;
       &lt;ul class="dropdown-menu dropdown-menu-right" aria-labelledby="oidcpro-login-menu-toggle"&gt;
         #foreach ($cfg in $oidcProviders)
-          #set ($cfgName = $cfg.clientConfiguration.configurationName)
+          #set ($cfgName = $cfg.configurationName)
           &lt;li class="oidcpro-login-option"&gt;
             &lt;a href="$escapetool.xml($loginURL)" rel="nofollow" data-oidcpro-cookie="$escapetool.xml($oidcCookieName)" data-oidcpro-client="$escapetool.xml($cfgName)"&gt;
               #if ("$!cfg.iconName" != '')

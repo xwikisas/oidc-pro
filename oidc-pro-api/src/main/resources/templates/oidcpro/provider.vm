@@ -67,10 +67,10 @@ $services.oidcpro.resetClientConfigurationSelection()
       <li>
         <button type="submit" class="auth-method btn btn-default"
           data-oidcpro-cookie="$escapetool.xml($oidcCookieName)"
-          data-oidcpro-client="$escapetool.xml($client.clientConfiguration.configurationName)">
+          data-oidcpro-client="$escapetool.xml($client.configurationName)">
           ## Keep the icon markup on one line so that the span is :empty when there is no icon.
           <span class="auth-method-icon" aria-hidden="true">#if ("$!client.iconName" != '')$services.icon.renderHTML($client.iconName)#elseif ("$!client.iconURL" != '')<img src="$escapetool.xml($client.iconURL)" alt="" />#end</span>
-          <span class="auth-method-label">$escapetool.xml($client.clientConfiguration.configurationName)</span>
+          <span class="auth-method-label">$escapetool.xml($client.configurationName)</span>
         </button>
       </li>
     #end

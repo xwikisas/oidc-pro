@@ -120,10 +120,14 @@ class OIDCProScriptServiceTest
     @Test
     void getConfigurations()
     {
-        List<OIDCProClientConfiguration> configurations = List.of(mock(OIDCProClientConfiguration.class));
-        when(this.configurationStore.getConfigurations()).thenReturn(configurations);
+        OIDCProClientConfiguration configuration = mock(OIDCProClientConfiguration.class);
+        when(configuration.getConfigurationName()).thenReturn("EntraID");
+        when(this.configurationStore.getConfigurations()).thenReturn(List.of(configuration));
 
-        assertSame(configurations, this.scriptService.getConfigurations());
+        List<SafeOIDCProClientConfiguration> configurations = this.scriptService.getConfigurations();
+
+        assertEquals(1, configurations.size());
+        assertEquals("EntraID", configurations.get(0).getConfigurationName());
     }
 
     @Test
