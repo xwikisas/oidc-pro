@@ -186,24 +186,81 @@ public class ConfigurationStore
     private BaseObject findTrustedTemplate(String templateId, XWikiContext context)
         throws QueryException, XWikiException
     {
+        XWikiDocument templateDoc = getTrustedTemplateDocument(templateId, context);
+        return templateDoc != null ? templateDoc.getXObject(PRO_TEMPLATE_CLASS) : null;
+    }
+
+    /**
+     * Templates contribute code to the login page and to the configuration sheet, so only the templates written by a
+     * wiki administrator are returned.
+     *
+     * @param templateName the name of the template
+     * @return the reference of the first trusted document holding a template with the given name, or {@code null} if
+     *     there is none
+     * @throws QueryException if the templates can't be retrieved
+     * @throws XWikiException if a template document can't be loaded
+     */
+    public DocumentReference getTemplateReference(String templateName) throws QueryException, XWikiException
+    {
+        XWikiDocument templateDoc = getTrustedTemplateDocument(templateName, contextProvider.get());
+        return templateDoc != null ? templateDoc.getDocumentReference() : null;
+    }
+
+    /**
+     * Templates contribute code to the login page and to the configuration sheet, so only the templates written by a
+     * wiki administrator are returned.
+     *
+     * @return the references of the trusted documents holding a template
+     * @throws QueryException if the templates can't be retrieved
+     * @throws XWikiException if a template document can't be loaded
+     */
+    public List<DocumentReference> getTemplateReferences() throws QueryException, XWikiException
+    {
+        XWikiContext context = contextProvider.get();
+        List<DocumentReference> templateReferences = new ArrayList<>();
+        List<Object> result =
+            queryManager.createQuery("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as template", Query.XWQL)
+                .execute();
+        for (Object templateDocRef : result) {
+            XWikiDocument templateDoc = getDocument(templateDocRef, context);
+            if (isTrustedTemplate(templateDoc)) {
+                templateReferences.add(templateDoc.getDocumentReference());
+            }
+        }
+        return templateReferences;
+    }
+
+    private XWikiDocument getTrustedTemplateDocument(String templateName, XWikiContext context)
+        throws QueryException, XWikiException
+    {
         List<Object> result = queryManager.createQuery("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as "
             + "template where template"
-            + ".name = :templateName", Query.XWQL).bindValue(TEMPLATE_NAME, templateId).execute();
-
-        // The template contributes code to the login page, so only use templates written by a wiki administrator.
+            + ".name = :templateName", Query.XWQL).bindValue(TEMPLATE_NAME, templateName).execute();
         for (Object templateDocRef : result) {
-            XWikiDocument templateDoc =
-                context.getWiki().getDocument(documentReferenceResolver.resolve(templateDocRef.toString()), context);
-            DocumentReference author = this.documentUserReferenceSerializer
-                .serialize(templateDoc.getAuthors().getEffectiveMetadataAuthor());
-            if (this.authorizationManager.hasAccess(Right.ADMIN, author,
-                templateDoc.getDocumentReference().getWikiReference()))
-            {
-                return templateDoc.getXObject(PRO_TEMPLATE_CLASS);
+            XWikiDocument templateDoc = getDocument(templateDocRef, context);
+            if (isTrustedTemplate(templateDoc)) {
+                return templateDoc;
             }
+        }
+        return null;
+    }
+
+    private XWikiDocument getDocument(Object serializedReference, XWikiContext context) throws XWikiException
+    {
+        return context.getWiki().getDocument(documentReferenceResolver.resolve(serializedReference.toString()),
+            context);
+    }
+
+    private boolean isTrustedTemplate(XWikiDocument templateDoc)
+    {
+        DocumentReference author =
+            this.documentUserReferenceSerializer.serialize(templateDoc.getAuthors().getEffectiveMetadataAuthor());
+        boolean trusted = this.authorizationManager.hasAccess(Right.ADMIN, author,
+            templateDoc.getDocumentReference().getWikiReference());
+        if (!trusted) {
             logger.debug("Ignoring the OIDC Pro template from [{}] because its author [{}] is not a wiki "
                 + "administrator.", templateDoc.getDocumentReference(), author);
         }
-        return null;
+        return trusted;
     }
 }

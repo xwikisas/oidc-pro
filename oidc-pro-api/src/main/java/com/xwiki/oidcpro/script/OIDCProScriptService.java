@@ -20,6 +20,7 @@
 
 package com.xwiki.oidcpro.script;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,15 +29,19 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.configuration.ConfigurationSource;
 import org.xwiki.contrib.oidc.auth.OIDCAuthServiceImpl;
 import org.xwiki.contrib.oidc.auth.internal.OIDCAuthService;
 import org.xwiki.contrib.oidc.auth.internal.OIDCClientConfiguration;
 import org.xwiki.contrib.oidc.auth.store.OIDCClientsConfigurationStore;
+import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.query.QueryException;
 import org.xwiki.script.service.ScriptService;
 
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.user.api.XWikiAuthService;
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 import com.xwiki.oidcpro.internal.ConfigurationStore;
@@ -51,6 +56,9 @@ import com.xwiki.oidcpro.internal.ConfigurationStore;
 @Named("oidcpro")
 public class OIDCProScriptService implements ScriptService
 {
+    @Inject
+    private Logger logger;
+
     @Inject
     private Provider<XWikiContext> contextProvider;
 
@@ -87,6 +95,40 @@ public class OIDCProScriptService implements ScriptService
     public List<OIDCProClientConfiguration> getConfigurations()
     {
         return configurationStore.getConfigurations();
+    }
+
+    /**
+     * Only the templates written by a wiki administrator are taken into account, since templates contribute code to
+     * the pages that display them.
+     *
+     * @param templateName the name of the OIDC Pro template
+     * @return the reference of the document holding the template with the given name, or {@code null} if there is no
+     *     such trusted template
+     */
+    public DocumentReference getTemplateReference(String templateName)
+    {
+        try {
+            return configurationStore.getTemplateReference(templateName);
+        } catch (QueryException | XWikiException e) {
+            logger.warn("Failed to retrieve the OIDC Pro template [{}].", templateName, e);
+            return null;
+        }
+    }
+
+    /**
+     * Only the templates written by a wiki administrator are taken into account, since templates contribute code to
+     * the pages that display them.
+     *
+     * @return the references of the documents holding the OIDC Pro templates
+     */
+    public List<DocumentReference> getTemplateReferences()
+    {
+        try {
+            return configurationStore.getTemplateReferences();
+        } catch (QueryException | XWikiException e) {
+            logger.warn("Failed to retrieve the OIDC Pro templates.", e);
+            return Collections.emptyList();
+        }
     }
 
     /**

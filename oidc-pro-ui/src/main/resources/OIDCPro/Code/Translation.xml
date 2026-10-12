@@ -64,6 +64,7 @@ oidcpro.admin.enable.error=Failed to toggle the OIDC client
 # Config Sheet
 oidcpro.config.defaultTitle=OIDC Configuration
 oidcpro.config.backToAdmin=Go back to the Administration Section
+oidcpro.config.templateNotFound=No OIDC template found with the name ''{0}''.
 oidcpro.config.section.General.label=General Configuration
 oidcpro.config.section.User.label=User Configuration
 oidcpro.config.section.Group.label=Group Configuration

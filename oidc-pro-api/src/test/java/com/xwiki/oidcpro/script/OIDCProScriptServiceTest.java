@@ -25,10 +25,15 @@ import javax.inject.Provider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.xwiki.configuration.ConfigurationSource;
 import org.xwiki.contrib.oidc.auth.OIDCAuthServiceImpl;
 import org.xwiki.contrib.oidc.auth.internal.OIDCClientConfiguration;
 import org.xwiki.contrib.oidc.auth.store.OIDCClientsConfigurationStore;
+import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.query.QueryException;
+import org.xwiki.test.LogLevel;
+import org.xwiki.test.junit5.LogCaptureExtension;
 import org.xwiki.test.junit5.mockito.ComponentTest;
 import org.xwiki.test.junit5.mockito.InjectMockComponents;
 import org.xwiki.test.junit5.mockito.MockComponent;
@@ -41,6 +46,7 @@ import com.xwiki.oidcpro.internal.ConfigurationStore;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -55,6 +61,9 @@ import static org.mockito.Mockito.when;
 @ComponentTest
 class OIDCProScriptServiceTest
 {
+    @RegisterExtension
+    private LogCaptureExtension logCapture = new LogCaptureExtension(LogLevel.WARN);
+
     @InjectMockComponents
     private OIDCProScriptService scriptService;
 
@@ -162,5 +171,43 @@ class OIDCProScriptServiceTest
 
         verify(this.oidcClientConfiguration)
             .removeSessionAttribute(OIDCClientConfiguration.DEFAULT_CLIENT_CONFIGURATION_PROPERTY);
+    }
+
+    @Test
+    void getTemplateReference() throws Exception
+    {
+        DocumentReference templateReference = new DocumentReference("xwiki", "Templates", "Entra");
+        when(this.configurationStore.getTemplateReference("entra")).thenReturn(templateReference);
+
+        assertSame(templateReference, this.scriptService.getTemplateReference("entra"));
+    }
+
+    @Test
+    void getTemplateReferenceWhenStoreFails() throws Exception
+    {
+        when(this.configurationStore.getTemplateReference("entra"))
+            .thenThrow(new QueryException("error", null, null));
+
+        assertNull(this.scriptService.getTemplateReference("entra"));
+        assertEquals("Failed to retrieve the OIDC Pro template [entra].", this.logCapture.getMessage(0));
+    }
+
+    @Test
+    void getTemplateReferences() throws Exception
+    {
+        List<DocumentReference> templateReferences =
+            List.of(new DocumentReference("xwiki", "Templates", "Entra"));
+        when(this.configurationStore.getTemplateReferences()).thenReturn(templateReferences);
+
+        assertSame(templateReferences, this.scriptService.getTemplateReferences());
+    }
+
+    @Test
+    void getTemplateReferencesWhenStoreFails() throws Exception
+    {
+        when(this.configurationStore.getTemplateReferences()).thenThrow(new QueryException("error", null, null));
+
+        assertTrue(this.scriptService.getTemplateReferences().isEmpty());
+        assertEquals("Failed to retrieve the OIDC Pro templates.", this.logCapture.getMessage(0));
     }
 }

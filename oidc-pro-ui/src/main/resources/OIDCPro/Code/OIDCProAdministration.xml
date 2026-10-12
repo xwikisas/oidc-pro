@@ -276,9 +276,9 @@
       &lt;span class="sr-only"&gt;Toggle Dropdown&lt;/span&gt;
     &lt;/button&gt;
     &lt;ul class="dropdown-menu"&gt;
-      ## Only select the page names: selecting object properties would require programming right.
-      #foreach ($templateDocName in $services.query.xwql("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as template").execute())
-        #set ($templateDoc = $xwiki.getDocument($templateDocName))
+      ## Only the templates written by a wiki administrator are offered.
+      #foreach ($templateRef in $services.oidcpro.templateReferences)
+        #set ($templateDoc = $xwiki.getDocument($templateRef))
         #set ($templateXObj = $templateDoc.getObject('OIDCPro.Code.OIDCProTemplateClass'))
         #set ($templateName = "$!templateXObj.getProperty('name').value")
         &lt;li class="oidcpro-config-create" data-templateid="$escapetool.xml($templateName)" title="$escapetool.xml($services.localization.render("oidcpro.templates.${templateName}.hint"))"&gt;

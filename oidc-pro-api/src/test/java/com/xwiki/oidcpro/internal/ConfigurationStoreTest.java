@@ -326,6 +326,41 @@ class ConfigurationStoreTest
     }
 
     @Test
+    void getTemplateReference() throws Exception
+    {
+        mockTemplate(UNTRUSTED_TEMPLATE_PAGE, EDITOR, "entra");
+        when(this.templateQuery.execute()).thenReturn(List.of(UNTRUSTED_TEMPLATE_PAGE, TEMPLATE_PAGE));
+
+        assertEquals(this.documentReferenceResolver.resolve(TEMPLATE_PAGE), this.store.getTemplateReference("entra"));
+        verify(this.templateQuery).bindValue(TEMPLATE_NAME, "entra");
+    }
+
+    @Test
+    void getTemplateReferenceWithoutTrustedTemplate() throws Exception
+    {
+        mockTemplate(UNTRUSTED_TEMPLATE_PAGE, EDITOR, "planted");
+        when(this.templateQuery.execute()).thenReturn(List.of(UNTRUSTED_TEMPLATE_PAGE));
+
+        assertNull(this.store.getTemplateReference("planted"));
+    }
+
+    @Test
+    void getTemplateReferences() throws Exception
+    {
+        mockTemplate(UNTRUSTED_TEMPLATE_PAGE, EDITOR, "planted");
+        String otherTemplatePage = "OIDCPro.Code.Templates.OtherTemplate";
+        mockTemplate(otherTemplatePage, ADMIN, "other");
+        Query allTemplatesQuery = mock(Query.class);
+        when(this.queryManager.createQuery("from doc.object('OIDCPro.Code.OIDCProTemplateClass') as template",
+            Query.XWQL)).thenReturn(allTemplatesQuery);
+        when(allTemplatesQuery.execute())
+            .thenReturn(List.of(TEMPLATE_PAGE, UNTRUSTED_TEMPLATE_PAGE, otherTemplatePage));
+
+        assertEquals(List.of(this.documentReferenceResolver.resolve(TEMPLATE_PAGE),
+            this.documentReferenceResolver.resolve(otherTemplatePage)), this.store.getTemplateReferences());
+    }
+
+    @Test
     void getConfigurationsWhenQueryFails() throws Exception
     {
         when(this.configurationsQuery.execute()).thenThrow(new QueryException("error", null, null));
