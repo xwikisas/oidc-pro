@@ -38,10 +38,10 @@
   <hidden>true</hidden>
   <content>{{velocity ouput="false"}}
 #macro (sectionHeaderHtml $section $properties $advanced)
-&lt;div class="oidcpro-section oidcpro-section-$section.id"&gt;
+&lt;div class="oidcpro-section oidcpro-section-$escapetool.xml($section.id)"&gt;
   #set ($collapseId = "oidcpro-section-${section.id}-collapse")
-  &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#${collapseId}"
-    aria-expanded="false" aria-controls="$collapseId"&gt;
+  &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#$escapetool.xml($collapseId)"
+    aria-expanded="false" aria-controls="$escapetool.xml($collapseId)"&gt;
     &lt;div class="oidcpro-section-header"&gt;
       &lt;h2&gt;
         &lt;span class="oidcpro-section-header-icon"&gt;
@@ -51,14 +51,14 @@
       &lt;/h2&gt;
     &lt;/div&gt;
   &lt;/a&gt;
-  &lt;div id="$collapseId" class="oidcpro-properties #if(!$collapsed)collapse#end"&gt;
+  &lt;div id="$escapetool.xml($collapseId)" class="oidcpro-properties #if(!$collapsed)collapse#end"&gt;
     &lt;dl&gt;
       #foreach ($property in $properties)
         #displayProperty($property)
       #end
       #set ($advancedCollapseId = "${collapseId}-advanced")
-      &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#${advancedCollapseId}"
-        aria-expanded="false" aria-controls="$advancedCollapseId"&gt;
+      &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#$escapetool.xml($advancedCollapseId)"
+        aria-expanded="false" aria-controls="$escapetool.xml($advancedCollapseId)"&gt;
         &lt;div class="oidcpro-section-header"&gt;
           &lt;span class="oidcpro-section-header-icon"&gt;
             $services.icon.renderHTML('caret-down')
@@ -68,7 +68,7 @@
           &lt;/p&gt;
         &lt;/div&gt;
       &lt;/a&gt;
-      &lt;div id="$advancedCollapseId" class="oidcpro-properties collapse"&gt;
+      &lt;div id="$escapetool.xml($advancedCollapseId)" class="oidcpro-properties collapse"&gt;
         #foreach ($property in $advanced)
           #displayProperty($property)
         #end
@@ -78,9 +78,12 @@
 &lt;/div&gt;
 #end
 #macro (displayProperty $property)
-&lt;div class="oidcpro-property oidcpro-property-${property.id} #if($property.hidden)hidden#end $!property.get('class')" 
+&lt;div class="oidcpro-property oidcpro-property-$escapetool.xml($property.id) #if($property.hidden)hidden#end $!escapetool.xml($property.get('class'))"
   #foreach($dataKey in $property.data.keySet())
-    data-$escapetool.xml($dataKey)="$escapetool.xml($jsontool.serialize($property.data.get($dataKey)))"
+    ## Escaping is not enough for an attribute name, so only accept plain names.
+    #if ("$dataKey".matches('^[a-zA-Z0-9_-]+$'))
+      data-$dataKey="$escapetool.xml($jsontool.serialize($property.data.get($dataKey)))"
+    #end
   #end
   &gt;
   &lt;dt&gt;
