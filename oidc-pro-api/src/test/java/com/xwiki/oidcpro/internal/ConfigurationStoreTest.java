@@ -49,6 +49,7 @@ import org.xwiki.user.UserReferenceSerializer;
 
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
@@ -358,6 +359,38 @@ class ConfigurationStoreTest
 
         assertEquals(List.of(this.documentReferenceResolver.resolve(TEMPLATE_PAGE),
             this.documentReferenceResolver.resolve(otherTemplatePage)), this.store.getTemplateReferences());
+    }
+
+    @Test
+    void getConfigurationsWithUnknownBoundTemplate() throws Exception
+    {
+        BaseObject binderObject = mock(BaseObject.class);
+        when(binderObject.getStringValue(TEMPLATE_NAME)).thenReturn("missing");
+        when(this.configurationDocument.getXObject(ConfigurationStore.PRO_TEMPLATE_BINDER_CLASS))
+            .thenReturn(binderObject);
+        when(this.templateQuery.execute()).thenReturn(Collections.emptyList(), List.of(TEMPLATE_PAGE));
+
+        List<OIDCProClientConfiguration> configurations = this.store.getConfigurations();
+
+        assertEquals(1, configurations.size());
+        assertEquals("entra", configurations.get(0).getTemplateName());
+    }
+
+    @Test
+    void getConfigurationsSkipsConfigurationThatFailsToLoad() throws Exception
+    {
+        String brokenName = "Broken";
+        when(this.configurationsQuery.execute()).thenReturn(List.of(new Object[] { PLANTED_PAGE, brokenName },
+            new Object[] { PLANTED_PAGE, null }, new Object[] { CONFIGURATION_PAGE, CONFIGURATION_NAME }));
+        when(this.oidcConfigurationStore.getOIDCClientConfigurationDocument(brokenName))
+            .thenThrow(new XWikiException());
+
+        List<OIDCProClientConfiguration> configurations = this.store.getConfigurations();
+
+        assertEquals(1, configurations.size());
+        assertSame(this.clientConfiguration, configurations.get(0).getClientConfiguration());
+        assertEquals("Failed to retrieve the oidc configuration [Broken] from [Sandbox.Planted].",
+            this.logCapture.getMessage(0));
     }
 
     @Test

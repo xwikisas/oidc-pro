@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -111,17 +112,27 @@ public class ConfigurationStore
      */
     public List<OIDCProClientConfiguration> getConfigurations()
     {
-        List<OIDCProClientConfiguration> configurations = new ArrayList<>();
-        XWikiContext context = contextProvider.get();
+        List<Object[]> result;
         try {
-            List<Object[]> result = queryManager.createQuery(
+            result = queryManager.createQuery(
                 "select distinct doc.fullName, oidc.configurationName from Document doc, "
                     + "doc.object('XWiki.OIDC.ClientConfigurationClass') as oidc where oidc.skipped <> '1'",
                 Query.XWQL).execute();
+        } catch (QueryException e) {
+            logger.error("Failed to retrieve the oidc configurations.", e);
+            return Collections.emptyList();
+        }
 
-            for (Object[] entry : result) {
-                String serializedDocument = entry[0].toString();
-                String cfgName = entry[1].toString();
+        // A configuration that can't be loaded must not prevent the others from being offered.
+        List<OIDCProClientConfiguration> configurations = new ArrayList<>();
+        XWikiContext context = contextProvider.get();
+        for (Object[] entry : result) {
+            String serializedDocument = Objects.toString(entry[0], null);
+            String cfgName = Objects.toString(entry[1], null);
+            if (StringUtils.isAnyBlank(serializedDocument, cfgName)) {
+                continue;
+            }
+            try {
                 OIDCProClientConfiguration proClientConfiguration = proClientConfigurationCache.get(cfgName);
                 if (proClientConfiguration == null) {
                     proClientConfiguration = getClientConfiguration(cfgName, serializedDocument, context);
@@ -131,10 +142,10 @@ public class ConfigurationStore
                     proClientConfigurationCache.set(cfgName, proClientConfiguration);
                 }
                 configurations.add(proClientConfiguration);
+            } catch (QueryException | XWikiException e) {
+                logger.error("Failed to retrieve the oidc configuration [{}] from [{}].", cfgName, serializedDocument,
+                    e);
             }
-        } catch (QueryException | XWikiException e) {
-            logger.error("Failed to retrieve the oidc configurations.", e);
-            return Collections.emptyList();
         }
         return configurations;
     }
