@@ -135,4 +135,22 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.xwiki.commons</groupId>
+        <artifactId>xwiki-commons-tool-xar-plugin</artifactId>
+        <configuration>
+          <entries>
+            <!-- The configurations hold the endpoints and mappings of the OIDC clients: restricted to administrators by
+                 default, but administrators may change these rights, which must be kept on upgrade. -->
+            <entry>
+              <document>OIDCPro.Configurations.WebPreferences</document>
+              <type>configuration</type>
+            </entry>
+          </entries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

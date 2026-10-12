@@ -81,7 +81,7 @@
 &lt;div class="oidcpro-property oidcpro-property-$escapetool.xml($property.id) #if($property.hidden)hidden#end $!escapetool.xml($property.get('class'))"
   #foreach($dataKey in $property.data.keySet())
     ## Escaping is not enough for an attribute name, so only accept plain names.
-    #if ("$dataKey".matches('^[a-zA-Z0-9_-]+$'))
+    #if ($dataKey.matches('^[a-zA-Z0-9_-]+$'))
       data-$dataKey="$escapetool.xml($jsontool.serialize($property.data.get($dataKey)))"
     #end
   #end

@@ -88,20 +88,6 @@
         <validationRegExp/>
         <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
       </customCode>
-      <iconName>
-        <customDisplay/>
-        <disabled>0</disabled>
-        <hint/>
-        <name>iconName</name>
-        <number>3</number>
-        <picker>1</picker>
-        <prettyName>iconName</prettyName>
-        <size>30</size>
-        <unmodifiable>0</unmodifiable>
-        <validationMessage/>
-        <validationRegExp/>
-        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-      </iconName>
       <iconAttachment>
         <customDisplay/>
         <disabled>0</disabled>
@@ -116,6 +102,20 @@
         <validationRegExp/>
         <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
       </iconAttachment>
+      <iconName>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <hint/>
+        <name>iconName</name>
+        <number>3</number>
+        <picker>1</picker>
+        <prettyName>iconName</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </iconName>
       <layoutJson>
         <contenttype>PureText</contenttype>
         <customDisplay/>
@@ -156,10 +156,10 @@
       <customCode/>
     </property>
     <property>
-      <iconName/>
+      <iconAttachment>openid-logo.png</iconAttachment>
     </property>
     <property>
-      <iconAttachment>openid-logo.png</iconAttachment>
+      <iconName/>
     </property>
     <property>
       <layoutJson>{
