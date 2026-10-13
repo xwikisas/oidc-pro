@@ -17,7 +17,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-.auth-methods {
+.oidcpro-auth-methods {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -27,14 +27,14 @@
   gap: 8px;
 }
 
-.auth-methods li {
+.oidcpro-auth-methods li {
   width: 100%;
   max-width: 360px;
 }
 
 /* Icon column, label column and an empty column of the same width as the icon, so that the label stays centered
    whether or not the client has an icon. */
-.auth-method {
+.oidcpro-auth-method {
   display: grid;
   grid-template-columns: 24px 1fr 24px;
   align-items: center;
@@ -47,7 +47,7 @@
 }
 
 /* Icons of the OIDC clients, on the login page and in the top menu. */
-.auth-method-icon,
+.oidcpro-auth-method-icon,
 .oidcpro-login-icon {
   display: inline-flex;
   flex: none;
@@ -56,8 +56,8 @@
   line-height: 1;
 }
 
-.auth-method-icon img,
-.auth-method-icon svg,
+.oidcpro-auth-method-icon img,
+.oidcpro-auth-method-icon svg,
 .oidcpro-login-icon img,
 .oidcpro-login-icon svg {
   max-width: 100%;
@@ -65,18 +65,18 @@
   object-fit: contain;
 }
 
-.auth-method-icon {
+.oidcpro-auth-method-icon {
   width: 24px;
   height: 24px;
   /* Font icons (e.g. Font Awesome) */
   font-size: 20px;
 }
 
-.auth-method-icon:empty {
+.oidcpro-auth-method-icon:empty {
   visibility: hidden;
 }
 
-.auth-method-label {
+.oidcpro-auth-method-label {
   overflow-wrap: anywhere;
 }
 

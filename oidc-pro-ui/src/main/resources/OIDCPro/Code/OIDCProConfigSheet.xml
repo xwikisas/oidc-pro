@@ -40,8 +40,10 @@
 #macro (sectionHeaderHtml $section $properties $advanced)
 &lt;div class="oidcpro-section oidcpro-section-$escapetool.xml($section.id)"&gt;
   #set ($collapseId = "oidcpro-section-${section.id}-collapse")
-  &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#$escapetool.xml($collapseId)"
-    aria-expanded="false" aria-controls="$escapetool.xml($collapseId)"&gt;
+  ## A template with a single section has nothing to collapse, so its section is expanded.
+  #set ($sectionExpanded = $collapsed || $orderedSections.size() == 1)
+  &lt;a class="oidcpro-collapse-link #if(!$sectionExpanded)collapsed#end" role="button" data-toggle="collapse"
+    href="#$escapetool.xml($collapseId)" aria-expanded="$sectionExpanded" aria-controls="$escapetool.xml($collapseId)"&gt;
     &lt;div class="oidcpro-section-header"&gt;
       &lt;h2&gt;
         &lt;span class="oidcpro-section-header-icon"&gt;
@@ -51,31 +53,41 @@
       &lt;/h2&gt;
     &lt;/div&gt;
   &lt;/a&gt;
-  &lt;div id="$escapetool.xml($collapseId)" class="oidcpro-properties #if(!$collapsed)collapse#end"&gt;
+  &lt;div id="$escapetool.xml($collapseId)" class="oidcpro-properties #if(!$sectionExpanded)collapse#end"&gt;
     &lt;dl&gt;
       #foreach ($property in $properties)
         #displayProperty($property)
       #end
-      #set ($advancedCollapseId = "${collapseId}-advanced")
-      &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#$escapetool.xml($advancedCollapseId)"
-        aria-expanded="false" aria-controls="$escapetool.xml($advancedCollapseId)"&gt;
-        &lt;div class="oidcpro-section-header"&gt;
-          &lt;span class="oidcpro-section-header-icon"&gt;
-            $services.icon.renderHTML('caret-down')
-          &lt;/span&gt;
-          &lt;p&gt;
-            $escapetool.xml($services.localization.render("oidcpro.config.section.advanced"))
-          &lt;/p&gt;
+      #if ($advanced.size() &gt; 0)
+        #set ($advancedCollapseId = "${collapseId}-advanced")
+        &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#$escapetool.xml($advancedCollapseId)"
+          aria-expanded="false" aria-controls="$escapetool.xml($advancedCollapseId)"&gt;
+          &lt;div class="oidcpro-section-header"&gt;
+            &lt;span class="oidcpro-section-header-icon"&gt;
+              $services.icon.renderHTML('caret-down')
+            &lt;/span&gt;
+            &lt;p&gt;
+              $escapetool.xml($services.localization.render("oidcpro.config.section.advanced"))
+            &lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/a&gt;
+        &lt;div id="$escapetool.xml($advancedCollapseId)" class="oidcpro-properties collapse"&gt;
+          #foreach ($property in $advanced)
+            #displayProperty($property)
+          #end
         &lt;/div&gt;
-      &lt;/a&gt;
-      &lt;div id="$escapetool.xml($advancedCollapseId)" class="oidcpro-properties collapse"&gt;
-        #foreach ($property in $advanced)
-          #displayProperty($property)
-        #end
-      &lt;/div&gt;
+      #end
     &lt;/dl&gt;
   &lt;/div&gt;
 &lt;/div&gt;
+#end
+## Templates can override the label and the hint of a property, since its meaning can depend on the provider.
+#macro (renderPropertyTranslation $property $type)
+  #set ($translationKey = "oidcpro.config.template.${templateId}.property.${property.id}.${type}")
+  #if (!$services.localization.get($translationKey))
+    #set ($translationKey = "oidcpro.config.property.${property.id}.${type}")
+  #end
+$escapetool.xml($services.localization.render($translationKey))##
 #end
 #macro (displayProperty $property)
 &lt;div class="oidcpro-property oidcpro-property-$escapetool.xml($property.id) #if($property.hidden)hidden#end $!escapetool.xml($property.get('class'))"
@@ -90,10 +102,19 @@
     #if($property.icon)
       $services.icon.renderHTML($property.icon)
     #end
-    &lt;label for=""&gt;$escapetool.xml($services.localization.render("oidcpro.config.property.${property.id}.label"))&lt;/label&gt;
-    &lt;span class="xHint"&gt;$escapetool.xml($services.localization.render("oidcpro.config.property.${property.id}.hint"))&lt;/span&gt;
+    &lt;label for=""&gt;#renderPropertyTranslation($property 'label')&lt;/label&gt;
+    &lt;span class="xHint"&gt;#renderPropertyTranslation($property 'hint')&lt;/span&gt;
   &lt;/dt&gt;
   &lt;dd&gt;
+    ## Properties can come from another class than the OIDC client configuration class, e.g. to store settings that
+    ## are specific to a provider. The object is created when missing, and saved thanks to the object policy.
+    #if ("$!property.xclass" != '')
+      #set ($discard = $doc.getObject($property.xclass, true))
+      #set ($discard = $doc.use($property.xclass))
+      #set ($hasExtraObjects = true)
+    #else
+      #set ($discard = $doc.use('XWiki.OIDC.ClientConfigurationClass'))
+    #end
     #set ($htmlInput = $doc.display($property.id).replaceAll('^\{\{html(.*?)\}\}', '').replaceAll('\{\{/html\}\}$', ''))
     #if ($property.required)
       $htmlInput.replaceFirst('&lt;(input|textarea|select)', '$0 required ')
@@ -184,8 +205,13 @@
     &lt;/div&gt;
   #end
   #set ($discard = $doc.use('XWiki.OIDC.ClientConfigurationClass'))
+  #set ($hasExtraObjects = false)
   #foreach ($section in $orderedSections.entrySet())
     #sectionHeaderHtml($section.value.section, $section.value.properties, $section.value.advanced)
+  #end
+  #if ($hasExtraObjects &amp;&amp; $xcontext.action != 'view')
+    ## Create the objects of the other classes used by the template, when the document doesn't have them yet.
+    &lt;input type="hidden" name="objectPolicy" value="updateOrCreate" /&gt;
   #end
   #if("$!templateXObj.getProperty('customCode').value" != '' &amp;&amp; "$!templateXObj.getProperty('codeInsertionPoint').value" == 'footer')
     &lt;div class="oidcpro-customcode"&gt;

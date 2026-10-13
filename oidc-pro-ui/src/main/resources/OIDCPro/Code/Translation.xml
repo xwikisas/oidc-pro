@@ -88,6 +88,9 @@ oidcpro.config.property.userInfoEndpoint.hint=The provider endpoint where XWiki 
 oidcpro.config.property.logoutEndpoint.label=Logout Endpoint
 oidcpro.config.property.logoutEndpoint.hint=If this property is filled, once the user logs out of XWiki, a logout request will also be sent to the OIDC provider, to the specified endpoint.
 
+oidcpro.config.property.scope.label=Scope
+oidcpro.config.property.scope.hint=The scopes to request from the OIDC provider, separated by spaces. e.g. openid profile email
+
 oidcpro.config.property.xwikiProvider.label=XWiki Provider
 oidcpro.config.property.xwikiProvider.hint=The URL of the XWiki instance that acts as an identity provider. Should only be used if XWiki serves as a provider.
 oidcpro.config.property.userInfoEndpointMethod.label=User Info Endpoint Method

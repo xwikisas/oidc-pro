@@ -34,14 +34,14 @@ import org.xwiki.test.ui.po.BasePage;
  */
 public class OIDCProLoginPage extends BasePage
 {
-    private static final By CLIENT_BUTTONS = By.cssSelector(".auth-methods .auth-method[data-oidcpro-client]");
+    private static final By CLIENT_BUTTONS = By.cssSelector(".oidcpro-auth-methods .oidcpro-auth-method[data-oidcpro-client]");
 
     /**
      * Wait for the list of clients to be displayed.
      */
     public OIDCProLoginPage()
     {
-        getDriver().waitUntilElementIsVisible(By.className("auth-methods"));
+        getDriver().waitUntilElementIsVisible(By.className("oidcpro-auth-methods"));
     }
 
     /**
@@ -62,7 +62,7 @@ public class OIDCProLoginPage extends BasePage
     public List<String> getClientNames()
     {
         return getDriver().findElements(CLIENT_BUTTONS).stream()
-            .map(button -> button.findElement(By.className("auth-method-label")).getText())
+            .map(button -> button.findElement(By.className("oidcpro-auth-method-label")).getText())
             .collect(Collectors.toList());
     }
 
@@ -73,7 +73,7 @@ public class OIDCProLoginPage extends BasePage
     public String getIconSource(String clientName)
     {
         WebElement button = getClientButton(clientName);
-        By image = By.cssSelector(".auth-method-icon img");
+        By image = By.cssSelector(".oidcpro-auth-method-icon img");
         return getDriver().hasElementWithoutWaiting(button, image)
             ? button.findElement(image).getAttribute("src") : null;
     }

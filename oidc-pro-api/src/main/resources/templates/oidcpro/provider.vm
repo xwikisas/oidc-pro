@@ -62,15 +62,15 @@ $services.oidcpro.resetClientConfigurationSelection()
     </dl>
     <input type="submit" class="button" value="$escapetool.xml($services.localization.render('oidc.template.provider.submit'))"/>
   #else
-  <ul class="auth-methods">
+  <ul class="oidcpro-auth-methods">
     #foreach ($client in $oidcClients)
       <li>
-        <button type="submit" class="auth-method btn btn-default"
+        <button type="submit" class="oidcpro-auth-method btn btn-default"
           data-oidcpro-cookie="$escapetool.xml($oidcCookieName)"
           data-oidcpro-client="$escapetool.xml($client.configurationName)">
           ## Keep the icon markup on one line so that the span is :empty when there is no icon.
-          <span class="auth-method-icon" aria-hidden="true">#if ("$!client.iconName" != '')$services.icon.renderHTML($client.iconName)#elseif ("$!client.iconURL" != '')<img src="$escapetool.xml($client.iconURL)" alt="" />#end</span>
-          <span class="auth-method-label">$escapetool.xml($client.configurationName)</span>
+          <span class="oidcpro-auth-method-icon" aria-hidden="true">#if ("$!client.iconName" != '')$services.icon.renderHTML($client.iconName)#elseif ("$!client.iconURL" != '')<img src="$escapetool.xml($client.iconURL)" alt="" />#end</span>
+          <span class="oidcpro-auth-method-label">$escapetool.xml($client.configurationName)</span>
         </button>
       </li>
     #end
