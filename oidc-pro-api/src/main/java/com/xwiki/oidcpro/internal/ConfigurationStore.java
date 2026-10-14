@@ -61,11 +61,15 @@ import com.xwiki.oidcpro.OIDCProClientConfiguration;
 @Singleton
 public class ConfigurationStore
 {
-    private static final String TEMPLATE_NAME = "templateName";
+    /**
+     * The name of the property holding the name of the template bound to an OIDC client configuration.
+     */
+    static final String TEMPLATE_NAME = "templateName";
 
-    private static final String DEFAULT_TEMPLATE = "default";
-
-    private static final List<String> OIDC_PRO_CODE_SPACE = Arrays.asList("OIDCPro", "Code");
+    /**
+     * The space holding the OIDC Pro code pages.
+     */
+    static final List<String> OIDC_PRO_CODE_SPACE = Arrays.asList("OIDCPro", "Code");
 
     /**
      * The class of the object that binds an OIDC client configuration to a template.
@@ -78,6 +82,8 @@ public class ConfigurationStore
      */
     static final LocalDocumentReference PRO_TEMPLATE_CLASS =
         new LocalDocumentReference(OIDC_PRO_CODE_SPACE, "OIDCProTemplateClass");
+
+    private static final String DEFAULT_TEMPLATE = "default";
 
     @Inject
     private QueryManager queryManager;

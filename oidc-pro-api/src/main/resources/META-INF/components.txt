@@ -4,3 +4,5 @@ com.xwiki.oidcpro.internal.OIDCProClientConfigurationCacheInvalidator
 500:com.xwiki.oidcpro.internal.OIDCProManager
 com.xwiki.oidcpro.internal.TemplateIconResolver
 com.xwiki.oidcpro.script.OIDCProScriptService
+com.xwiki.oidcpro.internal.OIDCProTemplateBinderClassDocumentInitializer
+com.xwiki.oidcpro.internal.OIDCProTemplateClassDocumentInitializer
