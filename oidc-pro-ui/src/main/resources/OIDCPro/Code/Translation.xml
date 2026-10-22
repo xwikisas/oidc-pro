@@ -45,7 +45,6 @@ oidcpro.login.provider.domain=Or specify its domain
 oidcpro.admin.create.title=Create a new OIDC Client Configuration
 oidcpro.admin.create.button.label=Create
 oidcpro.admin.create.placeholderTitle=New OIDC Client Configuration
-
 oidcpro.admin.livedata.title=Available OIDC Client Configurations
 oidcpro.admin.livedata.emptyvalue=-
 oidcpro.admin.livedata.configurationName=Configuration Name
@@ -54,9 +53,7 @@ oidcpro.admin.livedata.authorizationEndpoint=Authorization endpoint
 oidcpro.admin.livedata._actions=Actions
 oidcpro.admin.livedata.oidcpro.is_enabled=Enabled?
 oidcpro.admin.livedata.oidcpro.is_default=Default
-
 oidcpro.templates.default.name=Default
-
 oidcpro.admin.enable.progress=Toggling OIDC client
 oidcpro.admin.enable.done=OIDC client successfully toggled
 oidcpro.admin.enable.error=Failed to toggle the OIDC client
@@ -69,10 +66,8 @@ oidcpro.config.section.General.label=General Configuration
 oidcpro.config.section.User.label=User Configuration
 oidcpro.config.section.Group.label=Group Configuration
 oidcpro.config.section.advanced=Advanced properties
-
 oidcpro.config.property.skipped.label=Is skipped?
 oidcpro.config.property.skipped.hint=Defines whether the users can authenticate using this OIDC client or not.
-
 oidcpro.config.property.configurationName.label=Configuration name
 oidcpro.config.property.configurationName.hint=The name of this OIDC configuration.
 oidcpro.config.property.clientId.label=Client ID
@@ -87,10 +82,8 @@ oidcpro.config.property.userInfoEndpoint.label=User Info Endpoint
 oidcpro.config.property.userInfoEndpoint.hint=The provider endpoint where XWiki will retrieve the information of the user that wants to login. e.g. https://myprovider/openidconnect/userinfo
 oidcpro.config.property.logoutEndpoint.label=Logout Endpoint
 oidcpro.config.property.logoutEndpoint.hint=If this property is filled, once the user logs out of XWiki, a logout request will also be sent to the OIDC provider, to the specified endpoint.
-
 oidcpro.config.property.scope.label=Scope
 oidcpro.config.property.scope.hint=The scopes to request from the OIDC provider, separated by spaces. e.g. openid profile email
-
 oidcpro.config.property.xwikiProvider.label=XWiki Provider
 oidcpro.config.property.xwikiProvider.hint=The URL of the XWiki instance that acts as an identity provider. Should only be used if XWiki serves as a provider.
 oidcpro.config.property.userInfoEndpointMethod.label=User Info Endpoint Method
@@ -121,23 +114,20 @@ oidcpro.config.property.userSubjectFormatter.label=User Subject Formatter
 oidcpro.config.property.userSubjectFormatter.hint=The pattern to use to generate the unique identifier of the user in the OpenId Connect provider. e.g. ${oidc.user.subject}
 oidcpro.config.property.userMapping.label=User Attribute Mapping
 oidcpro.config.property.userMapping.hint=This property maps the attributes of the user coming from the OIDC provider to XWiki user attributes. e.g. if the OIDC provider stores the user email in a property named 'electronic-mail', we want to let XWiki know this by filling this property like so: electronic-mail=email.
-
 oidcpro.config.property.userInfoClaims.label=User Info Claims
 oidcpro.config.property.userInfoClaims.hint=The user information that should be returned by the OIDC provider. e.g. sub, name, gender, given_name.
 oidcpro.config.property.userInfoRefreshRate.label=User Info Refresh Rate
 oidcpro.config.property.userInfoRefreshRate.hint=The time after which the user information should be refreshed (in milliseconds).
 oidcpro.config.property.userInfoSkip.label=User Info Skip
 oidcpro.config.property.userInfoSkip.hint=If this property is set, then XWiki will skip the retrieval of the user information from the specialised endpoint. Useful for OAuth providers.
-
 oidcpro.config.property.enableUser.label=Enable User
-oidcpro.config.property.enableUser.hint=Define if user accounts should be enabled (marked as active) on first login.
+oidcpro.config.property.enableUser.hint=Defines if user accounts should be enabled (marked as active) on first login.
 
 
 oidcpro.config.property.groupsClaim.label=Group Claims
 oidcpro.config.property.groupsClaim.hint=The name of the claim used to get the list of groups the user belongs to.
 oidcpro.config.property.groupsMapping.label=Groups Mapping
-oidcpro.config.property.groupsMapping.hint=This property maps the groups coming from the OIDC provider to XWiki Groups. When a user coming from the OIDC provider logs in, they will also be added to the XWiki groups according to this mapping. e.g. OIDCGroupId=XWiki.AdminGroup
-
+oidcpro.config.property.groupsMapping.hint=This property maps the groups coming from the OIDC provider to XWiki Groups. When a user coming from the OIDC provider logs in, he will also be added to the XWiki groups according to this mapping. e.g. OIDCGroupId=XWiki.AdminGroup
 oidcpro.config.property.groupsMappingInclude.label=Group Mapping Include
 oidcpro.config.property.groupsMappingInclude.hint=Regular expression that will be used to determine the groups that should be included in the synchronization process. If the incoming group matches this regex, then it will be synced.
 oidcpro.config.property.groupsMappingExclude.label=Groups Mapping Exclude
@@ -145,7 +135,8 @@ oidcpro.config.property.groupsMappingExclude.hint=Regular expression that will b
 oidcpro.config.property.allowedGroups.label=Allowed groups
 oidcpro.config.property.allowedGroups.hint=The groups the user needs to belong to in order to be allowed to authenticate.
 oidcpro.config.property.forbiddenGroups.label=Forbidden Groups
-oidcpro.config.property.forbiddenGroups.hint=Defines a list of groups that should not be able to log in to XWiki. If a user belongs to one of the listed groups, access to XWiki will be forbidden. e.g. Group1,Group2.</content>
+oidcpro.config.property.forbiddenGroups.hint=Defines a list of groups that should not be able to log in to XWiki. If a user belongs to one of the listed groups, access to XWiki will be forbidden. e.g. Group1,Group2.
+</content>
   <object>
     <name>OIDCPro.Code.Translation</name>
     <number>0</number>
