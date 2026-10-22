@@ -20,7 +20,11 @@
 package com.xwiki.oidcpro.internal;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 import org.xwiki.component.descriptor.ComponentDescriptor;
+import org.xwiki.component.manager.ComponentManager;
+import org.xwiki.component.manager.ComponentRepositoryException;
+import org.xwiki.component.util.ReflectionUtils;
 import org.xwiki.contrib.oidc.provider.internal.OIDCManager;
 import org.xwiki.template.Template;
 import org.xwiki.template.TemplateManager;
@@ -32,7 +36,11 @@ import org.xwiki.test.mockito.MockitoComponentManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -100,5 +108,21 @@ class OIDCProManagerTest
         this.manager.dispose();
 
         assertSame(descriptor, this.componentManager.getComponentDescriptor(OIDCManager.class, "default"));
+    }
+
+    @Test
+    void disposeWhenOriginalManagerCannotBeRestored() throws Exception
+    {
+        ComponentManager failingComponentManager = mock(ComponentManager.class);
+        doThrow(new ComponentRepositoryException("error")).when(failingComponentManager)
+            .registerComponent(any(ComponentDescriptor.class));
+        ReflectionUtils.setFieldValue(this.manager, "componentManager", failingComponentManager);
+        Logger logger = mock(Logger.class);
+        ReflectionUtils.setFieldValue(this.manager, "logger", logger);
+
+        this.manager.dispose();
+
+        verify(logger).error(eq("Failed to restore the original OIDC manager component."),
+            any(ComponentRepositoryException.class));
     }
 }

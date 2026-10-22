@@ -233,6 +233,21 @@ class ConfigurationStoreTest
     }
 
     @Test
+    void getConfigurationsWithEmptyBoundTemplate()
+    {
+        BaseObject binderObject = mock(BaseObject.class);
+        when(binderObject.getStringValue(TEMPLATE_NAME)).thenReturn("");
+        when(this.configurationDocument.getXObject(ConfigurationStore.PRO_TEMPLATE_BINDER_CLASS))
+            .thenReturn(binderObject);
+
+        List<OIDCProClientConfiguration> configurations = this.store.getConfigurations();
+
+        assertEquals(1, configurations.size());
+        assertEquals("entra", configurations.get(0).getTemplateName());
+        verify(this.templateQuery).bindValue(TEMPLATE_NAME, "default");
+    }
+
+    @Test
     void getConfigurationsIgnoresConfigurationNotSelectedByTheOIDCStore() throws Exception
     {
         // The OIDC store only selects documents authored by a wiki administrator, so a configuration planted by

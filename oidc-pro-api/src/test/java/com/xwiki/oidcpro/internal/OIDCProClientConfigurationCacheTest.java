@@ -32,6 +32,7 @@ import org.xwiki.test.junit5.mockito.MockComponent;
 
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -85,6 +86,12 @@ class OIDCProClientConfigurationCacheTest
         this.configurationCache.dispose();
 
         verify(this.cache).dispose();
+    }
+
+    @Test
+    void disposeWithoutCache()
+    {
+        assertDoesNotThrow(() -> new OIDCProClientConfigurationCache().dispose());
     }
 
     @Test

@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.xwiki.configuration.ConfigurationSource;
 import org.xwiki.contrib.oidc.auth.OIDCAuthServiceImpl;
+import org.xwiki.contrib.oidc.auth.internal.OIDCAuthService;
 import org.xwiki.contrib.oidc.auth.internal.OIDCClientConfiguration;
 import org.xwiki.contrib.oidc.auth.store.OIDCClientsConfigurationStore;
 import org.xwiki.model.reference.DocumentReference;
@@ -97,6 +98,14 @@ class OIDCProScriptServiceTest
     void isOIDCAuthServiceEnabled()
     {
         when(this.wiki.getAuthService()).thenReturn(mock(OIDCAuthServiceImpl.class));
+
+        assertTrue(this.scriptService.isOIDCAuthServiceEnabled());
+    }
+
+    @Test
+    void isOIDCAuthServiceEnabledWithOIDCAuthService()
+    {
+        when(this.wiki.getAuthService()).thenReturn(mock(OIDCAuthService.class));
 
         assertTrue(this.scriptService.isOIDCAuthServiceEnabled());
     }
