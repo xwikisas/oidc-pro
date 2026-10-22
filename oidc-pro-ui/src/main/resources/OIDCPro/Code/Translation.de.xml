@@ -1,0 +1,177 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
+<xwikidoc version="1.5" reference="OIDCPro.Code.Translation" locale="">
+  <web>OIDCPro.Code</web>
+  <name>Translation</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.Admin</creator>
+  <parent>OIDCPro.Code.WebHome</parent>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
+  <title>Translation</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>plain/1.0</syntaxId>
+  <hidden>true</hidden>
+  <content># LOGIN
+oidcpro.login.title=Anmelden mit
+### Missing: oidcpro.login.provider.select.title=Select the OIDC provider
+### Missing: oidcpro.login.provider.domain=Or specify its domain
+
+# Admin section
+### Missing: oidcpro.admin.create.title=Create a new OIDC Client Configuration
+### Missing: oidcpro.admin.create.button.label=Create
+### Missing: oidcpro.admin.create.placeholderTitle=New OIDC Client Configuration
+### Missing: oidcpro.admin.livedata.title=Available OIDC Client Configurations
+### Missing: oidcpro.admin.livedata.emptyvalue=-
+### Missing: oidcpro.admin.livedata.configurationName=Configuration Name
+### Missing: oidcpro.admin.livedata.clientId=Client ID
+### Missing: oidcpro.admin.livedata.authorizationEndpoint=Authorization endpoint
+### Missing: oidcpro.admin.livedata._actions=Actions
+### Missing: oidcpro.admin.livedata.oidcpro.is_enabled=Enabled?
+### Missing: oidcpro.admin.livedata.oidcpro.is_default=Default
+### Missing: oidcpro.templates.default.name=Default
+### Missing: oidcpro.admin.enable.progress=Toggling OIDC client
+### Missing: oidcpro.admin.enable.done=OIDC client successfully toggled
+### Missing: oidcpro.admin.enable.error=Failed to toggle the OIDC client
+
+# Config Sheet
+### Missing: oidcpro.config.defaultTitle=OIDC Configuration
+### Missing: oidcpro.config.backToAdmin=Go back to the Administration Section
+### Missing: oidcpro.config.templateNotFound=No OIDC template found with the name ''{0}''.
+### Missing: oidcpro.config.section.General.label=General Configuration
+### Missing: oidcpro.config.section.User.label=User Configuration
+### Missing: oidcpro.config.section.Group.label=Group Configuration
+### Missing: oidcpro.config.section.advanced=Advanced properties
+### Missing: oidcpro.config.property.skipped.label=Is skipped?
+### Missing: oidcpro.config.property.skipped.hint=Defines whether the users can authenticate using this OIDC client or not.
+### Missing: oidcpro.config.property.configurationName.label=Configuration name
+### Missing: oidcpro.config.property.configurationName.hint=The name of this OIDC configuration.
+### Missing: oidcpro.config.property.clientId.label=Client ID
+### Missing: oidcpro.config.property.clientId.hint=The client id retrieved from the OIDC provider you want to connect to.
+### Missing: oidcpro.config.property.clientSecret.label=Client Secret
+### Missing: oidcpro.config.property.clientSecret.hint=The client secret retrieved from the same OIDC Provider. The secret is usually displayed only once so make sure to copy it as soon as you get your hands on it.
+### Missing: oidcpro.config.property.authorizationEndpoint.label=Authorization Endpoint
+### Missing: oidcpro.config.property.authorizationEndpoint.hint=The endpoint of your provider where XWiki will try to authorize itself using the client id and secret you provided. e.g. https://myprovider/openidconnect/auth
+### Missing: oidcpro.config.property.tokenEndpoint.label=Token Endpoint
+### Missing: oidcpro.config.property.tokenEndpoint.hint=The provider endpoint from where XWiki will retrieve the access and refresh tokens. e.g. https://myprovider/openidconnect/token
+### Missing: oidcpro.config.property.userInfoEndpoint.label=User Info Endpoint
+### Missing: oidcpro.config.property.userInfoEndpoint.hint=The provider endpoint where XWiki will retrieve the information of the user that wants to login. e.g. https://myprovider/openidconnect/userinfo
+### Missing: oidcpro.config.property.logoutEndpoint.label=Logout Endpoint
+### Missing: oidcpro.config.property.logoutEndpoint.hint=If this property is filled, once the user logs out of XWiki, a logout request will also be sent to the OIDC provider, to the specified endpoint.
+### Missing: oidcpro.config.property.scope.label=Scope
+### Missing: oidcpro.config.property.scope.hint=The scopes to request from the OIDC provider, separated by spaces. e.g. openid profile email
+### Missing: oidcpro.config.property.xwikiProvider.label=XWiki Provider
+### Missing: oidcpro.config.property.xwikiProvider.hint=The URL of the XWiki instance that acts as an identity provider. Should only be used if XWiki serves as a provider.
+### Missing: oidcpro.config.property.userInfoEndpointMethod.label=User Info Endpoint Method
+### Missing: oidcpro.config.property.userInfoEndpointMethod.hint=The HTTP method that will be used when requesting the user information. e.g. GET, POST
+### Missing: oidcpro.config.property.userInfoEndpointHeaders.label=User Info Endpoint Headers
+### Missing: oidcpro.config.property.userInfoEndpointHeaders.hint=Any additional HTTP headers that need to be used when requesting the user information. e.g. Accept:application/json,SomeOtherHeader:header value
+### Missing: oidcpro.config.property.logoutEndpointMethod.label=Logout Endpoint Method
+### Missing: oidcpro.config.property.logoutEndpointMethod.hint=The method that will be used to logout the user from the provider. e.g. POST, GET
+### Missing: oidcpro.config.property.logoutMechanism.label=Logout Mechanism
+### Missing: oidcpro.config.property.logoutMechanism.hint=The mechanism that should be used in the case of logging out. e.g. rpInitiated
+### Missing: oidcpro.config.property.responseType.label=Response Type
+### Missing: oidcpro.config.property.responseType.hint=The response type that we want to get from the OIDC provider after a successful authorization. e.g. code (authorization code), token (access token), id_token. The default value is `code`.
+### Missing: oidcpro.config.property.idTokenClaims.label=ID Token Claims
+### Missing: oidcpro.config.property.idTokenClaims.hint=The claims/information that should be contained in the ID Token returned by the provider. e.g. acc, iss, exp.
+### Missing: oidcpro.config.property.claims.label=Claims
+### Missing: oidcpro.config.property.claims.hint=The claims, in json format, that are to be retrieved from the OIDC provider. This field should only be used if certain claims (e.g. acc) require a value, otherwise, the claims are constructed from the "Id Token Claims" and "User Info Claims" properties.
+### Missing: oidcpro.config.property.afterLogoutURL.label=After-Logout URL
+### Missing: oidcpro.config.property.afterLogoutURL.hint=The URL where the user should be redirected to after they log out.
+### Missing: oidcpro.config.property.tokenEndpointMethod.label=Token Endpoint Method
+### Missing: oidcpro.config.property.tokenEndpointMethod.hint=The method that should be used when XWiki requests the tokens from the provided endpoint.
+### Missing: oidcpro.config.property.tokenStorageScope.label=Token Storage Scope
+### Missing: oidcpro.config.property.tokenStorageScope.hint=Defines where the retrieved tokens should be stored in the XWiki instance. e.g. NONE (no storage), WIKI (tokens will be stored at the wiki level), USER (tokens will be stored in the profile of each user - default).
+
+
+### Missing: oidcpro.config.property.userNameFormatter.label=Username Formatter
+### Missing: oidcpro.config.property.userNameFormatter.hint=The format that will be used in order to generate the XWiki username of a user coming from the OIDC provider. e.g. ${oidc.issuer.host._clean}-${oidc.user.preferredUsername._clean}
+### Missing: oidcpro.config.property.userSubjectFormatter.label=User Subject Formatter
+### Missing: oidcpro.config.property.userSubjectFormatter.hint=The pattern to use to generate the unique identifier of the user in the OpenId Connect provider. e.g. ${oidc.user.subject}
+### Missing: oidcpro.config.property.userMapping.label=User Attribute Mapping
+### Missing: oidcpro.config.property.userMapping.hint=This property maps the attributes of the user coming from the OIDC provider to XWiki user attributes. e.g. if the OIDC provider stores the user email in a property named 'electronic-mail', we want to let XWiki know this by filling this property like so: electronic-mail=email.
+### Missing: oidcpro.config.property.userInfoClaims.label=User Info Claims
+### Missing: oidcpro.config.property.userInfoClaims.hint=The user information that should be returned by the OIDC provider. e.g. sub, name, gender, given_name.
+### Missing: oidcpro.config.property.userInfoRefreshRate.label=User Info Refresh Rate
+### Missing: oidcpro.config.property.userInfoRefreshRate.hint=The time after which the user information should be refreshed (in milliseconds).
+### Missing: oidcpro.config.property.userInfoSkip.label=User Info Skip
+### Missing: oidcpro.config.property.userInfoSkip.hint=If this property is set, then XWiki will skip the retrieval of the user information from the specialised endpoint. Useful for OAuth providers.
+### Missing: oidcpro.config.property.enableUser.label=Enable User
+### Missing: oidcpro.config.property.enableUser.hint=Define if user accounts should be enabled (marked as active) on first login.
+
+
+### Missing: oidcpro.config.property.groupsClaim.label=Group Claims
+### Missing: oidcpro.config.property.groupsClaim.hint=The name of the claim used to get the list of groups the user belongs to.
+### Missing: oidcpro.config.property.groupsMapping.label=Groups Mapping
+### Missing: oidcpro.config.property.groupsMapping.hint=This property maps the groups coming from the OIDC provider to XWiki Groups. When a user coming from the OIDC provider logs in, they will also be added to the XWiki groups according to this mapping. e.g. OIDCGroupId=XWiki.AdminGroup
+### Missing: oidcpro.config.property.groupsMappingInclude.label=Group Mapping Include
+### Missing: oidcpro.config.property.groupsMappingInclude.hint=Regular expression that will be used to determine the groups that should be included in the synchronization process. If the incoming group matches this regex, then it will be synced.
+### Missing: oidcpro.config.property.groupsMappingExclude.label=Groups Mapping Exclude
+### Missing: oidcpro.config.property.groupsMappingExclude.hint=Regular expression that will be used to determine the groups that should not be included in the synchronization process. If the incoming group matches this regex, then it will not be synced.
+### Missing: oidcpro.config.property.allowedGroups.label=Allowed groups
+### Missing: oidcpro.config.property.allowedGroups.hint=The groups the user needs to belong to in order to be allowed to authenticate.
+### Missing: oidcpro.config.property.forbiddenGroups.label=Forbidden Groups
+### Missing: oidcpro.config.property.forbiddenGroups.hint=Defines a list of groups that should not be able to log in to XWiki. If a user belongs to one of the listed groups, access to XWiki will be forbidden. e.g. Group1,Group2.
+</content>
+  <object>
+    <name>OIDCPro.Code.Translation</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>262c0cbd-2282-4773-9675-acb380f35c8c</guid>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
+</xwikidoc>
