@@ -302,7 +302,7 @@
   id="oidcpro-connections"
   properties="configurationName,clientId,authorizationEndpoint,oidcpro.is_enabled,oidcpro.is_default,_actions,skipped"
   source="liveTable"
-  sourceParameters="className=XWiki.OIDC.ClientConfigurationClass&amp;resultPage=OIDCPro.Code.OIDCProLivedataResultsPage&amp;translationPrefix=oidcpro.admin.livedata."
+  sourceParameters="className=XWiki.OIDC.ClientConfigurationClass&amp;queryFilters=currentlanguage&amp;resultPage=OIDCPro.Code.OIDCProLivedataResultsPage&amp;translationPrefix=oidcpro.admin.livedata."
 }}
 {
   "meta": {
