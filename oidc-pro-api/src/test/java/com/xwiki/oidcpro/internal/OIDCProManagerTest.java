@@ -20,12 +20,19 @@
 package com.xwiki.oidcpro.internal;
 
 import org.junit.jupiter.api.Test;
+import org.xwiki.component.descriptor.ComponentDescriptor;
+import org.xwiki.contrib.oidc.provider.internal.OIDCManager;
+import org.xwiki.template.Template;
 import org.xwiki.template.TemplateManager;
 import org.xwiki.test.junit5.mockito.ComponentTest;
+import org.xwiki.test.junit5.mockito.InjectComponentManager;
 import org.xwiki.test.junit5.mockito.InjectMockComponents;
 import org.xwiki.test.junit5.mockito.MockComponent;
+import org.xwiki.test.mockito.MockitoComponentManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -42,9 +49,13 @@ class OIDCProManagerTest
     @MockComponent
     private TemplateManager templates;
 
+    @InjectComponentManager
+    private MockitoComponentManager componentManager;
+
     @Test
     void executeTemplateReplacesProviderTemplate() throws Exception
     {
+        when(this.templates.getTemplate("oidcpro/provider.vm")).thenReturn(mock(Template.class));
         when(this.templates.render("oidcpro/provider.vm")).thenReturn("OIDC Pro provider");
 
         assertEquals("OIDC Pro provider",
@@ -57,5 +68,37 @@ class OIDCProManagerTest
         when(this.templates.render("oidc/client/logout.vm")).thenReturn("logout");
 
         assertEquals("logout", this.manager.executeTemplate("oidc/client/logout.vm").toHTTPResponse().getBody());
+    }
+
+    @Test
+    void executeTemplateFallsBackWhenProviderTemplateIsMissing() throws Exception
+    {
+        when(this.templates.render("oidc/client/provider.vm")).thenReturn("OIDC provider");
+
+        assertEquals("OIDC provider",
+            this.manager.executeTemplate("oidc/client/provider.vm").toHTTPResponse().getBody());
+    }
+
+    @Test
+    void disposeRestoresOriginalManagerWhenUnregistered() throws Exception
+    {
+        this.componentManager.unregisterComponent(OIDCManager.class, "default");
+
+        this.manager.dispose();
+
+        assertEquals(OIDCManager.class,
+            this.componentManager.getComponentDescriptor(OIDCManager.class, "default").getImplementation());
+    }
+
+    @Test
+    void disposeKeepsRegisteredManager() throws Exception
+    {
+        this.componentManager.registerMockComponent(OIDCManager.class);
+        ComponentDescriptor<OIDCManager> descriptor =
+            this.componentManager.getComponentDescriptor(OIDCManager.class, "default");
+
+        this.manager.dispose();
+
+        assertSame(descriptor, this.componentManager.getComponentDescriptor(OIDCManager.class, "default"));
     }
 }

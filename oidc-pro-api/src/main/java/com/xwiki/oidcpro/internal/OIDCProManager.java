@@ -19,10 +19,19 @@
  */
 package com.xwiki.oidcpro.internal;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
+import org.xwiki.component.annotation.ComponentAnnotationLoader;
+import org.xwiki.component.descriptor.ComponentDescriptor;
+import org.xwiki.component.manager.ComponentLifecycleException;
+import org.xwiki.component.manager.ComponentManager;
+import org.xwiki.component.manager.ComponentRepositoryException;
+import org.xwiki.component.phase.Disposable;
 import org.xwiki.contrib.oidc.provider.internal.OIDCManager;
+import org.xwiki.template.TemplateManager;
 
 import com.nimbusds.oauth2.sdk.Response;
 
@@ -31,12 +40,16 @@ import com.nimbusds.oauth2.sdk.Response;
  * <p>
  * The OIDC authenticator hardcodes the {@code oidc/client/provider.vm} template, which is also shipped in its own jar
  * and thus cannot be reliably overridden from the classloader.
+ * <p>
+ * Registering this component replaces the original {@link OIDCManager} instead of hiding it, so it has to be put back
+ * when OIDC Pro is uninstalled. Components which already hold a reference to this instance (e.g. the authenticator)
+ * keep using it after the uninstall, so it falls back on the original template once the OIDC Pro one is gone.
  *
  * @version $Id$
  */
 @Component(roles = OIDCManager.class)
 @Singleton
-public class OIDCProManager extends OIDCManager
+public class OIDCProManager extends OIDCManager implements Disposable
 {
     /**
      * The template displayed by the OIDC authenticator to select the provider.
@@ -48,10 +61,38 @@ public class OIDCProManager extends OIDCManager
      */
     public static final String OIDCPRO_PROVIDER_TEMPLATE = "oidcpro/provider.vm";
 
+    @Inject
+    private TemplateManager templateManager;
+
+    @Inject
+    private ComponentManager componentManager;
+
+    @Inject
+    private Logger logger;
+
     @Override
     public Response executeTemplate(String templateName) throws Exception
     {
         return super.executeTemplate(
-            OIDC_PROVIDER_TEMPLATE.equals(templateName) ? OIDCPRO_PROVIDER_TEMPLATE : templateName);
+            OIDC_PROVIDER_TEMPLATE.equals(templateName) && this.templateManager.getTemplate(OIDCPRO_PROVIDER_TEMPLATE)
+                != null ? OIDCPRO_PROVIDER_TEMPLATE : templateName);
+    }
+
+    @Override
+    public void dispose() throws ComponentLifecycleException
+    {
+        // When the component manager is disposed, this component is still registered. When it's unregistered (i.e.
+        // OIDC Pro is uninstalled from the namespace of the component manager which replaced the original), nothing
+        // is left to fall back on.
+        if (!this.componentManager.hasComponent(OIDCManager.class)) {
+            try {
+                for (ComponentDescriptor<?> descriptor : new ComponentAnnotationLoader()
+                    .getComponentsDescriptors(OIDCManager.class)) {
+                    this.componentManager.registerComponent(descriptor);
+                }
+            } catch (ComponentRepositoryException e) {
+                this.logger.error("Failed to restore the original OIDC manager component.", e);
+            }
+        }
     }
 }
