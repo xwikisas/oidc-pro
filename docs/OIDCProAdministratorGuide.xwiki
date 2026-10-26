@@ -147,6 +147,7 @@ Configurations remember the template they were created from. Changing a template
 |hidden|##true## to keep the field in the form, with its value, without showing it
 |icon|An icon from the wiki's icon theme, shown before the label
 |class|Extra CSS classes added to the field, for use by **customCode**
+|documentation|A web address shown as a //Documentation// link after the help text, for fields that need more explanation
 |xclass|Name of another class holding the property, for settings that are specific to the provider. The object is created when the configuration is saved
 |data|Input helpers: ##selectize## turns the field into a list of suggestions, ##propertize## into a list of key/value pairs. Copy them from a field of the Default template that has the same kind of value
 

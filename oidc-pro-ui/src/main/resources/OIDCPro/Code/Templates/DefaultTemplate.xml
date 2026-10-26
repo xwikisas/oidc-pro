@@ -468,14 +468,16 @@
       "hidden": false,
       "section": "User",
       "advanced": false,
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "documentation": "https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/#Hxwiki.properties"
     },
     {
       "id": "userSubjectFormatter",
       "hidden": false,
       "section": "User",
       "advanced": false,
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "documentation": "https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/#Hxwiki.properties"
     },
     {
       "id": "userMapping",
@@ -487,7 +489,8 @@
         "propertize": {
           "separator": "|"
         }
-      }
+      },
+      "documentation": "https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/#Hxwiki.properties"
     },
     {
       "id": "userInfoClaims",

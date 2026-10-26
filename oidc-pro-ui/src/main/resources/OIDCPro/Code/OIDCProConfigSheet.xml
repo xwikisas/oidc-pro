@@ -112,7 +112,13 @@ $escapetool.xml($services.localization.render($translationKey))##
       $services.icon.renderHTML($property.icon)
     #end
     &lt;label for=""&gt;#renderPropertyTranslation($property 'label')&lt;/label&gt;
-    &lt;span class="xHint"&gt;#renderPropertyTranslation($property 'hint')&lt;/span&gt;
+    &lt;span class="xHint"&gt;#renderPropertyTranslation($property 'hint')
+      ## Some properties need more explanations than a hint can hold, so templates can link to their documentation.
+      #if ("$!property.documentation".matches('^https?://.+'))
+        &lt;a href="$escapetool.xml($property.documentation)" target="_blank" rel="noopener"&gt;##
+          $escapetool.xml($services.localization.render('oidcpro.config.property.documentation'))&lt;/a&gt;
+      #end
+    &lt;/span&gt;
   &lt;/dt&gt;
   &lt;dd&gt;
     ## Properties can come from another class than the OIDC client configuration class, e.g. to store settings that

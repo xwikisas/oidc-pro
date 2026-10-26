@@ -122,12 +122,13 @@ oidcpro.config.property.tryLocal.label=Allow Local Login
 oidcpro.config.property.tryLocal.hint=If enabled, users can also log in with a local XWiki account and password, for example the administrator account.
 
 
+oidcpro.config.property.documentation=Documentation
 oidcpro.config.property.userNameFormatter.label=Username Formatter
-oidcpro.config.property.userNameFormatter.hint=The format that will be used in order to generate the XWiki username of a user coming from the OIDC provider. e.g. ${oidc.issuer.host._clean}-${oidc.user.preferredUsername._clean}
+oidcpro.config.property.userNameFormatter.hint=The pattern used to generate the XWiki username of a user coming from the OIDC provider. Useful variables: ${oidc.user.subject}, ${oidc.user.preferredUsername}, ${oidc.user.mail}, ${oidc.user.givenName}, ${oidc.user.familyName}, ${oidc.issuer.host}, and any field of the user info as ${oidc.user.&lt;field&gt;}. Add ._lowerCase, ._upperCase or ._clean (removes dots, colons, commas, @, ^ and spaces) to a variable to transform it. The default is ${oidc.issuer.host._clean}-${oidc.user.preferredUsername._clean}.
 oidcpro.config.property.userSubjectFormatter.label=User Subject Formatter
-oidcpro.config.property.userSubjectFormatter.hint=The pattern to use to generate the unique identifier of the user in the OpenId Connect provider. e.g. ${oidc.user.subject}
+oidcpro.config.property.userSubjectFormatter.hint=The pattern used to generate the unique identifier of the user in the OIDC provider, which prevents collisions between users with similar names. It uses the same variables as the username formatter. The default is ${oidc.user.subject}.
 oidcpro.config.property.userMapping.label=User Attribute Mapping
-oidcpro.config.property.userMapping.hint=This property maps the attributes of the user coming from the OIDC provider to XWiki user attributes. e.g. if the OIDC provider stores the user email in a property named 'electronic-mail', we want to let XWiki know this by filling this property like so: electronic-mail=email.
+oidcpro.config.property.userMapping.hint=Maps XWiki user profile properties to values coming from the OIDC provider. The key is the name of the XWiki profile property and the value uses the same variables as the username formatter. e.g. company=${oidc.user.company} fills the company field of the XWiki profile from the company field of the user info.
 
 oidcpro.config.property.userInfoClaims.label=User Info Claims
 oidcpro.config.property.userInfoClaims.hint=The user information that should be returned by the OIDC provider. e.g. sub, name, gender, given_name.
