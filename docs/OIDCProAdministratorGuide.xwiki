@@ -79,6 +79,8 @@ Each section keeps its less common fields under a collapsed link: //Advanced gen
 
 Most providers only need the General section. Use User and Group to control how accounts are named and which XWiki groups users join. For example, ##OIDCGroupId=XWiki.AdminGroup## in **Groups Mapping** makes members of that provider group XWiki administrators.
 
+**Allowed groups** and **Forbidden groups** take the names of groups at the provider, exactly as the provider sends them in the claim set in **Group Claims**, not XWiki group names. Separate several groups with commas, ##|## or new lines, for example ##xwiki-users,xwiki-admins##. A user must belong to at least one allowed group, when the list is not empty, and to no forbidden group.
+
 Changes take effect for the next login as soon as you save. Users who are already logged in keep their session until they log out.
 
 = Enabling clients and choosing the default =

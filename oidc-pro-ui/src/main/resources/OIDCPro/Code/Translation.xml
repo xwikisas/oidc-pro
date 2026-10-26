@@ -160,10 +160,10 @@ oidcpro.config.property.groupsMappingInclude.label=Group Mapping Include
 oidcpro.config.property.groupsMappingInclude.hint=Regular expression that will be used to determine the groups that should be included in the synchronization process. If the incoming group matches this regex, then it will be synced.
 oidcpro.config.property.groupsMappingExclude.label=Groups Mapping Exclude
 oidcpro.config.property.groupsMappingExclude.hint=Regular expression that will be used to determine the groups that should not be included in the synchronization process. If the incoming group matches this regex, then it will not be synced.
-oidcpro.config.property.allowedGroups.label=Allowed groups
-oidcpro.config.property.allowedGroups.hint=The groups the user needs to belong to in order to be allowed to authenticate.
+oidcpro.config.property.allowedGroups.label=Allowed Groups
+oidcpro.config.property.allowedGroups.hint=Only users who belong to at least one of these provider groups can log in. Use the group names sent by the provider in the group claim, separated by commas, | or new lines. e.g. xwiki-users,xwiki-admins. Leave empty to allow everyone.
 oidcpro.config.property.forbiddenGroups.label=Forbidden Groups
-oidcpro.config.property.forbiddenGroups.hint=Defines a list of groups that should not be able to log in to XWiki. If a user belongs to one of the listed groups, access to XWiki will be forbidden. e.g. Group1,Group2.</content>
+oidcpro.config.property.forbiddenGroups.hint=Users who belong to one of these provider groups cannot log in. Use the group names sent by the provider in the group claim, separated by commas, | or new lines. e.g. contractors,suspended. Leave empty to forbid no one.</content>
   <object>
     <name>OIDCPro.Code.Translation</name>
     <number>0</number>
