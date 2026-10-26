@@ -23,6 +23,8 @@ OIDC Pro needs XWiki 15.10 or later. Installing it from the Extension Manager al
 
 The login menu and the provider selection page only appear once OpenID Connect is the active authentication service.
 
+If your wiki uses [[short URLs>>https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ShortURLs/]] (no ##/bin/view/## in page addresses), add ##oidc## to the known entry points of the URL rewriting, the same way as ##webjars##. Otherwise requests to the redirect URI above do not reach the authenticator, and users cannot finish logging in. See the [[Short URLs section of the OpenID Connect Authenticator documentation>>https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/#HShortURLs]].
+
 = The OIDC Pro administration section =
 
 Everything starts in //Administration › Other › OIDC Pro//. The page has a **Create** button for new client configurations and a table of every configuration in the wiki.
