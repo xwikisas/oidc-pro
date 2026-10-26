@@ -66,8 +66,13 @@
             &lt;span class="oidcpro-section-header-icon"&gt;
               $services.icon.renderHTML('caret-down')
             &lt;/span&gt;
+            ## Each section can name its advanced properties, so that the links can be told apart.
+            #set ($advancedTranslationKey = "oidcpro.config.section.${section.id}.advanced")
+            #if (!$services.localization.get($advancedTranslationKey))
+              #set ($advancedTranslationKey = 'oidcpro.config.section.advanced')
+            #end
             &lt;p&gt;
-              $escapetool.xml($services.localization.render("oidcpro.config.section.advanced"))
+              $escapetool.xml($services.localization.render($advancedTranslationKey))
             &lt;/p&gt;
           &lt;/div&gt;
         &lt;/a&gt;

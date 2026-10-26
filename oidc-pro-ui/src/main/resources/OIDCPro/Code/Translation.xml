@@ -69,6 +69,9 @@ oidcpro.config.section.General.label=General Configuration
 oidcpro.config.section.User.label=User Configuration
 oidcpro.config.section.Group.label=Group Configuration
 oidcpro.config.section.advanced=Advanced properties
+oidcpro.config.section.General.advanced=Advanced general properties
+oidcpro.config.section.User.advanced=Advanced user properties
+oidcpro.config.section.Group.advanced=Advanced group properties
 
 oidcpro.config.property.skipped.label=Is skipped?
 oidcpro.config.property.skipped.hint=Defines whether the users can authenticate using this OIDC client or not.

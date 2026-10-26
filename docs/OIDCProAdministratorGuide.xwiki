@@ -65,11 +65,11 @@ To change a client, click **Edit** in its row of the table. The form groups the 
 
 |=Section|=Settings
 |General|Is skipped?, configuration name, client ID and secret, authorization, token, user info and logout endpoints
-|General › Advanced properties|XWiki provider, HTTP methods and headers for the endpoints, logout mechanism, response type, ID token and other claims, after-logout URL, token storage scope
+|General › Advanced general properties|XWiki provider, HTTP methods and headers for the endpoints, logout mechanism, response type, ID token and other claims, after-logout URL, token storage scope
 |User|Username and user subject formatters, user attribute mapping, user info claims, refresh rate and skip, enable new users
 |Group|Groups claim, groups mapping, include and exclude patterns, allowed and forbidden groups
 
-//Advanced properties// is collapsed by default; click it to show those fields. The User and Group sections can also be collapsed from their headings.
+Each section keeps its less common fields under a collapsed link: //Advanced general properties//, //Advanced user properties// and //Advanced group properties//. Click it to show those fields. The User and Group sections can also be collapsed from their headings.
 
 Most providers only need the General section. Use User and Group to control how accounts are named and which XWiki groups users join. For example, ##OIDCGroupId=XWiki.AdminGroup## in **Groups Mapping** makes members of that provider group XWiki administrators.
 
