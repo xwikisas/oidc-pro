@@ -46,6 +46,10 @@
     href="#$escapetool.xml($collapseId)" aria-expanded="$sectionExpanded" aria-controls="$escapetool.xml($collapseId)"&gt;
     &lt;div class="oidcpro-section-header"&gt;
       &lt;h2&gt;
+        ## The caret shows that the section can be collapsed, so the section icon stays free to describe it.
+        &lt;span class="oidcpro-collapse-caret"&gt;
+          $services.icon.renderHTML('caret-down')
+        &lt;/span&gt;
         &lt;span class="oidcpro-section-header-icon"&gt;
           $services.icon.renderHTML($section.icon)
         &lt;/span&gt;
@@ -63,7 +67,7 @@
         &lt;a class="oidcpro-collapse-link collapsed" role="button" data-toggle="collapse" href="#$escapetool.xml($advancedCollapseId)"
           aria-expanded="false" aria-controls="$escapetool.xml($advancedCollapseId)"&gt;
           &lt;div class="oidcpro-section-header"&gt;
-            &lt;span class="oidcpro-section-header-icon"&gt;
+            &lt;span class="oidcpro-collapse-caret"&gt;
               $services.icon.renderHTML('caret-down')
             &lt;/span&gt;
             ## Each section can name its advanced properties, so that the links can be told apart.
@@ -515,15 +519,19 @@ require(['jquery', 'xwiki-propertize', 'xwiki-selectize'], function ($) {
       <cache>long</cache>
     </property>
     <property>
-      <code>.oidcpro-section-header-icon {
+      <code>.oidcpro-collapse-caret {
   transition: all 0.5s;
   display: inline-block;
 }
 
-a.collapsed .oidcpro-section-header-icon {
-  transform: rotate(-180deg);
-  -moz-transform: rotate(-180deg);
-  -webkit-transform: rotate(-180deg);
+a.collapsed .oidcpro-collapse-caret {
+  transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+}
+
+.oidcpro-section-header-icon {
+  margin-left: 0.5em;
 }
 
 .oidcpro-section-header {

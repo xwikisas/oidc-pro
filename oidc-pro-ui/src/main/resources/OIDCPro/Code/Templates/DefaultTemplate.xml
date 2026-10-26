@@ -172,11 +172,11 @@
     },
     {
       "id": "User",
-      "icon": "caret-down"
+      "icon": "user"
     },
     {
       "id": "Group",
-      "icon": "caret-down"
+      "icon": "group"
     }
   ],
   "properties": [
@@ -187,7 +187,7 @@
       "value": "Some value",
       "advanced": false,
       "class": "extraClass",
-      "icon": "play"
+      "icon": "lock"
     },
     {
       "id": "configurationName",
