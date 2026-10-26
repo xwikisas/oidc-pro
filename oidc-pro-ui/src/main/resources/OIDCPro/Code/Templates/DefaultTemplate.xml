@@ -164,7 +164,6 @@
     <property>
       <layoutJson>{
   "id": "default",
-  "extraCss": "StyleSheet",
   "sections": [
     {
       "id": "General",
@@ -184,18 +183,14 @@
       "id": "skipped",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "lock"
     },
     {
       "id": "configurationName",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "book",
       "required": true
     },
@@ -203,9 +198,7 @@
       "id": "clientId",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "user",
       "required": true
     },
@@ -213,9 +206,7 @@
       "id": "clientSecret",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "key",
       "required": true
     },
@@ -223,54 +214,42 @@
       "id": "authorizationEndpoint",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "tokenEndpoint",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "userInfoEndpoint",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "logoutEndpoint",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "xwikiProvider",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "userInfoEndpointMethod",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
@@ -294,9 +273,7 @@
       "id": "userInfoEndpointHeaders",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "propertize": {
@@ -309,9 +286,7 @@
       "id": "logoutEndpointMethod",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
@@ -335,18 +310,14 @@
       "id": "logoutMechanism",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "responseType",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
@@ -377,9 +348,7 @@
       "id": "idTokenClaims",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
@@ -434,28 +403,21 @@
       "id": "claims",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "afterLogoutURL",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
-      "icon": "icon-id",
-      "customCode": "templae.vm"
+      "icon": "icon-id"
     },
     {
       "id": "tokenEndpointMethod",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
@@ -479,37 +441,28 @@
       "id": "tokenStorageScope",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
-    
     {
       "id": "userNameFormatter",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "userSubjectFormatter",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "userMapping",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "propertize": {
@@ -521,9 +474,7 @@
       "id": "userInfoClaims",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
@@ -553,7 +504,8 @@
             {
               "value": "nickname",
               "label": "Nickname"
-            },            {
+            },
+            {
               "value": "preferred_username",
               "label": "Preferred Username"
             },
@@ -617,45 +569,35 @@
       "id": "userInfoRefreshRate",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "userInfoSkip",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "enableUser",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "groupsClaim",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "groupsMapping",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "propertize": {
@@ -667,36 +609,28 @@
       "id": "allowedGroups",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "forbiddenGroups",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "groupsMappingExclude",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "groupsMappingInclude",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     }
   ]

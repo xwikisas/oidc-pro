@@ -101,12 +101,69 @@ A template is a wiki page holding an ##OIDCPro.Code.OIDCProTemplateClass## objec
 |customCode|Extra HTML, CSS or JavaScript added to the form of configurations that use this template
 |codeInsertionPoint|Where the custom code goes: ##header## or ##footer##
 
-To add a template for a provider:
+== Creating a template for a provider ==
 
-1. Copy //DefaultTemplate// to a new page under //OIDCPro › Code › Templates//.
-1. In the object editor, set a new **name** and adapt **layoutJson**: hide fields the provider does not use, and mark the ones it requires.
-1. Attach the provider logo to the page and enter its file name in **iconAttachment**, or set **iconName** instead.
-1. Add the translation ##oidcpro.templates.<name>.name## so the Create menu shows a readable label.
+The easiest way is to start from the Default template and remove what your provider does not need.
+
+1. Open //OIDCPro › Code › Templates › DefaultTemplate//, choose **More actions › Copy**, and copy it to a new page under //OIDCPro › Code › Templates//, for example //KeycloakTemplate//.
+1. On the new page, choose **Edit › Objects** and expand the ##OIDCPro.Code.OIDCProTemplateClass## object.
+1. Set **name** to a short identifier without spaces, for example ##keycloak##. It must differ from the name of every other template.
+1. Edit **layoutJson** (see the reference below). The usual changes are:
+1*. delete the entries of fields the provider never uses;
+1*. add ##"required": true## to the fields the provider needs;
+1*. move rarely changed fields to the advanced part with ##"advanced": true##.
+1. Attach the provider logo to the page and enter its file name in **iconAttachment**, or enter an icon name in **iconName**.
+1. Save the page.
+1. Give the template a readable label. Edit a page that holds translations, for example a new page with an ##XWiki.TranslationDocumentClass## object whose scope is //Wiki//, and add:(((
+{{code language="properties"}}
+oidcpro.templates.keycloak.name=Keycloak
+oidcpro.templates.keycloak.hint=Connect to a Keycloak realm
+{{/code}}
+)))
+
+The new template appears in the list under the **Create** button. Only templates last saved by a wiki administrator are used, because a template adds code to the configuration form and the login page. A template saved by anyone else is ignored.
+
+Configurations remember the template they were created from. Changing a template changes the form of every configuration that uses it, but never deletes saved values.
+
+== The layoutJson reference ==
+
+**layoutJson** is a JSON object with two lists: ##sections## (the collapsible parts of the form, in display order) and ##properties## (the fields, in display order).
+
+|=Section key|=Meaning
+|id|Identifier of the section, referenced by the fields. The heading comes from the translation key ##oidcpro.config.section.<id>.label## and the advanced link from ##oidcpro.config.section.<id>.advanced##
+|icon|An icon from the wiki's icon theme, shown before the heading
+
+|=Field key|=Meaning
+|id|Name of the property to show. Any property of the ##XWiki.OIDC.ClientConfigurationClass## class, see the [[OpenID Connect Authenticator documentation>>https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/]]. Required
+|section|The id of the section the field belongs to. Defaults to ##General##
+|advanced|##true## to put the field under the section's advanced link
+|required|##true## to make the field mandatory
+|hidden|##true## to keep the field in the form, with its value, without showing it
+|icon|An icon from the wiki's icon theme, shown before the label
+|class|Extra CSS classes added to the field, for use by **customCode**
+|xclass|Name of another class holding the property, for settings that are specific to the provider. The object is created when the configuration is saved
+|data|Input helpers: ##selectize## turns the field into a list of suggestions, ##propertize## into a list of key/value pairs. Copy them from a field of the Default template that has the same kind of value
+
+A field that is not listed in **layoutJson** is not shown, but keeps its value.
+
+A minimal template with one section and three fields:
+
+{{code language="json"}}
+{
+  "sections": [
+    {"id": "General", "icon": "cog"}
+  ],
+  "properties": [
+    {"id": "configurationName", "section": "General", "required": true},
+    {"id": "clientId", "section": "General", "required": true},
+    {"id": "clientSecret", "section": "General", "required": true}
+  ]
+}
+{{/code}}
+
+The labels and help texts of fields come from the keys ##oidcpro.config.property.<id>.label## and ##oidcpro.config.property.<id>.hint##. A template can replace them for its own form with ##oidcpro.config.template.<name>.property.<id>.label## and ##oidcpro.config.template.<name>.property.<id>.hint##, for example to use the provider's own wording.
+
+== Icons ==
 
 The icon is shown on the login menu and the provider page. **iconName** wins when both are set. Attachments must be images of at most 512 KB. They are embedded into the login page itself, so guests see them even when the wiki does not let them view pages.
 
