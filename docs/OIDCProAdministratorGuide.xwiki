@@ -9,6 +9,8 @@ What it adds:
 * A guided **configuration form** with help text for every OpenID Connect setting, split into General, User and Group sections.
 * A **login menu** in the top bar and a **provider selection page**, so users pick the client they want to log in with.
 
+OIDC Pro has the same limitations as the authenticator it builds on, listed in its [[Main limitations>>https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/#HMainlimitations]] section. For example, a user whose XWiki session has expired is not logged back in automatically and has to log in again.
+
 This guide is for wiki administrators. It assumes you know which OpenID Connect provider you connect to and have its client ID, client secret and endpoints.
 
 = Requirements and setup =
@@ -194,3 +196,5 @@ When a user picks a client, OIDC Pro stores the choice in a browser cookie named
 |A user keeps being sent to the wrong provider|Their session still holds the client they picked earlier|Ask them to log out, or close the browser, and pick again
 |A provider icon does not show|The attachment is missing, is not an image, or is larger than 512 KB|Check the file name in iconAttachment; the wiki log names the problem
 |A change to a configuration or template does not show|The page was changed without being saved through the wiki, for example directly in the database|Save the page again from the wiki, or restart XWiki
+
+If none of these match, turn on debug logs to see what happens during a login. In //Administration › Other › Logging//, set the level of ##org.xwiki.contrib.oidc## (the authenticator) and ##com.xwiki.oidcpro## (OIDC Pro) to ##DEBUG##, try to log in again, and read the wiki log. Levels set there are reset when XWiki restarts. The [[Troubleshooting section of the OpenID Connect Authenticator documentation>>https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/#HTroubleshooting]] explains how to keep them with the ##logback.xml## file.
