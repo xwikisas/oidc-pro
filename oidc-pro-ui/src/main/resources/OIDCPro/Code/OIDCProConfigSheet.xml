@@ -98,6 +98,26 @@
   #end
 $escapetool.xml($services.localization.render($translationKey))##
 #end
+## Display a boolean property with Yes and No, while keeping the 1 and 0 values expected by the class.
+#macro (displayBooleanProperty $obj $className $propertyName)
+  #set ($booleanValue = "$!obj.getValue($propertyName)")
+  #if ($xcontext.action == 'edit' || $xcontext.action == 'inline')
+    #set ($fieldName = "${className}_${obj.number}_${propertyName}")
+&lt;select id="$escapetool.xml($fieldName)" name="$escapetool.xml($fieldName)"&gt;##
+    #if ($booleanValue == '')
+&lt;option value="" selected="selected"&gt;---&lt;/option&gt;##
+    #end
+&lt;option value="1" #if($booleanValue == '1')selected="selected"#end&gt;##
+$escapetool.xml($services.localization.render('oidcpro.config.boolean.yes'))&lt;/option&gt;##
+&lt;option value="0" #if($booleanValue == '0')selected="selected"#end&gt;##
+$escapetool.xml($services.localization.render('oidcpro.config.boolean.no'))&lt;/option&gt;##
+&lt;/select&gt;##
+  #elseif ($booleanValue == '1')
+$escapetool.xml($services.localization.render('oidcpro.config.boolean.yes'))##
+  #elseif ($booleanValue == '0')
+$escapetool.xml($services.localization.render('oidcpro.config.boolean.no'))##
+  #end
+#end
 #macro (displayProperty $property)
 &lt;div class="oidcpro-property oidcpro-property-$escapetool.xml($property.id) #if($property.hidden)hidden#end $!escapetool.xml($property.get('class'))"
   #foreach($dataKey in $property.data.keySet())
@@ -130,11 +150,22 @@ $escapetool.xml($services.localization.render($translationKey))##
     #else
       #set ($discard = $doc.use('XWiki.OIDC.ClientConfigurationClass'))
     #end
-    #set ($htmlInput = $doc.display($property.id).replaceAll('^\{\{html(.*?)\}\}', '').replaceAll('\{\{/html\}\}$', ''))
-    #if ($property.required)
-      $htmlInput.replaceFirst('&lt;(input|textarea|select)', '$0 required ')
+    #set ($propertyClassName = "$!property.xclass")
+    #if ($propertyClassName == '')
+      #set ($propertyClassName = 'XWiki.OIDC.ClientConfigurationClass')
+    #end
+    #set ($propertyObj = $doc.getObject($propertyClassName))
+    #set ($propertyClass = $xwiki.getClass($propertyClassName).get($property.id))
+    ## The boolean properties of the OIDC class have no display type, so XWiki displays them as 1 and 0.
+    #if ($propertyObj &amp;&amp; "$!propertyClass.classType".matches('.*Boolean(Class)?$'))
+      #displayBooleanProperty($propertyObj $propertyClassName $property.id)
     #else
-      $htmlInput
+      #set ($htmlInput = $doc.display($property.id).replaceAll('^\{\{html(.*?)\}\}', '').replaceAll('\{\{/html\}\}$', ''))
+      #if ($property.required)
+        $htmlInput.replaceFirst('&lt;(input|textarea|select)', '$0 required ')
+      #else
+        $htmlInput
+      #end
     #end
    &lt;/dd&gt;
 &lt;/div&gt;

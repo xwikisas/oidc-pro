@@ -69,12 +69,14 @@ oidcpro.config.section.General.label=General Configuration
 oidcpro.config.section.User.label=User Configuration
 oidcpro.config.section.Group.label=Group Configuration
 oidcpro.config.section.advanced=Advanced properties
+oidcpro.config.boolean.yes=Yes
+oidcpro.config.boolean.no=No
 oidcpro.config.section.General.advanced=Advanced general properties
 oidcpro.config.section.User.advanced=Advanced user properties
 oidcpro.config.section.Group.advanced=Advanced group properties
 
-oidcpro.config.property.skipped.label=Is skipped?
-oidcpro.config.property.skipped.hint=Defines whether the users can authenticate using this OIDC client or not.
+oidcpro.config.property.skipped.label=Authentication skipped?
+oidcpro.config.property.skipped.hint=Yes: users cannot log in with this client. No: the client is enabled. Turning on the Enabled? switch of the client in the OIDC Pro administration section sets it to No.
 
 oidcpro.config.property.configurationName.label=Configuration name
 oidcpro.config.property.configurationName.hint=The name of this OIDC configuration.
@@ -104,8 +106,8 @@ oidcpro.config.property.userInfoEndpointHeaders.label=User Info Endpoint Headers
 oidcpro.config.property.userInfoEndpointHeaders.hint=Any additional HTTP headers that need to be used when requesting the user information. e.g. Accept:application/json,SomeOtherHeader:header value
 oidcpro.config.property.logoutEndpointMethod.label=Logout Endpoint Method
 oidcpro.config.property.logoutEndpointMethod.hint=The method that will be used to logout the user from the provider. e.g. POST, GET
-oidcpro.config.property.skipLogoutIdToken.label=Skip ID Token at Logout
-oidcpro.config.property.skipLogoutIdToken.hint=If enabled, the ID token is not sent along with the logout request. Use it when the provider rejects logout requests that contain the ID token.
+oidcpro.config.property.skipLogoutIdToken.label=Skip ID token at logout?
+oidcpro.config.property.skipLogoutIdToken.hint=Yes: the ID token is not sent along with the logout request. Use it when the provider rejects logout requests that contain the ID token.
 oidcpro.config.property.responseType.label=Response Type
 oidcpro.config.property.responseType.hint=The response type that we want to get from the OIDC provider after a successful authorization. e.g. code (authorization code), token (access token), id_token. Several values are separated by commas. The default value is `code`.
 oidcpro.config.property.idTokenClaims.label=ID Token Claims
@@ -118,8 +120,8 @@ oidcpro.config.property.tokenEndpointMethod.label=Token Endpoint Authentication 
 oidcpro.config.property.tokenEndpointMethod.hint=How XWiki sends the client ID and secret when it requests the tokens: client_secret_basic (in an HTTP Basic authentication header, the default) or client_secret_post (in the request body).
 oidcpro.config.property.tokenStorageScope.label=Token Storage Scope
 oidcpro.config.property.tokenStorageScope.hint=Defines where the retrieved tokens should be stored in the XWiki instance. e.g. NONE (no storage), WIKI (tokens will be stored at the wiki level), USER (tokens will be stored in the profile of each user - default).
-oidcpro.config.property.tryLocal.label=Allow Local Login
-oidcpro.config.property.tryLocal.hint=If enabled, users can also log in with a local XWiki account and password, for example the administrator account.
+oidcpro.config.property.tryLocal.label=Allow local login?
+oidcpro.config.property.tryLocal.hint=Yes: users can also log in with a local XWiki account and password, for example the administrator account.
 
 
 oidcpro.config.property.documentation=Documentation
@@ -134,11 +136,11 @@ oidcpro.config.property.userInfoClaims.label=User Info Claims
 oidcpro.config.property.userInfoClaims.hint=The user information that should be returned by the OIDC provider. e.g. sub, name, gender, given_name.
 oidcpro.config.property.userInfoRefreshRate.label=User Info Refresh Rate
 oidcpro.config.property.userInfoRefreshRate.hint=The time after which the user information should be refreshed (in milliseconds).
-oidcpro.config.property.userInfoSkip.label=User Info Skip
-oidcpro.config.property.userInfoSkip.hint=If this property is set, then XWiki will skip the retrieval of the user information from the specialised endpoint. Useful for OAuth providers.
+oidcpro.config.property.userInfoSkip.label=User info skipped?
+oidcpro.config.property.userInfoSkip.hint=Yes: XWiki does not call the user info endpoint and takes the user information from the ID token instead. Useful for providers whose user info endpoint is missing or does not work. The default is No.
 
-oidcpro.config.property.enableUser.label=Enable User
-oidcpro.config.property.enableUser.hint=Define if user accounts should be enabled (marked as active) on first login.
+oidcpro.config.property.enableUser.label=Enable new users?
+oidcpro.config.property.enableUser.hint=Yes: user accounts created on first login are active right away. No: an administrator has to activate them.
 oidcpro.config.property.userNameForbiddenPattern.label=Username Forbidden Pattern
 oidcpro.config.property.userNameForbiddenPattern.hint=A regular expression matching the characters that are not allowed in the generated XWiki username. They are replaced with the username forbidden replacement.
 oidcpro.config.property.userNameForbiddenReplacement.label=Username Forbidden Replacement

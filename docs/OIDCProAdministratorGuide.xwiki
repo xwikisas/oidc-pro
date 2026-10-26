@@ -59,7 +59,7 @@ A new configuration is always created from a template, which decides which field
 
 The configuration name identifies the client everywhere else: in the login menu, on the provider page and as the default client. Keep it unique and readable, and avoid renaming it once users rely on it.
 
-A new configuration starts with **Is skipped?** set to ##1##, which means disabled. Set it to ##0## before saving, or turn on its **Enabled?** switch in the table afterwards.
+A new configuration starts with **Authentication skipped?** set to //Yes//, which means disabled. Set it to //No// before saving, or turn on its **Enabled?** switch in the table afterwards.
 
 = Editing a configuration =
 
@@ -68,10 +68,10 @@ To change a client, click **Edit** in its row of the table. The form groups the 
 [[image:06-configuration-edit.png||alt="Editing an existing configuration"]]
 
 |=Section|=Settings
-|General|Is skipped?, configuration name, client ID and secret, authorization, token, user info and logout endpoints, scope
+|General|Authentication skipped?, configuration name, client ID and secret, authorization, token, user info and logout endpoints, scope
 |General › Advanced general properties|Provider URL and discovery endpoint, token endpoint authentication method, user info endpoint method and headers, logout endpoint method, skip ID token at logout, after-logout URL, response type, ID token and other claims, token storage scope, allow local login
 |User|Username and user subject formatters, user attribute mapping
-|User › Advanced user properties|User info claims, refresh rate and skip, enable new users, forbidden patterns and replacements for the username and the user subject
+|User › Advanced user properties|User info claims, refresh rate, user info skipped?, enable new users?, forbidden patterns and replacements for the username and the user subject
 |Group|Groups claim, groups mapping
 |Group › Advanced group properties|Allowed and forbidden groups, include and exclude patterns
 
@@ -87,7 +87,7 @@ Both switches in the table save immediately; a notification confirms each change
 
 [[image:03-configurations-table.png||alt="The Enabled? and Default switches"]]
 
-**Enabled?** controls whether users can log in with a client. A disabled client disappears from the login menu and the provider page, but keeps its settings, so you can turn it back on later. It is the same setting as **Is skipped?** in the form.
+**Enabled?** controls whether users can log in with a client. A disabled client disappears from the login menu and the provider page, but keeps its settings, so you can turn it back on later. It is the same setting as **Authentication skipped?** in the form, with the opposite meaning.
 
 **Default** marks the client XWiki uses when a user logs in without picking one, for example from a plain //Log-in// link or a page that requires login. Only one client can be the default: turning one on turns the previous one off. Turning the default off resets it to the client named ##default##.
 
