@@ -136,7 +136,8 @@ $escapetool.xml($services.localization.render($translationKey))##
 {{/velocity}}
 
 {{velocity}}
-#set ($collapsed = "$!request.collapsed" == '1')
+## Sections are expanded in view mode, since there is nothing else to see on the page.
+#set ($collapsed = "$!request.collapsed" == '1' || $xcontext.action == 'view')
 #set ($templateBinderXObj = $doc.getObject('OIDCPro.Code.OIDCProTemplateBinderClass'))
 #if ($templateBinderXObj &amp;&amp; "$!templateBinderXObj.getProperty('templateName').value" != '')
   #set ($templateId = $templateBinderXObj.getProperty('templateName').value)

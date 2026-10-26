@@ -68,10 +68,12 @@ To change a client, click **Edit** in its row of the table. The form groups the 
 [[image:06-configuration-edit.png||alt="Editing an existing configuration"]]
 
 |=Section|=Settings
-|General|Is skipped?, configuration name, client ID and secret, authorization, token, user info and logout endpoints
-|General › Advanced general properties|XWiki provider, HTTP methods and headers for the endpoints, logout mechanism, response type, ID token and other claims, after-logout URL, token storage scope
-|User|Username and user subject formatters, user attribute mapping, user info claims, refresh rate and skip, enable new users
-|Group|Groups claim, groups mapping, include and exclude patterns, allowed and forbidden groups
+|General|Is skipped?, configuration name, client ID and secret, authorization, token, user info and logout endpoints, scope
+|General › Advanced general properties|Provider URL and discovery endpoint, token endpoint authentication method, user info endpoint method and headers, logout endpoint method, skip ID token at logout, after-logout URL, response type, ID token and other claims, token storage scope, allow local login
+|User|Username and user subject formatters, user attribute mapping
+|User › Advanced user properties|User info claims, refresh rate and skip, enable new users, forbidden patterns and replacements for the username and the user subject
+|Group|Groups claim, groups mapping
+|Group › Advanced group properties|Allowed and forbidden groups, include and exclude patterns
 
 Each section keeps its less common fields under a collapsed link: //Advanced general properties//, //Advanced user properties// and //Advanced group properties//. Click it to show those fields. The User and Group sections can also be collapsed from their headings.
 

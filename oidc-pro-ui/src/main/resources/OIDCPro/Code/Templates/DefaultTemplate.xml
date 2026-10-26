@@ -239,7 +239,60 @@
       "icon": "icon-id"
     },
     {
-      "id": "xwikiProvider",
+      "id": "scope",
+      "hidden": false,
+      "section": "General",
+      "advanced": false,
+      "icon": "icon-id",
+      "data": {
+        "selectize": {
+          "delimiter": ",",
+          "create": true,
+          "options": [
+            {
+              "value": "openid",
+              "label": "openid"
+            },
+            {
+              "value": "profile",
+              "label": "profile"
+            },
+            {
+              "value": "email",
+              "label": "email"
+            },
+            {
+              "value": "address",
+              "label": "address"
+            },
+            {
+              "value": "phone",
+              "label": "phone"
+            },
+            {
+              "value": "offline_access",
+              "label": "offline_access"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "provider",
+      "hidden": false,
+      "section": "General",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "discoveryEndpoint",
+      "hidden": false,
+      "section": "General",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "tokenEndpointMethod",
       "hidden": false,
       "section": "General",
       "advanced": true,
@@ -287,27 +340,17 @@
       "hidden": false,
       "section": "General",
       "advanced": true,
-      "icon": "icon-id",
-      "data": {
-        "selectize": {
-          "delimiter": ",",
-          "create": true,
-          "maxItems": 1,
-          "options": [
-            {
-              "value": "GET",
-              "label": "GET"
-            },
-            {
-              "value": "POST",
-              "label": "POST"
-            }
-          ]
-        }
-      }
+      "icon": "icon-id"
     },
     {
-      "id": "logoutMechanism",
+      "id": "skipLogoutIdToken",
+      "hidden": false,
+      "section": "General",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "afterLogoutURL",
       "hidden": false,
       "section": "General",
       "advanced": true,
@@ -321,7 +364,7 @@
       "icon": "icon-id",
       "data": {
         "selectize": {
-          "delimiter": " ",
+          "delimiter": ",",
           "create": true,
           "options": [
             {
@@ -352,7 +395,7 @@
       "icon": "icon-id",
       "data": {
         "selectize": {
-          "delimiter": " ",
+          "delimiter": ",",
           "create": true,
           "options": [
             {
@@ -407,38 +450,14 @@
       "icon": "icon-id"
     },
     {
-      "id": "afterLogoutURL",
+      "id": "tokenStorageScope",
       "hidden": false,
       "section": "General",
       "advanced": true,
       "icon": "icon-id"
     },
     {
-      "id": "tokenEndpointMethod",
-      "hidden": false,
-      "section": "General",
-      "advanced": true,
-      "icon": "icon-id",
-      "data": {
-        "selectize": {
-          "delimiter": ",",
-          "create": true,
-          "maxItems": 1,
-          "options": [
-            {
-              "value": "GET",
-              "label": "GET"
-            },
-            {
-              "value": "POST",
-              "label": "POST"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "tokenStorageScope",
+      "id": "tryLocal",
       "hidden": false,
       "section": "General",
       "advanced": true,
@@ -587,6 +606,34 @@
       "icon": "icon-id"
     },
     {
+      "id": "userNameForbiddenPattern",
+      "hidden": false,
+      "section": "User",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "userNameForbiddenReplacement",
+      "hidden": false,
+      "section": "User",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "userSubjectForbiddenPattern",
+      "hidden": false,
+      "section": "User",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "userSubjectForbiddenReplacement",
+      "hidden": false,
+      "section": "User",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
       "id": "groupsClaim",
       "hidden": false,
       "section": "Group",
@@ -620,14 +667,14 @@
       "icon": "icon-id"
     },
     {
-      "id": "groupsMappingExclude",
+      "id": "groupsMappingInclude",
       "hidden": false,
       "section": "Group",
       "advanced": true,
       "icon": "icon-id"
     },
     {
-      "id": "groupsMappingInclude",
+      "id": "groupsMappingExclude",
       "hidden": false,
       "section": "Group",
       "advanced": true,
