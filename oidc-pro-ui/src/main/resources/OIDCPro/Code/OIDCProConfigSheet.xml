@@ -188,6 +188,8 @@ $escapetool.xml($services.localization.render($translationKey))##
       'com.xwiki.commons:xwiki-pro-commons-webjar',
       'xwikiPropertize/xwikiPropertize.css',
       {'evaluate': true}), {'type': 'text/css', 'rel': 'stylesheet'}))
+  ## The selectize styles are not loaded by the edit form on every XWiki version, so load them explicitly.
+  #picker_import
   {{html clean=false}}
   &lt;div class="xform"&gt;
   #if("$!templateXObj.getProperty('customCode').value" != '' &amp;&amp; "$!templateXObj.getProperty('codeInsertionPoint').value" == 'header')
