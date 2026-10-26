@@ -57,7 +57,7 @@
       &lt;/h2&gt;
     &lt;/div&gt;
   &lt;/a&gt;
-  &lt;div id="$escapetool.xml($collapseId)" class="oidcpro-properties #if(!$sectionExpanded)collapse#end"&gt;
+  &lt;div id="$escapetool.xml($collapseId)" class="oidcpro-properties collapse #if($sectionExpanded)in#end"&gt;
     &lt;dl&gt;
       #foreach ($property in $properties)
         #displayProperty($property)
@@ -134,8 +134,9 @@ $escapetool.xml($services.localization.render('oidcpro.config.boolean.no'))##
     &lt;label for=""&gt;#renderPropertyTranslation($property 'label')&lt;/label&gt;
     &lt;span class="xHint"&gt;#renderPropertyTranslation($property 'hint')
       ## Some properties need more explanations than a hint can hold, so templates can link to their documentation.
-      #if ("$!property.documentation".matches('^https?://.+'))
-        &lt;a href="$escapetool.xml($property.documentation)" target="_blank" rel="noopener"&gt;##
+      #set ($documentationURL = "$!property.documentation")
+      #if ($documentationURL.matches('^https?://.+'))
+        &lt;a href="$escapetool.xml($documentationURL)" target="_blank" rel="noopener"&gt;##
           $escapetool.xml($services.localization.render('oidcpro.config.property.documentation'))&lt;/a&gt;
       #end
     &lt;/span&gt;
@@ -157,7 +158,8 @@ $escapetool.xml($services.localization.render('oidcpro.config.boolean.no'))##
     #set ($propertyObj = $doc.getObject($propertyClassName))
     #set ($propertyClass = $xwiki.getClass($propertyClassName).get($property.id))
     ## The boolean properties of the OIDC class have no display type, so XWiki displays them as 1 and 0.
-    #if ($propertyObj &amp;&amp; "$!propertyClass.classType".matches('.*Boolean(Class)?$'))
+    #set ($propertyClassType = "$!propertyClass.classType")
+    #if ($propertyObj &amp;&amp; $propertyClassType.matches('.*Boolean(Class)?$'))
       #displayBooleanProperty($propertyObj $propertyClassName $property.id)
     #else
       #set ($htmlInput = $doc.display($property.id).replaceAll('^\{\{html(.*?)\}\}', '').replaceAll('\{\{/html\}\}$', ''))
