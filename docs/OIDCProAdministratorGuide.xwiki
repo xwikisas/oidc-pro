@@ -15,7 +15,7 @@ This guide is for wiki administrators. It assumes you know which OpenID Connect 
 
 = Requirements and setup =
 
-OIDC Pro needs XWiki 15.10 or later. Installing it from the Extension Manager also installs the OpenID Connect Authenticator (version 2.28.0 or later) it depends on.
+OIDC Pro needs XWiki 15.10 or later. Installing it from the Extension Manager also installs the OpenID Connect Authenticator (version 2.29.1 or later) it depends on.
 
 1. Install **Open ID Connect (Pro)** from //Administration › Extensions//.
 1. Make OpenID Connect the active authentication service:
@@ -61,6 +61,8 @@ The configuration name identifies the client everywhere else: in the login menu,
 
 A new configuration starts with **Authentication skipped?** set to //Yes//, which means disabled. Set it to //No// before saving, or turn on its **Enabled?** switch in the table afterwards.
 
+Configurations hold client secrets and decide how users log in, so only wiki administrators can see and edit the pages under //OIDCPro › Configurations//. You can change these rights from the administration of that space, and upgrades of OIDC Pro keep your changes. Users are only offered configurations last saved by a wiki administrator. A configuration saved by anyone else still appears in the table, but never in the login menu or on the provider page. To use it, check it and save it again as an administrator.
+
 = Editing a configuration =
 
 To change a client, click **Edit** in its row of the table. The form groups the settings into three sections, and every field carries help text with an example value.
@@ -76,6 +78,8 @@ To change a client, click **Edit** in its row of the table. The form groups the 
 |Group › Advanced group properties|Allowed and forbidden groups, include and exclude patterns
 
 Each section keeps its less common fields under a collapsed link: //Advanced general properties//, //Advanced user properties// and //Advanced group properties//. Click it to show those fields. The User and Group sections can also be collapsed from their headings.
+
+To find a field without opening each section, type in the search box above the sections. It matches the field label, such as //Allow local login?//, and the property name used by the templates, such as ##tryLocal##. Upper and lower case, as well as spaces, are ignored, so //client id// finds **Client ID**. While you search, only the matching fields are shown, and the sections and advanced parts that hold them open by themselves. Clear the box to get the form back as it was. The search also works when viewing a configuration.
 
 Most providers only need the General section. Use User and Group to control how accounts are named and which XWiki groups users join. For example, ##OIDCGroupId=XWiki.AdminGroup## in **Groups Mapping** makes members of that provider group XWiki administrators.
 
@@ -196,7 +200,8 @@ When a user picks a client, OIDC Pro stores the choice in a browser cookie named
 
 |=Symptom|=Likely cause|=What to do
 |The Login with menu does not appear|OpenID Connect is not the active authentication service, or no client is enabled|Check step 2 of the setup, and turn on at least one client
-|A client is missing from the menu and the provider page|The client is disabled|Turn on its Enabled? switch
+|A client is missing from the menu and the provider page|The client is disabled, or its configuration was last saved by a user who is not a wiki administrator|Turn on its Enabled? switch, or check the configuration and save it again as an administrator
+|The form of a configuration shows "No OIDC template found with the name ..."|The template the configuration was created from was deleted or renamed, or was last saved by a user who is not a wiki administrator|Restore the template, or save it again as an administrator. Meanwhile, the login menu and the provider page use the icon of the Default template
 |Users always land on the provider selection page|The default client has no authorization endpoint, or no default is set|Fill in the endpoint, or mark a working client as Default
 |A user keeps being sent to the wrong provider|Their session still holds the client they picked earlier|Ask them to log out, or close the browser, and pick again
 |A provider icon does not show|The attachment is missing, is not an image, or is larger than 512 KB|Check the file name in iconAttachment; the wiki log names the problem
