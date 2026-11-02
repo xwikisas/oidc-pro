@@ -42,6 +42,7 @@ oidcpro.login.provider.select.title=Select the OIDC provider
 oidcpro.login.provider.domain=Or specify its domain
 
 # Admin section
+oidcpro.extension.name=Open ID Connect (Pro)
 oidcpro.admin.create.title=Create a new OIDC Client Configuration
 oidcpro.admin.create.button.label=Create
 oidcpro.admin.create.placeholderTitle=New OIDC Client Configuration

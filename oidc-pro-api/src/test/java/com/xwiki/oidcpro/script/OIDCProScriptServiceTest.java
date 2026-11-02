@@ -145,6 +145,14 @@ class OIDCProScriptServiceTest
     }
 
     @Test
+    void isLicensed()
+    {
+        when(this.licenseChecker.isLicensed()).thenReturn(true);
+
+        assertTrue(this.scriptService.isLicensed());
+    }
+
+    @Test
     void getConfigurationsWithoutLicense()
     {
         when(this.configurationStore.getConfigurations()).thenReturn(List.of(mock(OIDCProClientConfiguration.class)));

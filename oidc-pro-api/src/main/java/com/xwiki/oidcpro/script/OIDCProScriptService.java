@@ -94,6 +94,17 @@ public class OIDCProScriptService implements ScriptService
     }
 
     /**
+     * Without a license, users can still log in with the OpenID Connect authenticator, but the OIDC Pro features are
+     * turned off.
+     *
+     * @return {@code true} if there is a valid license for OIDC Pro on the current wiki
+     */
+    public boolean isLicensed()
+    {
+        return this.licenseChecker.isLicensed();
+    }
+
+    /**
      * The configurations are offered to every user (including guests, on the login page), so they don't give access to
      * the OIDC client configurations themselves, which hold the client secrets.
      * <p>
@@ -103,7 +114,7 @@ public class OIDCProScriptService implements ScriptService
      */
     public List<SafeOIDCProClientConfiguration> getConfigurations()
     {
-        if (!this.licenseChecker.isLicensed()) {
+        if (!isLicensed()) {
             return Collections.emptyList();
         }
         return configurationStore.getConfigurations().stream().map(SafeOIDCProClientConfiguration::new)
