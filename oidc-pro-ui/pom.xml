@@ -36,6 +36,14 @@
   <description>Manage your OpenID Connect (OIDC) integrations from a single place. Create and configure OIDC clients and connections, manage their settings, and connect your applications to identity providers for secure authentication.</description>
   <properties>
     <xwiki.extension.name>Open ID Connect (Pro)</xwiki.extension.name>
+    <!-- The list of documents that are not covered by the extension license. The user that installs the extension has
+      full access to these documents (view, edit, delete) without having a license, so use this property wisely. The
+      administration section stays reachable to tell the administrator that a license is needed, and the rights of the
+      configurations can be managed without a license. -->
+    <xwiki.extension.licensing.excludedDocuments>
+      OIDCPro.Code.OIDCProAdministration,
+      OIDCPro.Configurations.WebPreferences
+    </xwiki.extension.licensing.excludedDocuments>
   </properties>
   <dependencies>
     <dependency>
@@ -43,6 +51,11 @@
       <artifactId>oidc-pro-api</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.xwiki.licensing</groupId>
+      <artifactId>application-licensing-licensor-api</artifactId>
+      <version>${licensing.version}</version>
     </dependency>
     <dependency>
       <groupId>org.xwiki.platform</groupId>

@@ -33,7 +33,7 @@
   <name>OIDC Pro - Parent POM</name>
   <properties>
     <xwikipro.commons.version>1.5.0</xwikipro.commons.version>
-    <licensing.version>1.32.4</licensing.version>
+    <licensing.version>1.33.1</licensing.version>
     <oidc.version>2.29.1</oidc.version>
   </properties>
   <packaging>pom</packaging>
