@@ -120,6 +120,7 @@ $escapetool.xml($services.localization.render('oidcpro.config.boolean.no'))##
 #end
 #macro (displayProperty $property)
 &lt;div class="oidcpro-property oidcpro-property-$escapetool.xml($property.id) #if($property.hidden)hidden#end $!escapetool.xml($property.get('class'))"
+  data-oidcpro-property-name="$escapetool.xml($property.id)"
   #foreach($dataKey in $property.data.keySet())
     ## Escaping is not enough for an attribute name, so only accept plain names.
     #if ($dataKey.matches('^[a-zA-Z0-9_-]+$'))
@@ -257,6 +258,15 @@ $escapetool.xml($services.localization.render('oidcpro.config.boolean.no'))##
   #end
   #set ($discard = $doc.use('XWiki.OIDC.ClientConfigurationClass'))
   #set ($hasExtraObjects = false)
+  ## The input has no name, so that it is not submitted with the form.
+  &lt;div class="oidcpro-search"&gt;
+    #set ($searchPlaceholder = $services.localization.render('oidcpro.config.search.placeholder'))
+    &lt;input type="search" id="oidcpro-property-search" class="form-control" autocomplete="off"
+      placeholder="$escapetool.xml($searchPlaceholder)" aria-label="$escapetool.xml($searchPlaceholder)" /&gt;
+    &lt;p class="oidcpro-search-noresults xHint hidden"&gt;
+      $escapetool.xml($services.localization.render('oidcpro.config.search.noResults'))
+    &lt;/p&gt;
+  &lt;/div&gt;
   #foreach ($section in $orderedSections.entrySet())
     #sectionHeaderHtml($section.value.section, $section.value.properties, $section.value.advanced)
   #end
@@ -428,16 +438,75 @@ require(['jquery', 'xwiki-propertize', 'xwiki-selectize'], function ($) {
   });
 
   $('.oidcpro-property').each(function () {
+    let foundInput = $(this).find('input,textarea,select')[0];
+    // In view mode the properties have no field to enhance.
+    if (!foundInput) {
+      return;
+    }
     let selectizeCfg = $(this).data('selectize');
     if (selectizeCfg) {
-      let foundInput = $(this).find('input,textarea,select')[0];
       $(foundInput).xwikiSelectize(selectizeCfg);
       return;
     }
     let propertizeCfg = $(this).data('propertize');
     if (propertizeCfg) {
-      let foundInput = $(this).find('input,textarea,select')[0];
       $(foundInput).xwikiPropertize(propertizeCfg);
+    }
+  });
+});
+
+// The search is kept apart from the field enhancements, so that it works even when they fail.
+require(['jquery'], function ($) {
+  // Filter the properties by their name or label. The sections holding matches are expanded during the search, and
+  // restored to their previous state once the search is cleared.
+  let searchInput = $('#oidcpro-property-search');
+  // Ignore the case and the spaces, so that "client id" matches both the clientId name and the "Client ID" label.
+  let normalize = text =&gt; String(text || '').toLowerCase().replace(/\s+/g, '');
+  let collapseStates = null;
+  let setExpanded = function (collapse, expanded) {
+    // Bootstrap leaves an inline height on the collapsed elements, which would hide them once expanded again.
+    collapse.toggleClass('in', expanded).css('height', '');
+    collapse.prev('.oidcpro-collapse-link').toggleClass('collapsed', !expanded).attr('aria-expanded', expanded);
+  };
+  let filterProperties = function () {
+    let query = normalize(searchInput.val());
+    if (query &amp;&amp; !collapseStates) {
+      collapseStates = $('.oidcpro-section .collapse').map(function () {
+        return {collapse: $(this), expanded: $(this).hasClass('in')};
+      }).get();
+    }
+    // The properties hidden by the template stay hidden, whatever the search.
+    let properties = $('.oidcpro-property').not('.hidden');
+    properties.each(function () {
+      let property = $(this);
+      let matches = !query || normalize(property.attr('data-oidcpro-property-name')).includes(query)
+        || normalize(property.find('dt label').first().text()).includes(query);
+      property.toggleClass('oidcpro-search-hidden', !matches);
+    });
+    $('.oidcpro-section').each(function () {
+      let section = $(this);
+      section.find('.collapse').each(function () {
+        let collapse = $(this);
+        let hasMatches = collapse.find('.oidcpro-property').not('.hidden, .oidcpro-search-hidden').length &gt; 0;
+        if (query) {
+          setExpanded(collapse, hasMatches);
+        }
+        collapse.prev('.oidcpro-collapse-link').toggleClass('oidcpro-search-hidden', !!query &amp;&amp; !hasMatches);
+      });
+      section.toggleClass('oidcpro-search-hidden', !!query
+        &amp;&amp; section.find('.oidcpro-property').not('.hidden, .oidcpro-search-hidden').length === 0);
+    });
+    if (!query &amp;&amp; collapseStates) {
+      collapseStates.forEach(state =&gt; setExpanded(state.collapse, state.expanded));
+      collapseStates = null;
+    }
+    $('.oidcpro-search-noresults').toggleClass('hidden',
+      !query || properties.not('.oidcpro-search-hidden').length &gt; 0);
+  };
+  searchInput.on('input', filterProperties).on('keydown', function (event) {
+    // Pressing Enter in the search must not submit the edit form.
+    if (event.key === 'Enter') {
+      event.preventDefault();
     }
   });
   // XWiki.OIDC.ClientConfigurationClass_0_groupsMapping
@@ -594,6 +663,18 @@ a.collapsed .oidcpro-collapse-caret {
 
 .oidcpro-properties {
   padding-top: 1em;
+}
+
+.oidcpro-search {
+  margin-bottom: 1em;
+}
+
+.oidcpro-search-noresults {
+  margin-top: 0.5em;
+}
+
+.oidcpro-search-hidden {
+  display: none !important;
 }</code>
     </property>
     <property>

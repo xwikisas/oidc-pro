@@ -33,8 +33,10 @@ import org.xwiki.test.ui.TestUtils;
 
 import com.xwiki.oidcpro.test.po.AuthorizationRequest;
 import com.xwiki.oidcpro.test.po.OIDCProAdministrationPage;
+import com.xwiki.oidcpro.test.po.OIDCProConfigurationEditPage;
 import com.xwiki.oidcpro.test.po.OIDCProLoginMenu;
 import com.xwiki.oidcpro.test.po.OIDCProLoginPage;
+import com.xwiki.oidcpro.test.po.OIDCProPropertySearch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -87,13 +89,33 @@ class OIDCProIT
         String endpoint = getAuthorizationEndpoint(setup, testReference, "Admin");
 
         // Create a configuration from the Default template.
-        OIDCProAdministrationPage.gotoPage().createConfiguration()
-            .setConfigurationName(client)
+        OIDCProConfigurationEditPage editPage = OIDCProAdministrationPage.gotoPage().createConfiguration();
+
+        // The advanced properties are collapsed, but the search finds them by name and by label.
+        OIDCProPropertySearch search = new OIDCProPropertySearch();
+        List<String> displayedProperties = search.getDisplayedProperties();
+        assertTrue(displayedProperties.contains("clientId"), displayedProperties.toString());
+        assertFalse(displayedProperties.contains("tryLocal"), displayedProperties.toString());
+        assertEquals(List.of("groupsMappingInclude"), search.search("groupsMappingInclude").getDisplayedProperties());
+        assertEquals(List.of("tryLocal"), search.search("local login").getDisplayedProperties());
+        assertFalse(search.isNoPropertyFoundMessageDisplayed());
+        assertEquals(List.of(), search.search("no such property").getDisplayedProperties());
+        assertTrue(search.isNoPropertyFoundMessageDisplayed());
+        // Clearing the search collapses the advanced properties again.
+        assertEquals(displayedProperties, search.search("").getDisplayedProperties());
+        assertFalse(search.isNoPropertyFoundMessageDisplayed());
+
+        editPage.setConfigurationName(client)
             .setClientId("admin-client")
             .setClientSecret("secret")
             .setAuthorizationEndpoint(endpoint)
             .setEnabled(true)
             .clickSaveAndView();
+
+        // The search works in view mode too.
+        search = new OIDCProPropertySearch();
+        assertEquals(List.of("tryLocal"), search.search("local login").getDisplayedProperties());
+        assertTrue(search.search("").getDisplayedProperties().contains("clientId"));
 
         OIDCProAdministrationPage administration = OIDCProAdministrationPage.gotoPage();
         assertTrue(administration.hasConfiguration(client));
