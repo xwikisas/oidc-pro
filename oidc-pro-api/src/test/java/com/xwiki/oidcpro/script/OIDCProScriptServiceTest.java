@@ -44,6 +44,7 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.user.api.XWikiAuthService;
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 import com.xwiki.oidcpro.internal.ConfigurationStore;
+import com.xwiki.oidcpro.internal.OIDCProLicenseChecker;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -82,6 +83,9 @@ class OIDCProScriptServiceTest
 
     @MockComponent
     private OIDCClientConfiguration oidcClientConfiguration;
+
+    @MockComponent
+    private OIDCProLicenseChecker licenseChecker;
 
     private XWiki wiki;
 
@@ -132,11 +136,20 @@ class OIDCProScriptServiceTest
         OIDCProClientConfiguration configuration = mock(OIDCProClientConfiguration.class);
         when(configuration.getConfigurationName()).thenReturn("EntraID");
         when(this.configurationStore.getConfigurations()).thenReturn(List.of(configuration));
+        when(this.licenseChecker.isLicensed()).thenReturn(true);
 
         List<SafeOIDCProClientConfiguration> configurations = this.scriptService.getConfigurations();
 
         assertEquals(1, configurations.size());
         assertEquals("EntraID", configurations.get(0).getConfigurationName());
+    }
+
+    @Test
+    void getConfigurationsWithoutLicense()
+    {
+        when(this.configurationStore.getConfigurations()).thenReturn(List.of(mock(OIDCProClientConfiguration.class)));
+
+        assertEquals(List.of(), this.scriptService.getConfigurations());
     }
 
     @Test

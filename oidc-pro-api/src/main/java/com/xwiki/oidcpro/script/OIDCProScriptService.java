@@ -45,6 +45,7 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.user.api.XWikiAuthService;
 import com.xwiki.oidcpro.internal.ConfigurationStore;
+import com.xwiki.oidcpro.internal.OIDCProLicenseChecker;
 
 /**
  * Provides methods related to the OIDC Pro implementation accessible in the xwiki platform.
@@ -74,6 +75,9 @@ public class OIDCProScriptService implements ScriptService
     @Inject
     private OIDCClientConfiguration oidcClientConfiguration;
 
+    @Inject
+    private OIDCProLicenseChecker licenseChecker;
+
     /**
      * @return true if the current xwiki authenticator is OIDC.
      */
@@ -92,11 +96,16 @@ public class OIDCProScriptService implements ScriptService
     /**
      * The configurations are offered to every user (including guests, on the login page), so they don't give access to
      * the OIDC client configurations themselves, which hold the client secrets.
+     * <p>
+     * Without a license, no configuration is returned, which hides the OIDC Pro login menu and provider page.
      *
      * @return the OIDC configurations of the current wiki
      */
     public List<SafeOIDCProClientConfiguration> getConfigurations()
     {
+        if (!this.licenseChecker.isLicensed()) {
+            return Collections.emptyList();
+        }
         return configurationStore.getConfigurations().stream().map(SafeOIDCProClientConfiguration::new)
             .collect(Collectors.toList());
     }
