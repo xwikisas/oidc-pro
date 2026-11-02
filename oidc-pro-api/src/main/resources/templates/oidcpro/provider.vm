@@ -17,6 +17,11 @@
 ## Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 ## 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 ## ---------------------------------------------------------------------------
+## Without a license, show the provider page of the OpenID Connect authenticator. The OIDC Pro manager already picks it,
+## but the manager instance created before an upgrade of OIDC Pro keeps rendering this template until XWiki restarts.
+#if (!$services.oidcpro.isLicensed())
+  #template('oidc/client/provider.vm')
+#else
 #if(!$srid)
   #set($srid = $request.srid)
 #end
@@ -94,3 +99,4 @@ $services.oidcpro.resetClientConfigurationSelection()
   </form>
 </div>
 #template("endpage.vm")
+#end
