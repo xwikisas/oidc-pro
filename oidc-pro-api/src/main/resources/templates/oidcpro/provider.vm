@@ -37,14 +37,20 @@ $services.oidcpro.resetClientConfigurationSelection()
 <main id="mainContentArea">
 #set ($oidcProWebJar = 'com.xwiki.oidcpro:oidc-pro-api')
 <link rel="stylesheet" href="$escapetool.xml($services.webjars.url($oidcProWebJar, 'login.css'))" />
-<script src="$escapetool.xml($services.webjars.url($oidcProWebJar, 'login.js'))" defer></script>
-#set ($oidcCookieName = $services.oidcpro.clientConfigurationCookie)
+#set ($oidcClients = $services.oidcpro.configurations)
+#set ($oidcClientNames = [])
+#foreach ($client in $oidcClients)
+  #set ($discard = $oidcClientNames.add($client.configurationName))
+#end
+## The login script reads the cookie name and the clients that can be selected only from the script element.
+<script src="$escapetool.xml($services.webjars.url($oidcProWebJar, 'login.js'))" defer
+  data-oidcpro-cookie="$escapetool.xml($services.oidcpro.clientConfigurationCookie)"
+  data-oidcpro-clients="$escapetool.xml($jsontool.serialize($oidcClientNames))"></script>
 <div id="content">
   ## Submit the login request again, now that the client is selected. The saved request (srid) and the repeated
   ## parameters (e.g. xredirect) bring the user back where the authentication started.
   <form class="xform" method="get" action="$escapetool.xml($request.requestURI)">
   #xwikimessageboxstart($services.localization.render('login') '')
-  #set ($oidcClients = $services.oidcpro.configurations)
   ## Repeat input parameters, except the saved request identifier which is added below.
   #set ($params = ['srid', 'oidc.srid'])
   #foreach ($entry in $request.parameterMap.entrySet())
@@ -71,7 +77,6 @@ $services.oidcpro.resetClientConfigurationSelection()
     #foreach ($client in $oidcClients)
       <li>
         <button type="submit" class="oidcpro-auth-method btn btn-default"
-          data-oidcpro-cookie="$escapetool.xml($oidcCookieName)"
           data-oidcpro-client="$escapetool.xml($client.configurationName)">
           ## Keep the icon markup on one line so that the span is :empty when there is no icon.
           <span class="oidcpro-auth-method-icon" aria-hidden="true">#if ("$!client.iconName" != '')$services.icon.renderHTML($client.iconName)#elseif ("$!client.iconURL" != '')<img src="$escapetool.xml($client.iconURL)" alt="" />#end</span>
