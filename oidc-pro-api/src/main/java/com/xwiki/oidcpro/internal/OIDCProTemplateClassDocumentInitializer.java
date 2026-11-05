@@ -24,7 +24,6 @@ import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
 
-import com.xpn.xwiki.doc.AbstractMandatoryClassInitializer;
 import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.objects.classes.PropertyClass;
 import com.xpn.xwiki.objects.classes.TextAreaClass;
@@ -44,7 +43,7 @@ import static com.xwiki.oidcpro.OIDCProClientConfiguration.PROPERTY_NAME;
 @Component
 @Named("OIDCPro.Code.OIDCProTemplateClass")
 @Singleton
-public class OIDCProTemplateClassDocumentInitializer extends AbstractMandatoryClassInitializer
+public class OIDCProTemplateClassDocumentInitializer extends AbstractOIDCProClassDocumentInitializer
 {
     private static final int TEXT_SIZE = 30;
 
