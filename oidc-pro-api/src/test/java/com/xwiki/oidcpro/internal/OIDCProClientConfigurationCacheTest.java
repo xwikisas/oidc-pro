@@ -19,6 +19,7 @@
  */
 package com.xwiki.oidcpro.internal;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xwiki.cache.Cache;
 import org.xwiki.cache.CacheException;
@@ -29,11 +30,13 @@ import org.xwiki.test.annotation.BeforeComponent;
 import org.xwiki.test.junit5.mockito.ComponentTest;
 import org.xwiki.test.junit5.mockito.InjectMockComponents;
 import org.xwiki.test.junit5.mockito.MockComponent;
+import org.xwiki.wiki.descriptor.WikiDescriptorManager;
 
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -55,6 +58,9 @@ class OIDCProClientConfigurationCacheTest
     @MockComponent
     private CacheManager cacheManager;
 
+    @MockComponent
+    private WikiDescriptorManager wikiDescriptorManager;
+
     private Cache<OIDCProClientConfiguration> cache;
 
     @BeforeComponent
@@ -66,18 +72,38 @@ class OIDCProClientConfigurationCacheTest
             .thenReturn(this.cache);
     }
 
+    @BeforeEach
+    void setUp()
+    {
+        when(this.wikiDescriptorManager.getCurrentWikiId()).thenReturn("xwiki");
+    }
+
     @Test
     void getSetAndRemoveAll()
     {
         OIDCProClientConfiguration configuration = mock(OIDCProClientConfiguration.class);
-        when(this.cache.get("client")).thenReturn(configuration);
+        when(this.cache.get("xwiki:client")).thenReturn(configuration);
 
         this.configurationCache.set("client", configuration);
         assertSame(configuration, this.configurationCache.get("client"));
         this.configurationCache.removeAll();
 
-        verify(this.cache).set("client", configuration);
+        verify(this.cache).set("xwiki:client", configuration);
         verify(this.cache).removeAll();
+    }
+
+    @Test
+    void getAndSetAreScopedToTheCurrentWiki()
+    {
+        OIDCProClientConfiguration configuration = mock(OIDCProClientConfiguration.class);
+        when(this.wikiDescriptorManager.getCurrentWikiId()).thenReturn("subwiki");
+        this.configurationCache.set("client", configuration);
+
+        when(this.wikiDescriptorManager.getCurrentWikiId()).thenReturn("xwiki");
+        assertNull(this.configurationCache.get("client"));
+
+        verify(this.cache).set("subwiki:client", configuration);
+        verify(this.cache).get("xwiki:client");
     }
 
     @Test

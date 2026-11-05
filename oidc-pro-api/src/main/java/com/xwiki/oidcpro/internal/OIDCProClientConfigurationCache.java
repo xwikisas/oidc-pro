@@ -31,11 +31,15 @@ import org.xwiki.component.manager.ComponentLifecycleException;
 import org.xwiki.component.phase.Disposable;
 import org.xwiki.component.phase.Initializable;
 import org.xwiki.component.phase.InitializationException;
+import org.xwiki.wiki.descriptor.WikiDescriptorManager;
 
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 
 /**
- * Cache of the OIDC Pro client configurations, indexed by configuration name.
+ * Cache of the OIDC Pro client configurations of each wiki, indexed by configuration name.
+ * <p>
+ * The configurations (and the templates they use) are resolved for the current wiki, so the cache is scoped per wiki:
+ * a configuration resolved on one wiki must never be reused by another wiki having a configuration with the same name.
  *
  * @version $Id$
  */
@@ -47,6 +51,9 @@ public class OIDCProClientConfigurationCache implements Initializable, Disposabl
 
     @Inject
     private CacheManager cacheManager;
+
+    @Inject
+    private WikiDescriptorManager wikiDescriptorManager;
 
     private Cache<OIDCProClientConfiguration> cache;
 
@@ -70,27 +77,33 @@ public class OIDCProClientConfigurationCache implements Initializable, Disposabl
 
     /**
      * @param configurationName the name of the OIDC client configuration
-     * @return the cached configuration, or {@code null} if it is not cached
+     * @return the configuration cached for the current wiki, or {@code null} if it is not cached
      */
     public OIDCProClientConfiguration get(String configurationName)
     {
-        return this.cache.get(configurationName);
+        return this.cache.get(getKey(configurationName));
     }
 
     /**
      * @param configurationName the name of the OIDC client configuration
-     * @param configuration the configuration to cache
+     * @param configuration the configuration resolved for the current wiki
      */
     public void set(String configurationName, OIDCProClientConfiguration configuration)
     {
-        this.cache.set(configurationName, configuration);
+        this.cache.set(getKey(configurationName), configuration);
     }
 
     /**
-     * Remove all the cached configurations.
+     * Remove all the cached configurations, of all the wikis.
      */
     public void removeAll()
     {
         this.cache.removeAll();
+    }
+
+    private String getKey(String configurationName)
+    {
+        // A wiki identifier can't contain a colon, so the key is unambiguous whatever the configuration name.
+        return this.wikiDescriptorManager.getCurrentWikiId() + ':' + configurationName;
     }
 }
