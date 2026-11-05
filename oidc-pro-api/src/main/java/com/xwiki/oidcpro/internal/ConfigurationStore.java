@@ -268,6 +268,31 @@ public class ConfigurationStore
             context);
     }
 
+    /**
+     * The OIDC authenticator only uses a client configuration (and OIDC Pro only uses the template stored with it)
+     * when the document holding it was last saved by a wiki administrator. Saving such a document as a wiki
+     * administrator (e.g. to enable or disable the configuration) would thus make its content trusted, so this should
+     * only be done when the document is already trusted.
+     *
+     * @param documentReference the reference of the document holding an OIDC client configuration
+     * @return {@code true} if the last author of the document is a wiki administrator, {@code false} otherwise
+     * @throws XWikiException if the document can't be loaded
+     * @since 1.1.0
+     */
+    public boolean isTrustedConfigurationDocument(DocumentReference documentReference) throws XWikiException
+    {
+        XWikiContext context = contextProvider.get();
+        XWikiDocument document = context.getWiki().getDocument(documentReference, context);
+        // Use the same check as the OIDC client configuration store, which decides which documents are trusted.
+        boolean trusted = this.authorizationManager.hasAccess(Right.ADMIN, document.getAuthorReference(),
+            documentReference.getWikiReference());
+        if (!trusted) {
+            logger.debug("The OIDC client configuration document [{}] was not last saved by a wiki administrator.",
+                documentReference);
+        }
+        return trusted;
+    }
+
     private boolean isTrustedTemplate(XWikiDocument templateDoc)
     {
         DocumentReference author =

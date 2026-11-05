@@ -41,6 +41,7 @@ import org.xwiki.test.junit5.mockito.MockComponent;
 
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.user.api.XWikiAuthService;
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 import com.xwiki.oidcpro.internal.ConfigurationStore;
@@ -243,5 +244,26 @@ class OIDCProScriptServiceTest
 
         assertTrue(this.scriptService.getTemplateReferences().isEmpty());
         assertEquals("Failed to retrieve the OIDC Pro templates.", this.logCapture.getMessage(0));
+    }
+
+    @Test
+    void isTrustedConfigurationDocument() throws Exception
+    {
+        DocumentReference configurationReference = new DocumentReference("xwiki", "OIDCPro", "EntraID");
+        when(this.configurationStore.isTrustedConfigurationDocument(configurationReference)).thenReturn(true);
+
+        assertTrue(this.scriptService.isTrustedConfigurationDocument(configurationReference));
+    }
+
+    @Test
+    void isTrustedConfigurationDocumentWhenStoreFails() throws Exception
+    {
+        DocumentReference configurationReference = new DocumentReference("xwiki", "OIDCPro", "EntraID");
+        when(this.configurationStore.isTrustedConfigurationDocument(configurationReference))
+            .thenThrow(new XWikiException());
+
+        assertFalse(this.scriptService.isTrustedConfigurationDocument(configurationReference));
+        assertEquals("Failed to check if the OIDC client configuration document [xwiki:OIDCPro.EntraID] is trusted.",
+            this.logCapture.getMessage(0));
     }
 }

@@ -60,7 +60,17 @@
     #else
       #set ($checked = '')
     #end
-    #set ($discard = $row.put('oidcpro.is_enabled', "&lt;label data-docref='$escapetool.xml($row.get('doc_fullName'))' class='oidcpro-switch oidcpro-toggle'&gt;&lt;input type='checkbox' $checked&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
+    ## Toggling a configuration saves its page as the current user. The OIDC authenticator and OIDC Pro trust the
+    ## content of a configuration page (including the template code it may hold) based on its last author, so only the
+    ## pages that are already trusted can be toggled from here. The others have to be reviewed and edited directly.
+    #if ($services.oidcpro.isTrustedConfigurationDocument($rowDocRef))
+      #set ($labelAttributes = '')
+      #set ($inputAttributes = '')
+    #else
+      #set ($labelAttributes = " title='$escapetool.xml($services.localization.render('oidcpro.admin.livedata.untrusted', [$row.get('doc_fullName')]))'")
+      #set ($inputAttributes = ' disabled')
+    #end
+    #set ($discard = $row.put('oidcpro.is_enabled', "&lt;label data-docref='$escapetool.xml($row.get('doc_fullName'))' class='oidcpro-switch oidcpro-toggle'$labelAttributes&gt;&lt;input type='checkbox' $checked$inputAttributes&gt;&lt;span class='oidcpro-slider'&gt;&lt;/span&gt;&lt;/label&gt;"))
     ## Use the raw property value: the one in the row is displayed (and possibly escaped) by the live table macros.
     #set ($clientName = "$!rowDoc.getObject('XWiki.OIDC.ClientConfigurationClass').getValue('configurationName')")
     #if ($services.oidcpro.isDefaultClient($clientName))

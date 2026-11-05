@@ -729,6 +729,12 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
 .oidcpro-toggle input:checked + .oidcpro-slider:before {
   transform: translateX(26px);
 }
+
+/* Disabled state */
+.oidcpro-toggle input:disabled + .oidcpro-slider {
+  cursor: not-allowed;
+  opacity: .5;
+}
 </code>
     </property>
     <property>

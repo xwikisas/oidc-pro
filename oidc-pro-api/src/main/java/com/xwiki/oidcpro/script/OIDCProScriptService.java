@@ -156,6 +156,27 @@ public class OIDCProScriptService implements ScriptService
     }
 
     /**
+     * Enabling or disabling a configuration from the administration saves the document holding it with the rights of
+     * the current user, which makes the content of that document trusted (see
+     * {@link ConfigurationStore#isTrustedConfigurationDocument(DocumentReference)}). This should thus only be offered
+     * for the documents that are already trusted.
+     *
+     * @param documentReference the reference of the document holding an OIDC client configuration
+     * @return {@code true} if the document was last saved by a wiki administrator, {@code false} otherwise
+     * @since 1.1.0
+     */
+    public boolean isTrustedConfigurationDocument(DocumentReference documentReference)
+    {
+        try {
+            return configurationStore.isTrustedConfigurationDocument(documentReference);
+        } catch (XWikiException e) {
+            logger.warn("Failed to check if the OIDC client configuration document [{}] is trusted.",
+                documentReference, e);
+            return false;
+        }
+    }
+
+    /**
      * @param clientName the OIDC client name.
      * @return true if the provided client is used for authentication by default. False is some other client is used by
      *     default for authentication.

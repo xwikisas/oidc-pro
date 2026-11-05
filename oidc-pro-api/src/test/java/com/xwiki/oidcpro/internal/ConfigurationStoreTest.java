@@ -55,6 +55,7 @@ import com.xpn.xwiki.objects.BaseObject;
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -172,6 +173,7 @@ class ConfigurationStoreTest
         when(this.documentReferenceResolver.resolve(serializedReference)).thenReturn(reference);
         XWikiDocument document = mock(XWikiDocument.class);
         when(document.getDocumentReference()).thenReturn(reference);
+        when(document.getAuthorReference()).thenReturn(author);
         UserReference authorUserReference = mock(UserReference.class);
         DocumentAuthors authors = mock(DocumentAuthors.class);
         when(authors.getEffectiveMetadataAuthor()).thenReturn(authorUserReference);
@@ -339,6 +341,21 @@ class ConfigurationStoreTest
         assertSame(this.clientConfiguration, configurations.get(0).getClientConfiguration());
         assertNull(configurations.get(0).getTemplateName());
         verify(this.proClientConfigurationCache).set(CONFIGURATION_NAME, configurations.get(0));
+    }
+
+    @Test
+    void isTrustedConfigurationDocument() throws Exception
+    {
+        assertTrue(this.store.isTrustedConfigurationDocument(
+            this.documentReferenceResolver.resolve(CONFIGURATION_PAGE)));
+    }
+
+    @Test
+    void isTrustedConfigurationDocumentNotSavedByWikiAdmin() throws Exception
+    {
+        mockDocument(PLANTED_PAGE, EDITOR);
+
+        assertFalse(this.store.isTrustedConfigurationDocument(this.documentReferenceResolver.resolve(PLANTED_PAGE)));
     }
 
     @Test
