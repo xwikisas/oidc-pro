@@ -19,6 +19,8 @@
  */
 package com.xwiki.oidcpro.internal;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -28,20 +30,19 @@ import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.LocalDocumentReference;
 import org.xwiki.sheet.SheetBinder;
 
-import com.xpn.xwiki.doc.AbstractMandatoryClassInitializer;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.classes.BaseClass;
 
 /**
  * Create or update the {@code OIDCPro.Code.OIDCProTemplateBinderClass} class, binding an OIDC client configuration to
- * an OIDC Pro template, and bind it to the OIDC Pro configuration sheet.
+ * an OIDC Pro template, and bind it to the OIDC Pro configuration sheet only.
  *
  * @version $Id$
  */
 @Component
 @Named("OIDCPro.Code.OIDCProTemplateBinderClass")
 @Singleton
-public class OIDCProTemplateBinderClassDocumentInitializer extends AbstractMandatoryClassInitializer
+public class OIDCProTemplateBinderClassDocumentInitializer extends AbstractOIDCProClassDocumentInitializer
 {
     private static final LocalDocumentReference CONFIG_SHEET =
         new LocalDocumentReference(ConfigurationStore.OIDC_PRO_CODE_SPACE, "OIDCProConfigSheet");
@@ -69,9 +70,16 @@ public class OIDCProTemplateBinderClassDocumentInitializer extends AbstractManda
     {
         boolean needsUpdate = super.updateDocument(document);
 
+        // The configurations are displayed only with the OIDC Pro configuration sheet.
         DocumentReference sheetReference =
             new DocumentReference(CONFIG_SHEET, document.getDocumentReference().getWikiReference());
-        if (!this.classSheetBinder.getSheets(document).contains(sheetReference)) {
+        List<DocumentReference> sheets = this.classSheetBinder.getSheets(document);
+        for (DocumentReference sheet : sheets) {
+            if (!sheetReference.equals(sheet)) {
+                needsUpdate |= this.classSheetBinder.unbind(document, sheet);
+            }
+        }
+        if (!sheets.contains(sheetReference)) {
             needsUpdate |= this.classSheetBinder.bind(document, sheetReference);
         }
 

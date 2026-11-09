@@ -44,6 +44,8 @@ import com.nimbusds.oauth2.sdk.Response;
  * Registering this component replaces the original {@link OIDCManager} instead of hiding it, so it has to be put back
  * when OIDC Pro is uninstalled. Components which already hold a reference to this instance (e.g. the authenticator)
  * keep using it after the uninstall, so it falls back on the original template once the OIDC Pro one is gone.
+ * <p>
+ * Without a license, the original template is kept as well, so that users can still pick a client and log in.
  *
  * @version $Id$
  */
@@ -68,14 +70,21 @@ public class OIDCProManager extends OIDCManager implements Disposable
     private ComponentManager componentManager;
 
     @Inject
+    private OIDCProLicenseChecker licenseChecker;
+
+    @Inject
     private Logger logger;
 
     @Override
     public Response executeTemplate(String templateName) throws Exception
     {
-        return super.executeTemplate(
-            OIDC_PROVIDER_TEMPLATE.equals(templateName) && this.templateManager.getTemplate(OIDCPRO_PROVIDER_TEMPLATE)
-                != null ? OIDCPRO_PROVIDER_TEMPLATE : templateName);
+        return super.executeTemplate(useProTemplate(templateName) ? OIDCPRO_PROVIDER_TEMPLATE : templateName);
+    }
+
+    private boolean useProTemplate(String templateName)
+    {
+        return OIDC_PROVIDER_TEMPLATE.equals(templateName)
+            && this.templateManager.getTemplate(OIDCPRO_PROVIDER_TEMPLATE) != null && this.licenseChecker.isLicensed();
     }
 
     @Override

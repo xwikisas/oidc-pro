@@ -55,10 +55,12 @@ import com.xpn.xwiki.objects.BaseObject;
 import com.xwiki.oidcpro.OIDCProClientConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.mock;
@@ -172,6 +174,7 @@ class ConfigurationStoreTest
         when(this.documentReferenceResolver.resolve(serializedReference)).thenReturn(reference);
         XWikiDocument document = mock(XWikiDocument.class);
         when(document.getDocumentReference()).thenReturn(reference);
+        when(document.getAuthorReference()).thenReturn(author);
         UserReference authorUserReference = mock(UserReference.class);
         DocumentAuthors authors = mock(DocumentAuthors.class);
         when(authors.getEffectiveMetadataAuthor()).thenReturn(authorUserReference);
@@ -339,6 +342,39 @@ class ConfigurationStoreTest
         assertSame(this.clientConfiguration, configurations.get(0).getClientConfiguration());
         assertNull(configurations.get(0).getTemplateName());
         verify(this.proClientConfigurationCache).set(CONFIGURATION_NAME, configurations.get(0));
+    }
+
+    @Test
+    void getClientConfigurationObjects() throws Exception
+    {
+        Query query = mock(Query.class);
+        when(this.queryManager.createQuery(contains(":template"), eq(Query.XWQL))).thenReturn(query);
+        when(query.bindValue("template", "OIDCPro.Code.OIDCProTemplate")).thenReturn(query);
+        String withoutConfigurationPage = "Sandbox.WithoutConfiguration";
+        mockDocument(withoutConfigurationPage, ADMIN);
+        XWikiDocument plantedDocument = mockDocument(PLANTED_PAGE, EDITOR);
+        when(plantedDocument.getXObject(OIDCClientConfiguration.CLASS_REFERENCE)).thenReturn(mock(BaseObject.class));
+        BaseObject configurationObject = mock(BaseObject.class);
+        when(this.configurationDocument.getXObject(OIDCClientConfiguration.CLASS_REFERENCE))
+            .thenReturn(configurationObject);
+        when(query.execute()).thenReturn(List.of(CONFIGURATION_PAGE, PLANTED_PAGE, withoutConfigurationPage));
+
+        assertEquals(List.of(configurationObject), this.store.getClientConfigurationObjects());
+    }
+
+    @Test
+    void isTrustedConfigurationDocument() throws Exception
+    {
+        assertTrue(this.store.isTrustedConfigurationDocument(
+            this.documentReferenceResolver.resolve(CONFIGURATION_PAGE)));
+    }
+
+    @Test
+    void isTrustedConfigurationDocumentNotSavedByWikiAdmin() throws Exception
+    {
+        mockDocument(PLANTED_PAGE, EDITOR);
+
+        assertFalse(this.store.isTrustedConfigurationDocument(this.documentReferenceResolver.resolve(PLANTED_PAGE)));
     }
 
     @Test

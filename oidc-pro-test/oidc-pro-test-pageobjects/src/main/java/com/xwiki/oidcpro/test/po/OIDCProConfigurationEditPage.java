@@ -78,7 +78,7 @@ public class OIDCProConfigurationEditPage extends EditPage
     }
 
     /**
-     * @param enabled whether users can log in with this configuration (the opposite of "Is skipped?")
+     * @param enabled whether users can log in with this configuration (the opposite of "Authentication skipped?")
      * @return this form
      */
     public OIDCProConfigurationEditPage setEnabled(boolean enabled)

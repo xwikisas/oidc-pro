@@ -25,7 +25,7 @@
   <parent>
     <groupId>com.xwiki.oidcpro</groupId>
     <artifactId>oidc-pro-test</artifactId>
-    <version>1.0.0-rc-6-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>oidc-pro-test-docker</artifactId>
   <name>OIDC Pro - Tests - Functional Docker Tests</name>
@@ -43,6 +43,20 @@
       <artifactId>oidc-pro-ui</artifactId>
       <version>${project.version}</version>
       <type>xar</type>
+      <exclusions>
+        <!-- Run the functional tests without a license. -->
+        <exclusion>
+          <groupId>com.xwiki.licensing</groupId>
+          <artifactId>application-licensing-licensor-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- Use a fake licensor while running the functional tests. -->
+    <dependency>
+      <groupId>com.xwiki.licensing</groupId>
+      <artifactId>application-licensing-test-api</artifactId>
+      <version>${licensing.version}</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.xwiki.platform</groupId>

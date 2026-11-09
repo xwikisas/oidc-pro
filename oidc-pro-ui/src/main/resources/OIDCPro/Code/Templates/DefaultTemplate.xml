@@ -164,7 +164,6 @@
     <property>
       <layoutJson>{
   "id": "default",
-  "extraCss": "StyleSheet",
   "sections": [
     {
       "id": "General",
@@ -172,11 +171,11 @@
     },
     {
       "id": "User",
-      "icon": "caret-down"
+      "icon": "user"
     },
     {
       "id": "Group",
-      "icon": "caret-down"
+      "icon": "group"
     }
   ],
   "properties": [
@@ -184,18 +183,14 @@
       "id": "skipped",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
-      "icon": "play"
+      "icon": "lock"
     },
     {
       "id": "configurationName",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "book",
       "required": true
     },
@@ -203,9 +198,7 @@
       "id": "clientId",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "user",
       "required": true
     },
@@ -213,9 +206,7 @@
       "id": "clientSecret",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "key",
       "required": true
     },
@@ -223,54 +214,95 @@
       "id": "authorizationEndpoint",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "tokenEndpoint",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "userInfoEndpoint",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "logoutEndpoint",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
-      "id": "xwikiProvider",
+      "id": "scope",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
+      "advanced": false,
+      "icon": "icon-id",
+      "data": {
+        "selectize": {
+          "delimiter": ",",
+          "create": true,
+          "options": [
+            {
+              "value": "openid",
+              "label": "openid"
+            },
+            {
+              "value": "profile",
+              "label": "profile"
+            },
+            {
+              "value": "email",
+              "label": "email"
+            },
+            {
+              "value": "address",
+              "label": "address"
+            },
+            {
+              "value": "phone",
+              "label": "phone"
+            },
+            {
+              "value": "offline_access",
+              "label": "offline_access"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "provider",
+      "hidden": false,
+      "section": "General",
       "advanced": true,
-      "class": "extraClass",
+      "icon": "icon-id"
+    },
+    {
+      "id": "discoveryEndpoint",
+      "hidden": false,
+      "section": "General",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "tokenEndpointMethod",
+      "hidden": false,
+      "section": "General",
+      "advanced": true,
       "icon": "icon-id"
     },
     {
       "id": "userInfoEndpointMethod",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
@@ -294,9 +326,7 @@
       "id": "userInfoEndpointHeaders",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "propertize": {
@@ -309,48 +339,32 @@
       "id": "logoutEndpointMethod",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
-      "icon": "icon-id",
-      "data": {
-        "selectize": {
-          "delimiter": ",",
-          "create": true,
-          "maxItems": 1,
-          "options": [
-            {
-              "value": "GET",
-              "label": "GET"
-            },
-            {
-              "value": "POST",
-              "label": "POST"
-            }
-          ]
-        }
-      }
+      "icon": "icon-id"
     },
     {
-      "id": "logoutMechanism",
+      "id": "skipLogoutIdToken",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
+      "icon": "icon-id"
+    },
+    {
+      "id": "afterLogoutURL",
+      "hidden": false,
+      "section": "General",
+      "advanced": true,
       "icon": "icon-id"
     },
     {
       "id": "responseType",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
-          "delimiter": " ",
+          "delimiter": ",",
           "create": true,
           "options": [
             {
@@ -377,13 +391,11 @@
       "id": "idTokenClaims",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
-          "delimiter": " ",
+          "delimiter": ",",
           "create": true,
           "options": [
             {
@@ -434,96 +446,57 @@
       "id": "claims",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
-    },
-    {
-      "id": "afterLogoutURL",
-      "hidden": false,
-      "section": "General",
-      "value": "Some value",
-      "advanced": true,
-      "class": "extraClass",
-      "icon": "icon-id",
-      "customCode": "templae.vm"
-    },
-    {
-      "id": "tokenEndpointMethod",
-      "hidden": false,
-      "section": "General",
-      "value": "Some value",
-      "advanced": true,
-      "class": "extraClass",
-      "icon": "icon-id",
-      "data": {
-        "selectize": {
-          "delimiter": ",",
-          "create": true,
-          "maxItems": 1,
-          "options": [
-            {
-              "value": "GET",
-              "label": "GET"
-            },
-            {
-              "value": "POST",
-              "label": "POST"
-            }
-          ]
-        }
-      }
     },
     {
       "id": "tokenStorageScope",
       "hidden": false,
       "section": "General",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
-    
+    {
+      "id": "tryLocal",
+      "hidden": false,
+      "section": "General",
+      "advanced": true,
+      "icon": "icon-id"
+    },
     {
       "id": "userNameFormatter",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "documentation": "https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/#Hxwiki.properties"
     },
     {
       "id": "userSubjectFormatter",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
-      "icon": "icon-id"
+      "icon": "icon-id",
+      "documentation": "https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/#Hxwiki.properties"
     },
     {
       "id": "userMapping",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "propertize": {
           "separator": "|"
         }
-      }
+      },
+      "documentation": "https://extensions.xwiki.org/xwiki/bin/view/Extension/OpenID%20Connect/OpenID%20Connect%20Authenticator/#Hxwiki.properties"
     },
     {
       "id": "userInfoClaims",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "selectize": {
@@ -553,7 +526,8 @@
             {
               "value": "nickname",
               "label": "Nickname"
-            },            {
+            },
+            {
               "value": "preferred_username",
               "label": "Preferred Username"
             },
@@ -617,45 +591,63 @@
       "id": "userInfoRefreshRate",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "userInfoSkip",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "enableUser",
       "hidden": false,
       "section": "User",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
+      "icon": "icon-id"
+    },
+    {
+      "id": "userNameForbiddenPattern",
+      "hidden": false,
+      "section": "User",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "userNameForbiddenReplacement",
+      "hidden": false,
+      "section": "User",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "userSubjectForbiddenPattern",
+      "hidden": false,
+      "section": "User",
+      "advanced": true,
+      "icon": "icon-id"
+    },
+    {
+      "id": "userSubjectForbiddenReplacement",
+      "hidden": false,
+      "section": "User",
+      "advanced": true,
       "icon": "icon-id"
     },
     {
       "id": "groupsClaim",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "groupsMapping",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": false,
-      "class": "extraClass",
       "icon": "icon-id",
       "data": {
         "propertize": {
@@ -667,36 +659,28 @@
       "id": "allowedGroups",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "forbiddenGroups",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
-      "icon": "icon-id"
-    },
-    {
-      "id": "groupsMappingExclude",
-      "hidden": false,
-      "section": "Group",
-      "value": "Some value",
-      "advanced": true,
-      "class": "extraClass",
       "icon": "icon-id"
     },
     {
       "id": "groupsMappingInclude",
       "hidden": false,
       "section": "Group",
-      "value": "Some value",
       "advanced": true,
-      "class": "extraClass",
+      "icon": "icon-id"
+    },
+    {
+      "id": "groupsMappingExclude",
+      "hidden": false,
+      "section": "Group",
+      "advanced": true,
       "icon": "icon-id"
     }
   ]

@@ -170,13 +170,17 @@
     ## Load the resources from the WebJar because guests can't load skin extensions when the wiki requires authentication.
     #set ($oidcProWebJar = 'com.xwiki.oidcpro:oidc-pro-api')
     #set ($discard = $xwiki.linkx.use($services.webjars.url($oidcProWebJar, 'login.css'), {'type': 'text/css', 'rel': 'stylesheet'}))
-    #set ($oidcCookieName = $services.oidcpro.clientConfigurationCookie)
+    #set ($oidcClientNames = [])
+    #foreach ($cfg in $oidcProviders)
+      #set ($discard = $oidcClientNames.add($cfg.configurationName))
+    #end
     #set ($loginURL = $xwiki.getURL('XWiki.XWikiLogin', 'login', $escapetool.url({
       'xredirect': $xwiki.relativeRequestURL,
       'loginLink': 1
     })))
     {{html clean="false"}}
-    &lt;script src="$escapetool.xml($services.webjars.url($oidcProWebJar, 'login.js'))" defer&gt;&lt;/script&gt;
+    ## The login script reads the cookie name and the clients that can be selected only from the script element.
+    &lt;script src="$escapetool.xml($services.webjars.url($oidcProWebJar, 'login.js'))" defer data-oidcpro-cookie="$escapetool.xml($services.oidcpro.clientConfigurationCookie)" data-oidcpro-clients="$escapetool.xml($jsontool.serialize($oidcClientNames))"&gt;&lt;/script&gt;
     &lt;li class="dropdown oidcpro-login-menu"&gt;
       &lt;a class="btn btn-link dropdown-toggle" href="#" role="button" id="oidcpro-login-menu-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;
         $escapetool.xml($services.localization.render('oidcpro.login.title'))
@@ -186,7 +190,7 @@
         #foreach ($cfg in $oidcProviders)
           #set ($cfgName = $cfg.configurationName)
           &lt;li class="oidcpro-login-option"&gt;
-            &lt;a href="$escapetool.xml($loginURL)" rel="nofollow" data-oidcpro-cookie="$escapetool.xml($oidcCookieName)" data-oidcpro-client="$escapetool.xml($cfgName)"&gt;
+            &lt;a href="$escapetool.xml($loginURL)" rel="nofollow" data-oidcpro-client="$escapetool.xml($cfgName)"&gt;
               #if ("$!cfg.iconName" != '')
                 &lt;span class="oidcpro-login-icon" aria-hidden="true"&gt;$services.icon.renderHTML($cfg.iconName)&lt;/span&gt;
               #elseif ("$!cfg.iconURL" != '')

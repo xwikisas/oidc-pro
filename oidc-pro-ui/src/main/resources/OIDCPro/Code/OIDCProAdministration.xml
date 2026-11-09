@@ -264,6 +264,48 @@
     </property>
     <property>
       <codeToExecute>{{velocity}}
+## This page is not covered by the license, so that the administrator learns why the section is empty.
+#if (!$services.oidcpro.isLicensed())
+  {{missingLicenseMessage extensionName="oidcpro.extension.name"/}}
+#elseif (!$xcontext.isMainWiki())
+## Only the main wiki manages the OIDC client configurations: the administration of a subwiki displays them read-only.
+#set ($mainWikiPreferences = $services.model.createDocumentReference($xcontext.mainWikiName, 'XWiki', 'XWikiPreferences'))
+#set ($mainWikiAdministrationURL = $xwiki.getURL($mainWikiPreferences, 'admin', $escapetool.url({'editor': 'globaladmin', 'section': 'OIDC Pro'})))
+#set ($mainWikiConfigurations = $services.oidcpro.mainWikiConfigurations)
+#set ($emptyValue = $services.localization.render('oidcpro.admin.livedata.emptyvalue'))
+{{html}}
+&lt;div class="box infomessage"&gt;
+  &lt;p&gt;$escapetool.xml($services.localization.render('oidcpro.admin.subwiki.info'))&lt;/p&gt;
+  &lt;a class="btn btn-default" href="$escapetool.xml($mainWikiAdministrationURL)"&gt;$escapetool.xml($services.localization.render('oidcpro.admin.subwiki.link'))&lt;/a&gt;
+&lt;/div&gt;
+&lt;h2&gt;$escapetool.xml($services.localization.render('oidcpro.admin.subwiki.title'))&lt;/h2&gt;
+#if ($mainWikiConfigurations.isEmpty())
+  &lt;p class="noitems"&gt;$escapetool.xml($services.localization.render('oidcpro.admin.subwiki.empty'))&lt;/p&gt;
+#else
+  &lt;table class="table table-striped oidcpro-main-wiki-configurations"&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        #foreach ($column in ['configurationName', 'clientId', 'authorizationEndpoint', 'oidcpro.is_enabled', 'oidcpro.is_default'])
+          &lt;th scope="col"&gt;$escapetool.xml($services.localization.render("oidcpro.admin.livedata.$column"))&lt;/th&gt;
+        #end
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      #foreach ($configuration in $mainWikiConfigurations)
+        &lt;tr&gt;
+          #foreach ($value in [$configuration.configurationName, $configuration.clientId, $configuration.authorizationEndpoint])
+            &lt;td&gt;#if ("$!value" != '')$escapetool.xml($value)#{else}$escapetool.xml($emptyValue)#end&lt;/td&gt;
+          #end
+          #foreach ($flag in [$configuration.isEnabled(), $configuration.isDefault()])
+            &lt;td&gt;#if ($flag)$escapetool.xml($services.localization.render('oidcpro.config.boolean.yes'))#{else}$escapetool.xml($services.localization.render('oidcpro.config.boolean.no'))#end&lt;/td&gt;
+          #end
+        &lt;/tr&gt;
+      #end
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+#end
+{{/html}}
+#else
 #set ($discard = $xwiki.jsx.use('OIDCPro.Code.OIDCProAdministration'))
 #set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProAdministration'))
 {{html}}
@@ -337,6 +379,7 @@
   }
 }
 {{/livedata}}
+#end
 {{/velocity}}</codeToExecute>
     </property>
     <property>
@@ -724,6 +767,12 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
 .oidcpro-toggle input:checked + .oidcpro-slider:before {
   transform: translateX(26px);
 }
+
+/* Disabled state */
+.oidcpro-toggle input:disabled + .oidcpro-slider {
+  cursor: not-allowed;
+  opacity: .5;
+}
 </code>
     </property>
     <property>
@@ -737,6 +786,89 @@ require(['jquery', 'xwiki-meta', 'xwiki-l10n!oidcpro-admin-translation-keys'], f
     </property>
     <property>
       <use/>
+    </property>
+  </object>
+  <object>
+    <name>OIDCPro.Code.OIDCProAdministration</name>
+    <number>0</number>
+    <className>XWiki.XWikiRights</className>
+    <guid>3feea6b8-f64e-43f0-968e-e5459c041593</guid>
+    <class>
+      <name>XWiki.XWikiRights</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <allow>
+        <defaultValue>1</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>allow</displayType>
+        <name>allow</name>
+        <number>4</number>
+        <prettyName>Allow/Deny</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </allow>
+      <groups>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>input</displayType>
+        <multiSelect>1</multiSelect>
+        <name>groups</name>
+        <number>1</number>
+        <picker>1</picker>
+        <prettyName>Groups</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <size>5</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.GroupsClass</classType>
+      </groups>
+      <levels>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>1</multiSelect>
+        <name>levels</name>
+        <number>2</number>
+        <prettyName>Levels</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <size>3</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.LevelsClass</classType>
+      </levels>
+      <users>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>input</displayType>
+        <multiSelect>1</multiSelect>
+        <name>users</name>
+        <number>3</number>
+        <picker>1</picker>
+        <prettyName>Users</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <size>5</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.UsersClass</classType>
+      </users>
+    </class>
+    <property>
+      <allow>1</allow>
+    </property>
+    <property>
+      <groups>XWiki.XWikiAdminGroup</groups>
+    </property>
+    <property>
+      <levels>edit,delete</levels>
+    </property>
+    <property>
+      <users/>
     </property>
   </object>
 </xwikidoc>

@@ -57,6 +57,9 @@ class OIDCProManagerTest
     @MockComponent
     private TemplateManager templates;
 
+    @MockComponent
+    private OIDCProLicenseChecker licenseChecker;
+
     @InjectComponentManager
     private MockitoComponentManager componentManager;
 
@@ -64,6 +67,7 @@ class OIDCProManagerTest
     void executeTemplateReplacesProviderTemplate() throws Exception
     {
         when(this.templates.getTemplate("oidcpro/provider.vm")).thenReturn(mock(Template.class));
+        when(this.licenseChecker.isLicensed()).thenReturn(true);
         when(this.templates.render("oidcpro/provider.vm")).thenReturn("OIDC Pro provider");
 
         assertEquals("OIDC Pro provider",
@@ -76,6 +80,16 @@ class OIDCProManagerTest
         when(this.templates.render("oidc/client/logout.vm")).thenReturn("logout");
 
         assertEquals("logout", this.manager.executeTemplate("oidc/client/logout.vm").toHTTPResponse().getBody());
+    }
+
+    @Test
+    void executeTemplateKeepsProviderTemplateWithoutLicense() throws Exception
+    {
+        when(this.templates.getTemplate("oidcpro/provider.vm")).thenReturn(mock(Template.class));
+        when(this.templates.render("oidc/client/provider.vm")).thenReturn("OIDC provider");
+
+        assertEquals("OIDC provider",
+            this.manager.executeTemplate("oidc/client/provider.vm").toHTTPResponse().getBody());
     }
 
     @Test

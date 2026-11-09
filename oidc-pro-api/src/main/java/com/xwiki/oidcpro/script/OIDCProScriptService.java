@@ -40,11 +40,14 @@ import org.xwiki.contrib.oidc.auth.store.OIDCClientsConfigurationStore;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.query.QueryException;
 import org.xwiki.script.service.ScriptService;
+import org.xwiki.security.authorization.ContextualAuthorizationManager;
+import org.xwiki.security.authorization.Right;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.user.api.XWikiAuthService;
 import com.xwiki.oidcpro.internal.ConfigurationStore;
+import com.xwiki.oidcpro.internal.OIDCProLicenseChecker;
 
 /**
  * Provides methods related to the OIDC Pro implementation accessible in the xwiki platform.
@@ -74,6 +77,12 @@ public class OIDCProScriptService implements ScriptService
     @Inject
     private OIDCClientConfiguration oidcClientConfiguration;
 
+    @Inject
+    private OIDCProLicenseChecker licenseChecker;
+
+    @Inject
+    private ContextualAuthorizationManager contextualAuthorizationManager;
+
     /**
      * @return true if the current xwiki authenticator is OIDC.
      */
@@ -90,13 +99,29 @@ public class OIDCProScriptService implements ScriptService
     }
 
     /**
+     * Without a license, users can still log in with the OpenID Connect authenticator, but the OIDC Pro features are
+     * turned off.
+     *
+     * @return {@code true} if there is a valid license for OIDC Pro on the current wiki
+     */
+    public boolean isLicensed()
+    {
+        return this.licenseChecker.isLicensed();
+    }
+
+    /**
      * The configurations are offered to every user (including guests, on the login page), so they don't give access to
      * the OIDC client configurations themselves, which hold the client secrets.
+     * <p>
+     * Without a license, no configuration is returned, which hides the OIDC Pro login menu and provider page.
      *
      * @return the OIDC configurations of the current wiki
      */
     public List<SafeOIDCProClientConfiguration> getConfigurations()
     {
+        if (!isLicensed()) {
+            return Collections.emptyList();
+        }
         return configurationStore.getConfigurations().stream().map(SafeOIDCProClientConfiguration::new)
             .collect(Collectors.toList());
     }
@@ -136,16 +161,72 @@ public class OIDCProScriptService implements ScriptService
     }
 
     /**
+     * Enabling or disabling a configuration from the administration saves the document holding it with the rights of
+     * the current user, which makes the content of that document trusted (see
+     * {@link ConfigurationStore#isTrustedConfigurationDocument(DocumentReference)}). This should thus only be offered
+     * for the documents that are already trusted.
+     *
+     * @param documentReference the reference of the document holding an OIDC client configuration
+     * @return {@code true} if the document was last saved by a wiki administrator, {@code false} otherwise
+     * @since 1.1.0
+     */
+    public boolean isTrustedConfigurationDocument(DocumentReference documentReference)
+    {
+        try {
+            return configurationStore.isTrustedConfigurationDocument(documentReference);
+        } catch (XWikiException e) {
+            logger.warn("Failed to check if the OIDC client configuration document [{}] is trusted.",
+                documentReference, e);
+            return false;
+        }
+    }
+
+    /**
+     * The configurations of the subwikis are not used: only the main wiki manages them. The administration of a
+     * subwiki displays the configurations of the main wiki instead, which only requires administration right on the
+     * current wiki. The client secrets are not exposed.
+     *
+     * @return the OIDC client configurations of the main wiki, or an empty list if the current user is not an
+     *     administrator of the current wiki or if there is no valid license
+     * @since 1.1.0
+     */
+    public List<ReadOnlyOIDCClientConfiguration> getMainWikiConfigurations()
+    {
+        if (!isLicensed() || !this.contextualAuthorizationManager.hasAccess(Right.ADMIN)) {
+            return Collections.emptyList();
+        }
+
+        XWikiContext context = this.contextProvider.get();
+        String currentWiki = context.getWikiId();
+        try {
+            context.setWikiId(context.getMainXWiki());
+            String defaultClient = getDefaultClient();
+            return this.configurationStore.getClientConfigurationObjects().stream()
+                .map(configurationObject -> new ReadOnlyOIDCClientConfiguration(configurationObject, defaultClient))
+                .collect(Collectors.toList());
+        } catch (QueryException | XWikiException e) {
+            this.logger.warn("Failed to retrieve the OIDC client configurations of the main wiki.", e);
+            return Collections.emptyList();
+        } finally {
+            context.setWikiId(currentWiki);
+        }
+    }
+
+    /**
      * @param clientName the OIDC client name.
      * @return true if the provided client is used for authentication by default. False is some other client is used by
      *     default for authentication.
      */
     public boolean isDefaultClient(String clientName)
     {
-        return StringUtils.isNotEmpty(clientName) && clientName.equals(
-            getConfigProperty(oidcStore.getDefaultClientConfiguration(),
-                OIDCClientConfiguration.DEFAULT_CLIENT_CONFIGURATION_PROPERTY,
-                OIDCClientConfiguration.DEFAULT_CLIENT_CONFIGURATION));
+        return StringUtils.isNotEmpty(clientName) && clientName.equals(getDefaultClient());
+    }
+
+    private String getDefaultClient()
+    {
+        return getConfigProperty(oidcStore.getDefaultClientConfiguration(),
+            OIDCClientConfiguration.DEFAULT_CLIENT_CONFIGURATION_PROPERTY,
+            OIDCClientConfiguration.DEFAULT_CLIENT_CONFIGURATION);
     }
 
     /**
