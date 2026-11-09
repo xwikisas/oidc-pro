@@ -85,6 +85,8 @@ public class ConfigurationStore
 
     private static final String DEFAULT_TEMPLATE = "default";
 
+    private static final String OIDC_PRO_TEMPLATE = "OIDCPro.Code.OIDCProTemplate";
+
     @Inject
     private QueryManager queryManager;
 
@@ -282,13 +284,45 @@ public class ConfigurationStore
     public boolean isTrustedConfigurationDocument(DocumentReference documentReference) throws XWikiException
     {
         XWikiContext context = contextProvider.get();
-        XWikiDocument document = context.getWiki().getDocument(documentReference, context);
+        return isTrustedConfigurationDocument(context.getWiki().getDocument(documentReference, context));
+    }
+
+    /**
+     * Only the configurations held by trusted documents (see
+     * {@link #isTrustedConfigurationDocument(DocumentReference)}) are returned, since the OIDC authenticator ignores
+     * the others.
+     *
+     * @return the OIDC client configuration objects of the current wiki, enabled or not
+     * @throws QueryException if the configurations can't be retrieved
+     * @throws XWikiException if a configuration document can't be loaded
+     * @since 1.1.0
+     */
+    public List<BaseObject> getClientConfigurationObjects() throws QueryException, XWikiException
+    {
+        XWikiContext context = contextProvider.get();
+        // The OIDC Pro template holds a configuration object that is only used to create new configurations.
+        List<Object> result = queryManager.createQuery("select distinct doc.fullName from Document doc, "
+            + "doc.object('XWiki.OIDC.ClientConfigurationClass') as oidc where doc.fullName <> :template",
+            Query.XWQL).bindValue("template", OIDC_PRO_TEMPLATE).execute();
+        List<BaseObject> configurationObjects = new ArrayList<>();
+        for (Object serializedReference : result) {
+            XWikiDocument document = getDocument(serializedReference, context);
+            BaseObject configurationObject = document.getXObject(OIDCClientConfiguration.CLASS_REFERENCE);
+            if (configurationObject != null && isTrustedConfigurationDocument(document)) {
+                configurationObjects.add(configurationObject);
+            }
+        }
+        return configurationObjects;
+    }
+
+    private boolean isTrustedConfigurationDocument(XWikiDocument document)
+    {
         // Use the same check as the OIDC client configuration store, which decides which documents are trusted.
         boolean trusted = this.authorizationManager.hasAccess(Right.ADMIN, document.getAuthorReference(),
-            documentReference.getWikiReference());
+            document.getDocumentReference().getWikiReference());
         if (!trusted) {
             logger.debug("The OIDC client configuration document [{}] was not last saved by a wiki administrator.",
-                documentReference);
+                document.getDocumentReference());
         }
         return trusted;
     }

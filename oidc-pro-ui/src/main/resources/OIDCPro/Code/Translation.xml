@@ -57,6 +57,11 @@ oidcpro.admin.livedata.oidcpro.is_enabled=Enabled?
 oidcpro.admin.livedata.oidcpro.is_default=Default
 oidcpro.admin.livedata.untrusted=The page {0} holding this configuration was not last saved by a wiki administrator. Review its content and edit it directly to enable or disable it.
 
+oidcpro.admin.subwiki.info=The OIDC client configurations are managed from the administration of the main wiki, and the users of this wiki log in with them too.
+oidcpro.admin.subwiki.link=Manage the configurations on the main wiki
+oidcpro.admin.subwiki.title=OIDC Client Configurations of the Main Wiki
+oidcpro.admin.subwiki.empty=No OIDC client configuration is defined on the main wiki.
+
 oidcpro.templates.default.name=Default
 
 oidcpro.admin.enable.progress=Toggling OIDC client

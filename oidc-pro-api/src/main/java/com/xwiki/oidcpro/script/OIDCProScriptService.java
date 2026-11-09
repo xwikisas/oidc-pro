@@ -40,6 +40,8 @@ import org.xwiki.contrib.oidc.auth.store.OIDCClientsConfigurationStore;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.query.QueryException;
 import org.xwiki.script.service.ScriptService;
+import org.xwiki.security.authorization.ContextualAuthorizationManager;
+import org.xwiki.security.authorization.Right;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -77,6 +79,9 @@ public class OIDCProScriptService implements ScriptService
 
     @Inject
     private OIDCProLicenseChecker licenseChecker;
+
+    @Inject
+    private ContextualAuthorizationManager contextualAuthorizationManager;
 
     /**
      * @return true if the current xwiki authenticator is OIDC.
@@ -177,16 +182,51 @@ public class OIDCProScriptService implements ScriptService
     }
 
     /**
+     * The configurations of the subwikis are not used: only the main wiki manages them. The administration of a
+     * subwiki displays the configurations of the main wiki instead, which only requires administration right on the
+     * current wiki. The client secrets are not exposed.
+     *
+     * @return the OIDC client configurations of the main wiki, or an empty list if the current user is not an
+     *     administrator of the current wiki or if there is no valid license
+     * @since 1.1.0
+     */
+    public List<ReadOnlyOIDCClientConfiguration> getMainWikiConfigurations()
+    {
+        if (!isLicensed() || !this.contextualAuthorizationManager.hasAccess(Right.ADMIN)) {
+            return Collections.emptyList();
+        }
+
+        XWikiContext context = this.contextProvider.get();
+        String currentWiki = context.getWikiId();
+        try {
+            context.setWikiId(context.getMainXWiki());
+            String defaultClient = getDefaultClient();
+            return this.configurationStore.getClientConfigurationObjects().stream()
+                .map(configurationObject -> new ReadOnlyOIDCClientConfiguration(configurationObject, defaultClient))
+                .collect(Collectors.toList());
+        } catch (QueryException | XWikiException e) {
+            this.logger.warn("Failed to retrieve the OIDC client configurations of the main wiki.", e);
+            return Collections.emptyList();
+        } finally {
+            context.setWikiId(currentWiki);
+        }
+    }
+
+    /**
      * @param clientName the OIDC client name.
      * @return true if the provided client is used for authentication by default. False is some other client is used by
      *     default for authentication.
      */
     public boolean isDefaultClient(String clientName)
     {
-        return StringUtils.isNotEmpty(clientName) && clientName.equals(
-            getConfigProperty(oidcStore.getDefaultClientConfiguration(),
-                OIDCClientConfiguration.DEFAULT_CLIENT_CONFIGURATION_PROPERTY,
-                OIDCClientConfiguration.DEFAULT_CLIENT_CONFIGURATION));
+        return StringUtils.isNotEmpty(clientName) && clientName.equals(getDefaultClient());
+    }
+
+    private String getDefaultClient()
+    {
+        return getConfigProperty(oidcStore.getDefaultClientConfiguration(),
+            OIDCClientConfiguration.DEFAULT_CLIENT_CONFIGURATION_PROPERTY,
+            OIDCClientConfiguration.DEFAULT_CLIENT_CONFIGURATION);
     }
 
     /**

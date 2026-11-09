@@ -267,6 +267,44 @@
 ## This page is not covered by the license, so that the administrator learns why the section is empty.
 #if (!$services.oidcpro.isLicensed())
   {{missingLicenseMessage extensionName="oidcpro.extension.name"/}}
+#elseif (!$xcontext.isMainWiki())
+## Only the main wiki manages the OIDC client configurations: the administration of a subwiki displays them read-only.
+#set ($mainWikiPreferences = $services.model.createDocumentReference($xcontext.mainWikiName, 'XWiki', 'XWikiPreferences'))
+#set ($mainWikiAdministrationURL = $xwiki.getURL($mainWikiPreferences, 'admin', $escapetool.url({'editor': 'globaladmin', 'section': 'OIDC Pro'})))
+#set ($mainWikiConfigurations = $services.oidcpro.mainWikiConfigurations)
+#set ($emptyValue = $services.localization.render('oidcpro.admin.livedata.emptyvalue'))
+{{html}}
+&lt;div class="box infomessage"&gt;
+  &lt;p&gt;$escapetool.xml($services.localization.render('oidcpro.admin.subwiki.info'))&lt;/p&gt;
+  &lt;a class="btn btn-default" href="$escapetool.xml($mainWikiAdministrationURL)"&gt;$escapetool.xml($services.localization.render('oidcpro.admin.subwiki.link'))&lt;/a&gt;
+&lt;/div&gt;
+&lt;h2&gt;$escapetool.xml($services.localization.render('oidcpro.admin.subwiki.title'))&lt;/h2&gt;
+#if ($mainWikiConfigurations.isEmpty())
+  &lt;p class="noitems"&gt;$escapetool.xml($services.localization.render('oidcpro.admin.subwiki.empty'))&lt;/p&gt;
+#else
+  &lt;table class="table table-striped oidcpro-main-wiki-configurations"&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        #foreach ($column in ['configurationName', 'clientId', 'authorizationEndpoint', 'oidcpro.is_enabled', 'oidcpro.is_default'])
+          &lt;th scope="col"&gt;$escapetool.xml($services.localization.render("oidcpro.admin.livedata.$column"))&lt;/th&gt;
+        #end
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      #foreach ($configuration in $mainWikiConfigurations)
+        &lt;tr&gt;
+          #foreach ($value in [$configuration.configurationName, $configuration.clientId, $configuration.authorizationEndpoint])
+            &lt;td&gt;#if ("$!value" != '')$escapetool.xml($value)#{else}$escapetool.xml($emptyValue)#end&lt;/td&gt;
+          #end
+          #foreach ($flag in [$configuration.isEnabled(), $configuration.isDefault()])
+            &lt;td&gt;#if ($flag)$escapetool.xml($services.localization.render('oidcpro.config.boolean.yes'))#{else}$escapetool.xml($services.localization.render('oidcpro.config.boolean.no'))#end&lt;/td&gt;
+          #end
+        &lt;/tr&gt;
+      #end
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+#end
+{{/html}}
 #else
 #set ($discard = $xwiki.jsx.use('OIDCPro.Code.OIDCProAdministration'))
 #set ($discard = $xwiki.ssx.use('OIDCPro.Code.OIDCProAdministration'))
