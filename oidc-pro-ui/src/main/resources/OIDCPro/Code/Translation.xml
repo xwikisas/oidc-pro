@@ -24,7 +24,7 @@
   <web>OIDCPro.Code</web>
   <name>Translation</name>
   <language/>
-  <defaultLanguage/>
+  <defaultLanguage>en</defaultLanguage>
   <translation>0</translation>
   <creator>xwiki:XWiki.Admin</creator>
   <parent>OIDCPro.Code.WebHome</parent>
